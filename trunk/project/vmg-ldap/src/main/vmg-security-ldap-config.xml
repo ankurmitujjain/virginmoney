@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+	<!--  TODO LDAP connection pooling. -->
+	<description>
+		Provides the configuration required for LDAP authentication.
+  </description>
+
+	<!-- The basic LDAP Context Source configuration -->
+	<bean id="contextSource" class="org.springframework.ldap.core.support.LdapContextSource">
+		<property name="url" value="${ldap.url}" />
+		<property name="base" value="${ldap.base}" />
+		<property name="authenticationSource" ref="authenticationSource" />
+	</bean>
+
+	<bean id="authenticationSource"
+		class="org.springframework.ldap.authentication.DefaultValuesAuthenticationSourceDecorator">
+		<property name="target" ref="springSecurityAuthenticationSource" />
+		<property name="defaultUser" value="${ldap.adminName}" />
+		<property name="defaultPassword" value="${ldap.adminPassword}" />
+	</bean>
+
+	<bean id="springSecurityAuthenticationSource"
+		class="org.springframework.security.ldap.SpringSecurityAuthenticationSource" />
+
+
+	<!-- Spring Ldap template configuration -->
+	<bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+		<constructor-arg ref="contextSource" />
+		<property name="ignorePartialResultException" value="true" />
+	</bean>
+
+	<bean id="springSecurityContext"
+		class="org.springframework.security.ldap.DefaultSpringSecurityContextSource"
+		parent="contextSource">
+		<constructor-arg value="${ldap.url}" />
+	</bean>
+
+	<!--
+		Bean used to process authentication request against a configured
+		active directory environment.
+	-->
+	<bean id="authenticationService"
+		class="com.virginmoneygiving.ldap.service.impl.AuthenticationServiceActiveDirectoryImpl">
+		<property name="userBaseDn" value="${ldap.giving.userbasednfilter}" />
+		<property name="baseDn" value="${ldap.base}" />
+		<property name="contextSource" ref="contextSource" />
+	</bean>
+
+	<!--
+		Bean used to process request for active directory specific operations.
+	-->
+	<bean id="directoryService"
+		class="com.virginmoneygiving.ldap.service.impl.ActiveDirectoryServiceImpl">
+		<property name="ldapTemplate" ref="ldapTemplate" />
+		<property name="userBaseDn" value="${ldap.giving.userbasedn}" />
+	</bean>
+
+	<!--
+		DomainPolicyAttributeMapper bean instance. Commented out at the
+		moment. <bean id="domainPolicyAttributeMapper"
+		class="com.virginmoneygiving.ldap.util.DomainPolicyAttributeMapper"
+		init-method="init"> <property name="contextSource"
+		ref="contextSource"/> </bean>
+	-->
+
+
+</beans>
