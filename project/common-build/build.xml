@@ -1,0 +1,191 @@
+<?xml version="1.0"?>
+<project name="common-build" basedir=".." default="all">
+
+	<!-- user-specific properties -->
+	<property file="${user.home}/etc/env.build.properties" />
+
+	<!--
+		import the build file which predefines all the standard properties
+	-->
+	<property name="antscripts.dir" value="${env.dev.root.dir}/common/antscripts" />
+	<property file="${antscripts.dir}/common.build.properties" />
+
+
+	<!-- import all the thirdparty library definitions -->
+	<property name="common.library.dir" value="${env.dev.root.dir}/thirdparty/libraries" />
+	<property file="${common.library.dir}/common.libraries.properties" />
+
+	<!-- import vm deployment and jboss control -->
+	<import file="${antscripts.dir}/ant-vm-deployment.xml" />
+
+	<property name="project.build.order" value="payment-db, 
+				giving-db,
+				vmg-commons,
+				bam-service-client,
+				vmg-ldap,
+				profanity-service,
+				alert-service,
+				indexer-service-client, 
+				indexer-service,
+				user-alerts-service-client,
+				sugarcrm-service-client,
+				online-card-payment-ws,
+				payment-management-ws,
+				security-ws,
+				giving-management-ws,
+				user-alerts-service,
+				sugarcrm-service,	
+				template-email-service,
+				vmg-web-commons,
+				cas-client-signout,
+				cas-internal,
+				cas-external,
+				charity-web,
+				fundraiser-web,
+				stub-glis-service-ws,
+				scheduler-service,
+				operations-web,
+				giving-batch-assimilator,
+				giving-batch-ext-db,
+				giving-batch-ext-management-ws,
+				giving-batch"/>
+
+	
+	<!-- ================================= -->
+
+	<macrodef name="optionally-run-against-all">
+		<attribute name="target" />
+		<sequential>
+					<for delimiter="," trim="true" param="projectDir" list="${project.build.order}">
+						<sequential>	
+                                                <tstamp><format property="currenttime" pattern="MM/dd/yyyy hh:mm aa"/></tstamp>
+                                                <echo>${currenttime} Started processing for project @{projectDir}</echo>
+
+						<var name="build.necessary" value="true" />
+					<if>
+						<equals arg1="${force.build}" arg2="false" />
+						<then>
+							<var name="jar.available" unset="true" />
+							<var name="war.deployed" unset="true" />
+							<antfetch antfile="@{projectDir}/build.xml" target="check-deployment" return="jar.available, war.deployed" inheritall="false" inheritrefs="false"/>							
+							<if>
+								<or>
+									<isset property="war.deployed" />
+									<isset property="jar.available" />
+								</or>
+								<then>
+									<var name="build.necessary" value="false" />
+								</then>
+							</if>
+						</then>
+					</if>
+					<if>
+						<istrue value="${build.necessary}" />
+						<then>
+							<ant antfile="@{projectDir}/build.xml" target="@{target}" inheritall="false" inheritrefs="false" />
+						</then>
+						<else>
+							<echo message="Not building project '@{projectDir}' as it's already deployed, to force rebuild/redeployment change 'force.build' to true (or unset it)" />
+						</else>
+					</if>
+                                                <tstamp><format property="currenttime" pattern="MM/dd/yyyy hh:mm aa"/></tstamp>
+                                                <echo>${currenttime} Finished processing for project @{projectDir}</echo>
+				</sequential>
+			</for>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="run-against-all">
+		<attribute name="target" />
+		<sequential>
+			<for delimiter="," trim="true" param="projectDir" list="${project.build.order}">
+				<sequential>
+					<ant antfile="@{projectDir}/build.xml" target="@{target}" inheritall="false" inheritrefs="false" />
+				</sequential>
+			</for>
+		</sequential>
+	</macrodef>
+
+	<!-- ================================= -->
+
+	<target name="build" depends="all" />
+	<target name="all" depends="build-and-deploy-dist" />
+
+	<target name="build-and-deploy-dist" description="Attempt to deploy all the project distributions">
+		<optionally-run-against-all target="build-and-deploy-dist" />
+	</target>
+
+	<target name="deploy-dist" description="Attempt to deploy all the project distributions">
+                <tstamp><format property="currenttime" pattern="MM/dd/yyyy hh:mm aa"/></tstamp>
+                <echo>deploy-dist started at ${currenttime}</echo>
+		<optionally-run-against-all target="deploy-dist" />
+                <tstamp><format property="currenttime" pattern="MM/dd/yyyy hh:mm aa"/></tstamp>
+                <echo>deploy-dist finished at ${currenttime}</echo>
+	</target>
+
+	<target name="dist" description="Attempt to build the distribution target for all projects">
+		<optionally-run-against-all target="dist" />
+	</target>
+
+	<target name="shiny-and-new" description="Restore the JBoss server, wipe any external config and then attempt to build and deploy all the projects">
+                <tstamp><format property="currenttime" pattern="MM/dd/yyyy hh:mm aa"/></tstamp>
+                <echo>shiny-and-new started at ${currenttime}</echo>
+		<var name="mysq.database.keep" value="false"/>
+		<var name="force.build" value="true"/>
+		<antcall target="prepare-jboss" />
+		<antcall target="clean-external-config" />
+		<antcall target="build-and-deploy-dist" />
+                <tstamp><format property="currenttime" pattern="MM/dd/yyyy hh:mm aa"/></tstamp>
+                <echo>shiny-and-new finished at ${currenttime}</echo>
+	</target>
+
+	<target name="clean" depends="clean-dist" description="Clean all the project's build artefacts (excluding any distributions)">
+		<run-against-all target="clean" />
+	</target>
+
+	<target name="clean-dist" description="Clean all the project's distributions">
+		<run-against-all target="clean-dist" />
+	</target>
+
+	<target name="clean-all" description="Clean all the project's and their distributions">
+		<run-against-all target="clean" />
+		<run-against-all target="clean-dist" />
+	</target>
+
+	<target name="prepare-jboss" depends="jboss-stop,jboss-restore,jboss-start" description="Restore the JBoss server" />
+
+	<target name="check-deployment" description="Check each component's deployment state">
+		<run-against-all target="check-deployment" />
+	</target>
+
+	<target name="assert-deployment" description="Assert that each component is properly deployed">
+		<run-against-all target="assert-dependencies" />
+	</target>
+
+
+	<!-- ================================= -->
+
+	<target name="payment">
+		<ant antfile="payment-db/build.xml" target="build-no-tests" inheritall="false" />
+		<ant antfile="payment-management-ws/build.xml" target="deploy-local-jboss-no-tests" inheritall="false" />
+	</target>
+
+	<target name="giving">
+		<ant antfile="giving-db/build.xml" target="build-no-tests" inheritall="false" />
+		<ant antfile="giving-management-ws/build.xml" target="deploy-local-jboss-no-tests" inheritall="false" />
+	</target>
+
+	<target name="charity">
+		<ant antfile="charity-web/build.xml" target="deploy-local-jboss-no-tests" inheritall="false" />
+	</target>
+
+	<target name="fundraiser">
+		<ant antfile="fundraiser-web/build.xml" target="deploy-local-jboss-no-tests" inheritall="false" />
+	</target>
+
+	<target name="template-email-service">
+		<ant antfile="template-email-service/build.xml" target="deploy-local-jboss-no-tests" inheritall="false" />
+	</target>
+
+
+</project>
