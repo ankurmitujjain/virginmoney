@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cruisecontrol>
+  <project name="common-antscripts" buildafterfailed="false">
+    <labelincrementer defaultLabel="${project.name}-build.1" />
+    <listeners>
+      <currentbuildstatuslistener file="logs/${project.name}/status.txt" />
+    </listeners>
+    <bootstrappers>
+      <svnbootstrapper localWorkingCopy="projects/common/antscripts" />
+    </bootstrappers>
+    <modificationset>
+      <svn localWorkingCopy="projects/common/antscripts" />
+    </modificationset>
+    <schedule interval="300">
+      <!--     <composite>  -->
+      <ant anthome="projects/thirdparty/tools/apache-ant-1.7.0" buildfile="projects/common/antscripts/cruisecontrol-build.xml" />
+    </schedule>
+  </project>
+</cruisecontrol>

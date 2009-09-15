@@ -1,0 +1,393 @@
+<?xml version="1.0"?>
+<project name="vm-deployment" basedir="." default="">
+
+	<!-- user-specific properties -->
+	<property file="${user.home}/etc/env.build.properties" />
+
+	<!--
+		import the build file which predefines all the standard properties
+	-->
+	<property name="antscripts.dir" value="${env.dev.root.dir}/common/antscripts" />
+	<property file="${antscripts.dir}/common.build.properties" />
+
+	<!-- import all the thirdparty library definitions -->
+	<property name="common.library.dir" value="${env.dev.root.dir}/thirdparty/libraries" />
+	<property file="${common.library.dir}/common.libraries.properties" />
+
+	<property name="distribution.name" value="${war.name}" />
+
+	<import file="${antscripts.dir}/ant-vm-jboss.xml" />
+	<import file="${antscripts.dir}/ant-vm-mysql.xml" />
+
+	<!-- a time stamp for now is -->
+	<tstamp>
+		<format property="time.now" pattern="yyyyddMMHHmmss" />
+	</tstamp>
+
+	<!-- pull in ant contrib -->
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<fileset dir="${antcontrib.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</classpath>
+	</taskdef>
+
+	<macrodef name="gunzip-and-untar">
+		<attribute name="outDir" />
+		<attribute name="srcFile" />
+		<sequential>
+			<delete failonerror="false" file="${java.io.tmpdir}/${ant.project.name}.tar" />
+			<gunzip src="@{srcFile}" dest="${java.io.tmpdir}/${ant.project.name}.tar" />
+			<untar src="${java.io.tmpdir}/${ant.project.name}.tar" dest="@{outDir}" />
+		</sequential>
+	</macrodef>
+
+	<target name="unpack-distribution">
+		<gunzip-and-untar srcFile="${distribution.dir}/${distribution.name}.tar.gz" outDir="${distribution.dir}" />
+	</target>
+
+	<macrodef name="copy-and-flatten-files">
+		<attribute name="srcDir" />
+		<attribute name="outDir" />
+		<sequential>
+			<mkdir dir="@{outDir}" />
+			<copy todir="@{outDir}" includeemptydirs="false" flatten="true" overwrite="true">
+				<fileset dir="@{srcDir}">
+					<include name="**/*" />
+				</fileset>
+			</copy>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="gethostname">
+		<sequential>
+	  	<property environment="env"/>
+	  	<var name="hostname" unset="true"/>
+	  	<condition property="hostname" value="${env.HOSTNAME}">
+		    <os family="unix"/>
+		  </condition>
+		  <condition property="hostname" value="${env.COMPUTERNAME}">
+		    <os family="windows"/>
+		    <!-- perhaps i stricter test is necessary, not sure it works on older windows systems. -->
+		  </condition>
+		  <!-- what to do on Mac or other operation systems??? -->
+		  <echo message="host = ${hostname}"/>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="copy-files">
+		<attribute name="srcDir" />
+		<attribute name="outDir" />
+		<sequential>
+			<mkdir dir="@{outDir}" />
+			<copy todir="@{outDir}" includeemptydirs="false" overwrite="true">
+				<fileset dir="@{srcDir}">
+					<include name="**/*" />
+				</fileset>
+			</copy>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="fail-if-not-available">
+		<attribute name="url" />
+		<sequential>
+			<var name="tmp.file" value="${java.io.tmpdir}/fail-if-not-available.tmp" />
+			<delete failonerror="false" file="${src}" />
+			<get ignoreerrors="true" src="@{url}" dest="${tmp.file}" />
+			<available property="url.found" file="${tmp.file}" />
+			<fail message="Could not locate resource '@{url}'" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="deploy-database-from-files">
+		<attribute name="url" default="${mysql.url}" />
+		<attribute name="username" default="${mysql.root.username}" />
+		<attribute name="password" default="${mysql.root.password}" />
+		<attribute name="sqlDir" default="${distribution.database.dir}" />
+		<attribute name="dbUsername"/>
+		<attribute name="dbPassword" default=""/>
+		<attribute name="dbName" />
+		<attribute name="keepDB" default="${mysql.database.keep}" />
+		<sequential>
+			<antcall target="mysql-assert-running" />
+			<mysql-select sql="show databases like '@{dbName}'" url="@{url}" username="@{username}" password="@{password}"/>
+			<if>
+				<or>
+					<not>
+						<isset property="rows.count" />
+					</not>
+					<and>
+						<isset property="rows.count" />
+						<isfalse value="@{keepDB}" />
+					</and>
+				</or>
+				<then>
+					<if>
+						<not>
+							<equals arg1="@{dbUsername}" arg2=""/>
+						</not>
+						<then>
+							<mysql-select sql="select user from mysql.user where user = '@{dbUsername}'"  url="@{url}" username="@{username}" password="@{password}"/>
+							<if>
+								<isset property="rows.count"/>
+								<then>
+									<echo message="Database user '@{dbUsername}' found, not creating user"/>
+								</then>
+								<else>
+									<echo message="Database user '@{dbUsername}' not found, creating user"/>
+									<mysql-run-sql sql="grant all on @{dbName}.* to '@{dbUsername}'@'%' identified by '@{dbPassword}'" url="@{url}" username="@{username}" password="@{password}" />
+								</else>
+							</if>
+						</then>
+					</if>						
+					<echo message="Database '@{dbName}' not found or 'mysql.database.keep' set to false, deploying database"/>				
+					<mysql-run-sql sql="drop database if exists @{dbName}" url="@{url}" username="@{username}" password="@{password}" />
+					<mysql-run-scripts sqlDir="@{sqlDir}" url="@{url}" username="@{username}" password="@{password}" />
+				</then>
+				<else>
+					<echo message="Database already exists and 'mysql.database.keep' set to true, not deploying database" />
+				</else>
+			</if>
+		</sequential>
+	</macrodef>
+
+
+	<macrodef name="replace-property-value-in-file">
+		<attribute name="file" />
+		<attribute name="name" />
+		<attribute name="value" />
+		<sequential>
+			<if>
+				<isfileselected file="@{file}">
+					<contains text="@{name}=" />
+				</isfileselected>
+				<then>
+					<echo message="Setting property '@{name}' to '@{value}'" />
+					<replaceregexp file="@{file}" byline="false" flags="g">
+						<regexp pattern="@{name}=(.*)" />
+						<substitution expression="@{name}=@{value}" />
+					</replaceregexp>
+				</then>				
+			</if>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="filter-grenta-service-urls">
+		<attribute name="file" />
+		<sequential>
+			<for trim="true" delimiter="," param="service" list="securedata, keymanagement,
+				paymentmanagement, givingmanagement, glis, alertservice, indexerservice,
+				addresslookup, onlinecardpayment, security, givingbatchextmanagement, bankaccountvalidation">
+				<sequential>
+					<var name="prop.name" value="@{service}.url.system.property" />
+					<var name="prop.value" value="${@{service}.url}" />
+					<if>
+						<isset property="@{service}.url" />
+						<then>
+							<replace-property-value-in-file file="@{file}" name="${prop.name}" value="${prop.value}" />
+						</then>
+						<else>
+							<echo level="warning" message="Property '${@{service}.url}' not set, will not attempt to filter with it" />
+						</else>
+					</if>
+				</sequential>
+			</for>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="filter-ldap-properties">
+		<attribute name="file" />
+		<sequential>
+			<for trim="true" delimiter="," param="property.name" list="ldap.url, ldap.base, ldap.adminName, ldap.adminPassword,
+			ldap.giving.userbasedn, ldap.giving.userbasednfilter, ldap.giving.default.group">
+				<sequential>
+					<var name="prop.name" value="@{property.name}" />
+					<var name="prop.value" value="${@{property.name}}" />
+					<if>
+						<isset property="@{property.name}" />
+						<then>
+							<replace-property-value-in-file file="@{file}" name="${prop.name}" value="${prop.value}" />
+						</then>
+					</if>
+				</sequential>
+			</for>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="filter-ocp-properties">		
+		<attribute name="file" />
+		<sequential>
+			<for trim="true" delimiter=", " param="property.name" list="tlg.primary.basic.wsdl, tlg.secondary.basic.wsdl, 
+			tlg.primary.extended.wsdl, tlg.secondary.extended.wsdl, threed.donation.good.url, threed.donation.bad.url, 
+			threed.eventreg.good.url, threed.eventreg.bad.url, threed.regulardonation.good.url, threed.regulardonation.bad.url,
+			tlg.ha.useproxy, tlg.ha.primary.proxyHost, tlg.ha.primary.proxyPort, tlg.ha.secondary.proxyHost, tlg.ha.secondary.proxyPort">
+				<sequential>
+					<var name="prop.name" value="@{property.name}" />
+					<var name="prop.value" value="${@{property.name}}" />
+					<if>
+						<isset property="@{property.name}" />
+						<then>
+							<replace-property-value-in-file file="@{file}" name="${prop.name}" value="${prop.value}" />
+						</then>
+					</if>
+				</sequential>
+			</for>
+		</sequential>
+	</macrodef>
+					
+	<macrodef name="filter-misc-properties">
+		<attribute name="file" />
+		<sequential>
+			<for trim="true" delimiter=" " param="property.name" list="eventlogo.upload.folder 
+				eventlogo.temp.folder charitylogo.upload.folder charitylogo.temp.folder forms.folder 
+				fundraiser.image.baseImageLocation fundraiser.3ds.ignoreInvalidXid amendBankAccountDetailsFormLocation.path
+				glis.xml.file.path glis.test.data.path givingbatch.output.folder emailAttachmentFormLocation.path
+				vmg.website.url">
+				<sequential>
+					<var name="prop.name" value="@{property.name}" />
+					<var name="prop.value" value="${@{property.name}}" />
+					<if>
+						<isset property="@{property.name}" />
+						<then>
+							<replace-property-value-in-file file="@{file}" name="${prop.name}" value="${prop.value}" />
+						</then>
+					</if>
+				</sequential>
+			</for>
+		</sequential>
+	</macrodef>
+
+	<target name="build-and-deploy-dist" depends="dist, deploy-dist" description="Builds the component distribution bundle and then deploys it to the local Jboss server"/>
+
+	<target name="deploy-dist" />
+
+	<target name="deploy-database" />
+
+	<target name="dist">
+		<fail message="You must declare a 'dist' target for your project" />
+	</target>
+
+	<target name="deploy-libraries" description="Deploy the component's JBoss lib-virgin libraries">
+		<copy-and-flatten-files srcDir="${distribution.jboss.lib-virgin.dir}" outDir="${jboss.server.root}/lib-virgin" />
+	</target>
+
+	<target name="deploy-external-config" depends="filter-external-config" description="Deploy the component's Gretna external configuration files">
+		<copy-files srcDir="${distribution.jboss.external-configuration.dir}" outDir="${gretna.external-config.dir}" />
+	</target>
+
+	<target name="clean-external-config">
+		<delete dir="${gretna.external-config.dir}"/>
+	</target>
+
+	<target name="deploy-jboss-config" description="Deploy the component's JBoss configuration files">
+		<copy-files srcDir="${distribution.jboss.conf.dir}" outDir="${jboss.server.root}/conf" />
+	</target>
+
+	<target name="deploy-jboss-deployables" depends="filter-jboss-deployables, jboss-assert-running, undeploy-war">
+		<copy overwrite="true" todir="${jboss.server.deploy.root}" verbose="true">
+			<fileset dir="${distribution.jboss.deploy-virgin.dir}">
+				<include name="**/*" />
+				<exclude name="**/*.war" />
+				<exclude name="**/*.sar" />
+			</fileset>
+		</copy>
+		<for param="war-file">
+			<path>
+				<fileset dir="${distribution.jboss.deploy-virgin.dir}" includes="*.war" />
+			</path>
+			<sequential>
+				<deploy-war-to-jboss warFile="@{war-file}" />
+				<var name="war-file-basename" unset="true" />
+				<basename property="war-file-basename" file="@{war-file}" />
+				<wait-for-jboss-deployment warName="${war-file-basename}" />
+			</sequential>
+		</for>
+	</target>
+
+	<target name="deploy-war"  if="war.name" description="Assumes the project has a WAR and attempts to deploy it">
+		<deploy-war-to-jboss warfile="${deploy.dir}/${war.name}.war" />
+		<wait-for-jboss-deployment warname="${war.name}.war" />
+	</target>
+	<target name="undeploy-war"  if="war.name" description="Assumes the project has a WAR and attempts to undeploy it">
+		<undeploy-war-from-jboss warname="${war.name}.war" />
+		<wait-for-jboss-undeployment warname="${war.name}.war" />
+	</target>
+	<target name="redeploy-war"  if="war.name" depends="undeploy-war, deploy-war" description="Assumes the project has a WAR and attempts to redeploy it">
+	</target>
+
+	<target name="is-war-deployed"  if="war.name" description="Assumes the project has a WAR and checks if it's deployed">
+		<is-war-deployed warname="${war.name}.war" />
+		<if>		
+			<equals arg1="${war.deployed}" arg2="true" />
+			<then>
+				<echo>'${war.name}' is deployed</echo>
+			</then>	
+			<else>
+				<echo>'${war.name}' is not deployed</echo>
+			</else>
+		</if>
+	</target>
+
+	<target name="filter-external-config">
+		<for param="file">
+			<path>
+				<fileset dir="${distribution.jboss.external-configuration.dir}" includes="*.properties" />
+			</path>
+			<sequential>
+				<echo message="Processing configuration file @{file}" />
+				<filter-grenta-service-urls file="@{file}" />
+				<filter-ldap-properties file="@{file}" />
+				<filter-misc-properties file="@{file}" />
+				<filter-ocp-properties file="@{file}" />
+			</sequential>
+		</for>
+	</target>
+
+	<target name="filter-jboss-deployables">
+		<!-- we need to filter the DS's here -->
+	</target>
+
+	<!-- CHECK DEPLOYMENT -->
+
+	<target name="check-deployment" depends="check-mysql-deployment, check-jboss-deployment" description="Checks the status of the project's JBoss and MySQL deployments, if they have any."/>
+	
+	<target name="check-jboss-deployment" description="Checks to see if the project's war is deployed">
+		<if>
+			<isset property="war.name"/>
+			<then>
+				<antfetch target="is-war-deployed" return="war.deployed"/>
+			</then>
+			<else>
+				<echo message="Project has no Jboss deployables (not a WAR project)"/>
+			</else>	
+		</if>
+	</target>
+
+	<target name="check-mysql-deployment" description="Checks to see if the project's database files are deployed.">
+	</target>
+
+	<!-- ASSERT DEPENDENCIES -->
+
+	<!-- Override in main projects -->
+	
+	<!-- JHA: im am temporarily disbaling this to see how much it improves the build time -->
+	<!--target name="assert-dependencies" depends="assert-build-dependencies, assert-runtime-dependencies" /-->
+	<target name="assert-dependencies"/>
+
+	<target name="assert-runtime-dependencies" description="Asserts that all of the component's runtime dependencies are available" />
+
+	<target name="assert-build-dependencies" description="Asserts that all of the component's build dependencies are available" />
+
+	<!-- ASSERT DEPLOYMENT -->
+
+	<target name="assert-deployment" depends="assert-mysql-deployment, assert-jboss-deployment" />
+
+	<target name="assert-jboss-deployment" depends="check-jboss-deployment" if="war.name" description="Asserts that the project's WAR is running in JBoss">
+		<echo>${war.deployed}</echo>
+		<fail message="'${war.name}' not deployed to Jboss server" unless="war.deployed"/>
+	</target>
+
+	<target name="assert-mysql-deployment" depends="check-mysql-deployment" description="Asserts that the project's database is available" />
+
+</project>

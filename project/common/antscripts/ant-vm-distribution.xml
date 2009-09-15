@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<project name="vm-distribution" default="vm-distribution">
+
+	<!--
+
+		Standard Ant task to create a VM distribution folder structure and
+		produce a release tar.
+		==========================================================================================
+
+		Function ======== This script runs the standard metrics currently in
+		use by Virgin Money. To use this script ================== 1. include
+		the file common.build.properties from this folder into your local
+		build file (see the common.build.properties file for details on how to
+		do this). This will import standard definitions for all properties
+		needed, including the ${antscripts.dir} referenced below. 2. create a
+		task in your own ant buildscript like this :- <target
+		name="vm-distribution" description="Creates a VM distribution folder
+		structure, copy all necessary files and produce a release tar."> <ant
+		antfile="${antscripts.dir}/ant-vm-distribution.xml" inheritall="true"
+		inheritrefs="true"/> </target> The script also contains individual
+		targets to clean specific folders if required. just add
+		target="(name)" to the ant call NOTE: Please make sure to setup
+		vm-distribution properties inside common.build.properties to point to
+		correct location. This script creates a folder strucure in following
+		format / | README.txt ** module overview plus any special deployment
+		instructions +database/ ** stores sql scripts +include-scripts/ **
+		Optional (stores scripts referred from parent sql's under database
+		folder.) +JBoss/ +deploy-virgin/ ** stores deploy artifcats like war,
+		data source.xml etc. +lib-virgin/ ** stores external library files.
+
+		+groovy/ ** stores groovy scripts. +conf/ ** stores jboss
+		configuration files. +external-configuraton/ **strores external
+		configurable application proeprties. To use this scripts 1) Create a
+		distribution folder strucure using create-distribution-structure ant
+		task. 2) Copy required artifacts to respective folder and 3) Create
+		tar.gz using create-gzip ant task.
+	-->
+
+	<property name="distribution.name" value="${war.name}" />
+	<property name="tar_file_name" value="${distribution.name}" />
+
+	<target name="clean-distribution" description="Clean out the distribution directory">
+		<echo message="ant-vm-distribution.xml : clean-distribution :  started" />
+		<delete dir="${distribution.dir}" />
+		<echo message="ant-vm-distribution.xml : clean-distribution :  finished" />
+	</target>
+
+	<target name="vm-distribution" depends="clean-distribution"
+		description="Create new distribution directory">
+		<echo
+			message="ant-vm-distribution.xml : create-distribution-structure :  started" />
+		<mkdir dir="${distribution.dir}" />
+		<!--
+			echo message="# Include module overview plus any special deployment
+			instructions here." file="${distribution.dir}/README.txt"/
+		-->
+		<mkdir dir="${distribution.database.dir}" />
+		<mkdir dir="${distribution.include-scripts.dir}" />
+		<mkdir dir="${distribution.jboss.dir}" />
+		<mkdir dir="${distribution.jboss.main.dir}" />
+		<mkdir dir="${distribution.jboss.deploy-virgin.dir}" />
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}" />
+		<mkdir dir="${distribution.jboss.conf.dir}" />
+		<mkdir dir="${distribution.jboss.groovy.dir}" />
+		<mkdir dir="${distribution.jboss.external-configuration.dir}" />
+	</target>
+
+
+	<target name="create-gzip" description="Creates tar file.">
+		<echo message="ant-vm-distribution.xml : create-gzip :  started" />
+
+		<tstamp>
+			<format property="DSTAMP" pattern="yyyymmDD-HHMMss" />
+		</tstamp>
+
+		<tar destfile="${distribution.dir}/${tar_file_name}.tar" basedir="${distribution.dir}" />
+		<gzip destfile="${distribution.dir}/${tar_file_name}.tar.gz" src="${distribution.dir}/${tar_file_name}.tar" />
+		<delete file="${distribution.dir}/${tar_file_name}.tar" />
+		<echo message="ant-vm-distribution.xml : create-gzip :  finished" />
+	</target>
+
+	<target name="copy-jboss-deployables">
+		<copy todir="${distribution.jboss.deploy-virgin.dir}" failonerror="false">
+			<fileset dir="${deploy.dir}">
+				<include name="**/*war" />
+				<exclude name="**/exploded/*" />
+			</fileset>
+			<fileset dir="${conf.dir}/jboss/deploy">
+				<include name="**/*" />
+			</fileset>
+		</copy>		
+	</target>
+	 
+	<target name="copy-jboss-conf"
+		description="Copy configuration files required in jboss -> deploy folder.">
+		<copy todir="${distribution.jboss.conf.dir}" failonerror="false">
+			<fileset dir="${conf.dir}/jboss/conf" />
+
+
+
+
+
+		</copy>
+	</target>
+
+	<target name="copy-sql-scripts" description="Copy sql-scripts to deploy-vigin folder.">
+		<copy todir="${distribution.database.dir}" failonerror="false">
+			<fileset dir="${datbase.dir}" />
+		</copy>
+	</target>
+
+	<target name="copy-external-configuration" description="Copy external-configurations.">
+		<echo>${conf.dir}/${external-configuration.dir}</echo>
+		<copy todir="${distribution.jboss.external-configuration.dir}" failonerror="false">
+			<fileset dir="${conf.dir}/${external-configuration.dir}" />
+		</copy>
+	</target>
+
+	<target name="copy-registration-forms" description="Copy registration forms to distribution.">
+		<mkdir dir="${distribution.jboss.registration-forms.dir}" />
+		<copy todir="${distribution.jboss.registration-forms.dir}">
+			<fileset dir="${conf.dir}/${registration-forms.dir}" />
+		</copy>
+	</target>
+	
+	<target name="copy-email-documents" description="Copy email documents to distribution.">
+			<mkdir dir="${distribution.jboss.email-documents.dir}" />
+			<copy todir="${distribution.jboss.email-documents.dir}">
+				<fileset dir="${conf.dir}/${email-documents.dir}" />
+			</copy>
+	</target>
+
+	<target name="copy-bank-account-documents" description="Copy bank account documents to distribution.">
+		<mkdir dir="${distribution.jboss.bank-account-documents.dir}" />
+		<copy todir="${distribution.jboss.bank-account-documents.dir}">
+			<fileset dir="${conf.dir}/${bank-account-documents.dir}" />
+		</copy>
+	</target>
+
+	<target name="copy-readme" description="Copy deployment instructions.">
+		<copy failonerror="false" file="${basedir}/${deployment-instructions.file}" tofile="${distribution.dir}/${readme.file}" />
+	</target>
+	
+	<target name="copy-static-assets" description="Copy static assets to the distribution.">
+		<mkdir dir="${distribution.apache.frontend.dir}/${war.name}" />
+		<mkdir dir="${distribution.apache.backend.dir}/${war.name}" />
+		<copy todir="${distribution.apache.frontend.dir}/${war.name}">
+			<fileset dir="${assets.main.dir}" />
+		</copy>
+		<copy todir="${distribution.apache.backend.dir}/${war.name}">
+			<fileset dir="${assets.main.dir}" />
+		</copy>
+	</target>
+</project>

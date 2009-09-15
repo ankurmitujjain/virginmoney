@@ -1,0 +1,562 @@
+<?xml version="1.0"?>
+<project name="vm-jboss-helpers" basedir=".">
+
+	<!-- user-specific properties -->
+	<property file="${user.home}/etc/env.build.properties" />
+
+	<!-- import the build file which predefines all the standard properties -->
+	<property name="antscripts.dir" value="${env.dev.root.dir}/common/antscripts" />
+	<property file="${antscripts.dir}/common.build.properties" />
+
+	<!-- import all the thirdparty library definitions -->
+	<property name="common.library.dir" value="${env.dev.root.dir}/thirdparty/libraries" />
+	<property file="${common.library.dir}/common.libraries.properties" />
+
+	<property name="jboss.deploy.timeout" value="180" />
+	<property name="jboss.undeploy.timeout" value="60" />
+	<property name="jboss.startup.timeout" value="300" />
+	<property name="jboss.shutdown.timeout" value="120" />
+	<property name="jboss.archive.keep" value="false" />
+
+	<!-- a time stamp for now is -->
+	<tstamp>
+		<format property="time.now" pattern="yyyyddMMHHmmss" />
+	</tstamp>
+
+	<!-- pull in OS env -->
+	<property environment="os-env" />
+
+	<!-- need local tools.jar to run JBoss -->
+	<property name="jdk.tools.jar" value="${os-env.JAVA_HOME}/lib/tools.jar" />
+
+	<!-- jboss server's start-up class path -->
+	<path id="jboss.server.classpath">
+		<pathelement location="${jdk.tools.jar}" />
+		<fileset dir="${jboss.install.root}/bin">
+			<include name="run.jar" />
+		</fileset>
+	</path>
+
+	<!-- jboss server's start-up class path -->
+	<path id="jboss.groovy-scripts.classpath">
+		<fileset dir="${groovy.lib}">
+			<include name="groovy-all-1.5.7.jar" />
+		</fileset>
+		<fileset dir="${bsf.lib}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${commons-logging.lib}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${jboss.install.root}/client">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${jboss.lib}">
+			<include name="asm*.jar" />
+		</fileset>
+		<fileset dir="${antlr.lib}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<!-- pull in ant contrib -->
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<fileset dir="${antcontrib.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</classpath>
+	</taskdef>
+
+    <macrodef name="start-jboss-server">
+        <attribute name="serverHome" default="${jboss.install.root}"/>
+        <attribute name="serverConfig" default="${jboss.server.name}"/>
+        <attribute name="serverPartition" default="${jboss.partition.name}"/>
+        <attribute name="serverBindInterface" default="${jboss.bind.interface}"/>
+        <element name="serverElements" implicit="yes" optional="true"/>
+        <sequential>
+            <echo message="Starting local JBoss server ..."/>
+            <echo message="Using JBoss home: @{serverHome}"/>
+            <echo message="Using JBoss configuration: @{serverConfig}"/>
+            <echo message="Using JBoss classpath: ${toString:jboss.server.classpath}"/>
+            <!-- decide if we need to use proxy settings or not -->
+            <condition property="internal_use_proxy" value="false" else="true">
+                <or>
+                    <length string="${env.proxy.default.host}" trim="true" length="0"/>
+                    <not>
+                        <isset property="env.proxy.default.host"/>
+                    </not>
+                </or>
+            </condition>
+            <if>
+                <equals arg1="${internal_use_proxy}" arg2="true"/>
+                <then>
+                    <echo message="Using Proxys http.proxyHost: ${env.proxy.default.host}"/>
+                    <echo message="             http.proxyPort: ${env.proxy.default.port}"/>
+                    <echo message="         http.nonProxyHosts: ${env.proxy.default.nonproxyhosts}"/>
+                    <java classname="org.jboss.Main" fork="true" spawn="true" dir="@{serverHome}/bin">
+                        <classpath refid="jboss.server.classpath"/>
+                        <arg value="-c"/>
+                        <arg value="@{serverConfig}"/>
+                        <arg value="--partition"/>
+                        <arg value="@{serverPartition}"/>
+                        <arg value="-b"/>
+                        <arg value="@{serverBindInterface}"/>
+                        <arg value="-Dhttp.proxyHost=${env.proxy.default.host}"/>
+                        <arg value="-Dhttp.proxyPort=${env.proxy.default.port}"/>
+                        <arg value="-Dhttp.nonProxyHosts=${env.proxy.default.nonproxyhosts}"/>
+                        <arg value="-Dhttps.proxyHost=${env.proxy.default.host}"/>
+                        <arg value="-Dhttps.proxyPort=${env.proxy.default.port}"/>
+                        <arg value="-Dhttps.nonProxyHosts=${env.proxy.default.nonproxyhosts}"/>                        
+                        <serverElements/>
+                    </java>
+                </then>
+                <else>
+                    <echo message="Not Using Proxys"/>
+                    <java classname="org.jboss.Main" fork="true" spawn="true" dir="@{serverHome}/bin">
+                        <classpath refid="jboss.server.classpath"/>
+                        <arg value="-c"/>
+                        <arg value="@{serverConfig}"/>
+                        <arg value="--partition"/>
+                        <arg value="@{serverPartition}"/>
+                        <arg value="-b"/>
+                        <arg value="0.0.0.0"/>
+                        <serverElements/>
+                    </java>
+                </else>
+            </if>
+
+        </sequential>
+    </macrodef>
+
+
+    <macrodef name="wait-for-jboss-start">
+		<attribute name="seconds" default="${jboss.startup.timeout}" />
+		<attribute name="serverUrl" default="${jboss.url}" />
+		<attribute name="serverHome" default="${jboss.install.root}" />
+		<attribute name="serverConfig" default="${jboss.server.name}" />		
+		<sequential>
+			<var name="timedout" unset="true" />
+			<echo message="Waiting @{seconds} seconds for local JBoss server to start, checking file @{serverHome}/server/@{serverConfig}/log/server.log ..." />
+			<stopwatch name="jboss-start"/>
+			<waitfor maxwait="@{seconds}" maxwaitunit="second" checkevery="5" checkeveryunit="second" timeoutproperty="timedout">
+				<http url="@{serverUrl}" />
+			</waitfor>
+			<stopwatch name="jboss-start" action="total"/>
+			<fail message="Timed-out waiting for Jboss server to start-up." if="timedout" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="stop-jboss-server">
+		<attribute name="serverHome" default="${jboss.install.root}" />
+		<attribute name="jmxRmiHost" default="${jboss.hostname}" />
+		<attribute name="jmxRmiPort" default="${jboss.rmi.port}" />
+		<attribute name="jmxRmiUsername" default="${jboss.jmx.username}" />
+		<attribute name="jmxRmiPassword" default="${jboss.jmx.password}" />
+		<sequential>
+			<var name="jmxrmihost" value="@{jmxRmiHost}" />
+			<var name="jmxrmiport" value="@{jmxRmiPort}" />
+			<var name="jmxrmiusername" value="@{jmxRmiUsername}" />
+			<var name="jmxrmipassword" value="@{jmxRmiPassword}" />
+			<var name="jboss.running" unset="true" />
+			<script language="groovy" src="${antscripts.dir}/groovy/jboss-shutdown-server.groovy" classpathref="jboss.groovy-scripts.classpath" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="wait-for-jboss-shutdown">
+		<attribute name="serverHome" default="${jboss.install.root}" />
+		<attribute name="serverConfig" default="${jboss.server.name}" />
+		<attribute name="seconds" default="${jboss.shutdown.timeout}" />
+		<sequential>
+			<var name="timedout" unset="true" />
+			<echo message="Waiting @{seconds} seconds for JBoss server to stop, checking file @{serverHome}/server/@{serverConfig}/log/server.log ..." />
+			<stopwatch name="jboss-shutdown"/>
+			<waitfor maxwait="@{seconds}" maxwaitunit="second" checkevery="5" checkeveryunit="second" timeoutproperty="timedout">
+				<isfileselected file="@{serverHome}/server/@{serverConfig}/log/server.log">
+					<contains text="[org.jboss.system.server.Server] Shutdown complete" />
+				</isfileselected>
+			</waitfor>
+			<stopwatch name="jboss-shutdown" action="total"/>
+			<fail message="Timed out waiting for Jboss server to shutdown." if="timedout" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="web-page-contains">
+		<attribute name="pageUrl" />
+		<attribute name="match" />
+		<attribute name="property" />
+		<attribute name="username" default="admin" />
+		<attribute name="password" default="admin" />
+		<sequential>
+			<var name="tmp.file" value="${java.io.tmpdir}/web-scrape.tmp" />
+			<delete failonerror="false" file="${tmp.file}" />
+			<get username="@{username}" password="@{password}" verbose="false" src="@{pageUrl}" dest="${tmp.file}" ignoreerrors="yes" />
+			<var name="@{property}" unset="true" />
+			<!--loadfile property="contents" srcFile="${tmp.file}" failonerror="no" /-->
+			<condition property="@{property}">
+				<isfileselected file="${tmp.file}">
+					<contains text="@{match}" />
+				</isfileselected>
+				<!--contains string="${contents}" substring="@{match}" /-->
+			</condition>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="ping-jboss-server" description="Scrapes the JBoss server's front page to see if it's running, setting the property 'jboss.running' if it is">
+		<attribute name="serverUrl" default="${jboss.url}" />
+		<attribute name="pageMatch" default="Welcome to JBoss"/> 
+		<sequential>
+			<web-page-contains pageUrl="@{serverUrl}" match="@{pageMatch}" property="jboss.running" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="ping-jboss-jmx-server">
+		<attribute name="jmxRmiHost" default="${jboss.hostname}" />
+		<attribute name="jmxRmiPort" default="${jboss.rmi.port}" />
+		<attribute name="jmxRmiUsername" default="${jboss.jmx.username}" />
+		<attribute name="jmxRmiPassword" default="${jboss.jmx.password}" />
+		<sequential>
+			<var name="jmxrmihost" value="@{jmxRmiHost}" />
+			<var name="jmxrmiport" value="@{jmxRmiPort}" />
+			<var name="jmxrmiusername" value="@{jmxRmiUsername}" />
+			<var name="jmxrmipassword" value="@{jmxRmiPassword}" />
+			<var name="jboss.running" unset="true" />
+			<script language="groovy" src="${antscripts.dir}/groovy/jboss-ping-server.groovy" classpathref="jboss.groovy-scripts.classpath" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="deploy-war-to-jboss">
+		<attribute name="deployDir" default="${jboss.server.deploy.root}" />
+		<attribute name="warFile" />
+		<sequential>
+			<copy verbose="true" overwrite="true" file="@{warFile}" todir="@{deployDir}" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="undeploy-war-from-jboss">
+		<attribute name="deployDir" default="${jboss.server.deploy.root}" />
+		<attribute name="warName" />
+		<attribute name="jmxRmiHost" default="${jboss.hostname}" />
+		<attribute name="jmxRmiPort" default="${jboss.rmi.port}" />
+		<attribute name="jmxRmiUsername" default="${jboss.jmx.username}" />
+		<attribute name="jmxRmiPassword" default="${jboss.jmx.password}" />
+		<sequential>
+			<var name="maxWait" value="@{seconds}" />
+			<var name="checkEvery" value="2" />
+			<var name="war.deployed" unset="true" />
+			<var name="war.undeployed" unset="true" />
+			<var name="jmxrmihost" value="@{jmxRmiHost}" />
+			<var name="jmxrmiport" value="@{jmxRmiPort}" />
+			<var name="jmxrmiusername" value="@{jmxRmiUsername}" />
+			<var name="jmxrmipassword" value="@{jmxRmiPassword}" />
+			<var name="warfilename" value="@{warName}" />
+			<var name="failonerror" value="true" />
+			<var name="verifymode" value="deploy" />
+			<var name="deployDir" value="@{deployDir}" />
+			<script language="groovy" src="${antscripts.dir}/groovy/jboss-undeploy-war.groovy" classpathref="jboss.groovy-scripts.classpath" />
+			<delete file="@{deployDir}/@{warName}" failonerror="false" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="wait-for-jboss-deployment">
+		<attribute name="seconds" default="${jboss.deploy.timeout}" />
+		<attribute name="warName" />
+		<attribute name="jmxRmiHost" default="${jboss.hostname}" />
+		<attribute name="jmxRmiPort" default="${jboss.rmi.port}" />
+		<attribute name="jmxRmiUsername" default="${jboss.jmx.username}" />
+		<attribute name="jmxRmiPassword" default="${jboss.jmx.password}" />
+		<attribute name="serverHome" default="${jboss.install.root}" />
+		<attribute name="serverConfig" default="${jboss.server.name}" />
+		<attribute name="logLines" default="${jboss.log.tail.numLines}" />
+		<sequential>
+			<var name="maxWait" value="@{seconds}" />
+			<var name="checkEvery" value="2" />
+			<var name="war.deployed" unset="true" />
+			<var name="war.undeployed" unset="true" />
+			<var name="jmxrmihost" value="@{jmxRmiHost}" />
+			<var name="jmxrmiport" value="@{jmxRmiPort}" />
+			<var name="jmxrmiusername" value="@{jmxRmiUsername}" />
+			<var name="jmxrmipassword" value="@{jmxRmiPassword}" />
+			<var name="warfilename" value="@{warName}" />
+			<var name="failonerror" value="true" />
+			<var name="verifymode" value="deploy" />
+			<echo>warfilename = ${warfilename}</echo>			
+			<stopwatch name="jboss-deployment"/>
+			<script language="groovy" src="${antscripts.dir}/groovy/jboss-find-war-status.groovy" classpathref="jboss.groovy-scripts.classpath" />
+			<stopwatch name="jboss-deployment" action="total"/>
+			<if>
+				<not>
+					<isset property="war.deployed"/>
+				</not>
+				<then>
+					<echo level="error" message="Web application '@{warName}' failed to deploy"/>
+					<echo level="error" message="See last @{logLines} lines from Jboss server log to diagnose problem (@{serverHome}/server/@{serverConfig}/log/server.xml) ..."/>					
+					<echo level="error" message="========================================================================================="/>
+					<concat>
+						<filelist dir="@{serverHome}/server/@{serverConfig}/log" files="server.log"/>						
+						<filterchain>
+						    <tailfilter lines="@{logLines}"/>
+						</filterchain>
+  				</concat>					
+					<echo level="error" message="========================================================================================="/>
+					<echo level="error" message="Web application '@{warName}' failed to deploy, see above JBoss log to diagnose problem"/>
+					<fail message="Web application '@{warName}' failed to deploy" />
+				</then>
+			</if>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="wait-for-jboss-undeployment">
+		<attribute name="seconds" default="${jboss.deploy.timeout}" />
+		<attribute name="warName" />
+		<attribute name="jmxRmiHost" default="${jboss.hostname}" />
+		<attribute name="jmxRmiPort" default="${jboss.rmi.port}" />
+		<attribute name="jmxRmiUsername" default="${jboss.jmx.username}" />
+		<attribute name="jmxRmiPassword" default="${jboss.jmx.password}" />
+		<sequential>
+			<var name="maxWait" value="@{seconds}" />
+			<var name="checkEvery" value="2" />
+			<var name="war.deployed" unset="true" />
+			<var name="war.undeployed" unset="true" />
+			<var name="jmxrmihost" value="@{jmxRmiHost}" />
+			<var name="jmxrmiport" value="@{jmxRmiPort}" />
+			<var name="jmxrmiusername" value="@{jmxRmiUsername}" />
+			<var name="jmxrmipassword" value="@{jmxRmiPassword}" />
+			<var name="warfilename" value="@{warName}" />
+			<var name="failonerror" value="true" />
+			<var name="verifymode" value="undeploy" />
+			<stopwatch name="jboss-undeployment"/>
+			<script language="groovy" src="${antscripts.dir}/groovy/jboss-find-war-status.groovy" classpathref="jboss.groovy-scripts.classpath" />
+			<stopwatch name="jboss-undeployment" action="total"/>
+			<fail message="Web application '@{warName}' failed to undeploy." unless="war.undeployed" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="is-war-deployed">
+		<attribute name="warName" />
+		<attribute name="jmxRmiHost" default="${jboss.hostname}" />
+		<attribute name="jmxRmiPort" default="${jboss.rmi.port}" />
+		<attribute name="jmxRmiUsername" default="${jboss.jmx.username}" />
+		<attribute name="jmxRmiPassword" default="${jboss.jmx.password}" />
+		<sequential>
+			<var name="maxWait" value="1" />
+			<var name="checkEvery" value="1" />
+			<var name="warfilename" value="@{warName}" />
+			<var name="war.deployed" unset="true" />
+			<var name="war.undeployed" unset="true" />
+			<var name="jmxrmihost" value="@{jmxRmiHost}" />
+			<var name="jmxrmiport" value="@{jmxRmiPort}" />
+			<var name="jmxrmiusername" value="@{jmxRmiUsername}" />
+			<var name="jmxrmipassword" value="@{jmxRmiPassword}" />
+			<var name="failonerror" value="true" />
+			<var name="verifymode" value="deploy" />
+			<script language="groovy" src="${antscripts.dir}/groovy/jboss-find-war-status.groovy" classpathref="jboss.groovy-scripts.classpath" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="filter-jboss-datasource" description="Filters JBoss datasource properties.">
+		<attribute name="dsUrl" />
+		<attribute name="dsUsername" />
+		<attribute name="dsPassword" />
+		<attribute name="dsFile" />
+		<sequential>
+			<replaceregexp file="@{dsFile}" byline="false" flags="g">
+				<regexp pattern="&lt;connection-url&gt;(.*)&lt;/connection-url&gt;" />
+				<substitution expression="&lt;connection-url&gt;@{dsUrl}&lt;/connection-url&gt;" />
+			</replaceregexp>
+			<replaceregexp file="@{dsFile}" byline="false">
+				<regexp pattern="&lt;user-name&gt;(.*)&lt;/user-name&gt;" />
+				<substitution expression="&lt;user-name&gt;@{dsUsername}&lt;/user-name&gt;" />
+			</replaceregexp>
+			<replaceregexp file="@{dsFile}" byline="false">
+				<regexp pattern="&lt;password&gt;(.*)&lt;/password&gt;" />
+				<substitution expression="&lt;password&gt;@{dsPassword}&lt;/password&gt;" />
+			</replaceregexp>
+		</sequential>
+	</macrodef>
+
+
+	<!-- handy targets -->
+
+	<target name="jboss-start" depends="jboss-ping" unless="jboss.running" description="Starts the local JBoss server">
+		<start-jboss-server>
+			<jvmarg value="-Xmx${jboss.jvmarg.maxheap}" />
+			<jvmarg value="-Xms${jboss.jvmarg.minheap}" />
+			<jvmarg value="-XX:MaxPermSize=${jboss.jvmarg.maxpermsize}" />
+			<jvmarg value="-Djava.net.preferIPv4Stack=true" />
+			<jvmarg value="-Xdebug" />
+			<jvmarg value="-Xrunjdwp:transport=dt_socket,address=${jboss.jdwp.port},server=y,suspend=n" />
+			<jvmarg value="-server" />
+			<jvmarg value="-Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=${jboss.ws.http.dump}" />
+			<jvmarg value="-Dsun.rmi.dgc.client.gcInterval=3600000" />
+			<jvmarg value="-Dsun.rmi.dgc.server.gcInterval=3600000" />
+			<jvmarg value="-Djava.endorsed.dirs=${jboss.install.root}/lib/endorsed" />
+			<jvmarg value="-Djboss.partition.udpGroup=${jboss.partition.udpGroup}"/>
+			<jvmarg value="-Djboss.hapartition.mcast_port=${jboss.hapartition.mcast_port}"/>
+			<jvmarg value="-DGIVING_CONF_HOME=${gretna.external-config.dir}" />
+			<jvmarg value="-Dsolr.solr.home=${gretna.solr.solr.home}" />
+			<jvmarg value="-Dsolr.data.dir=${gretna.solr.data.dir}" />
+			<jvmarg value="-DpostcodeAnywhere.service.url=http://services.postcodeanywhere.co.uk/uk/simplelookup.asmx?wsdl" />
+			<jvmarg value="-DpostcodeAnywhere.VMGivingConsumer.accountCode=VIRGI11136"/>
+			<jvmarg value="-DpostcodeAnywhere.VMGivingConsumer.licenseKey=XM16-ZJ12-CA97-GN68"/>
+			<jvmarg value="-Dcurrent.vm.secure.server.name=${jboss.url.https}" />
+			<jvmarg value="-Dcurrent.vm.server.name=${jboss.url}" />
+			<jvmarg value="-Dsecurity.service.wsdl.url=${security.url}" />
+			<jvmarg value="-Ddozer.configuration=file://${jboss.server.root}/conf/dozer.properties"/>
+			<jvmarg value="-Dcom.sun.management.jmxremote=${jboss.jmx.port}"/>
+			<jvmarg value="-Djboss.platform.mbeanserver"/>
+			<jvmarg value="-Djavax.management.builder.initial=org.jboss.system.server.jmx.MBeanServerBuilderImpl"/>
+			<jvmarg value="-Djboss.shutdown.forceHalt=${jboss.shutdown.forceHalt}"/>
+		</start-jboss-server>
+		<wait-for-jboss-start />
+	</target>
+
+	<target name="jboss-assert-running" depends="jboss-ping" description="Will fail the build if JBoss is not running">
+		<fail message="JBoss server is apparently not running" unless="jboss.running" />
+	</target>
+
+	<target name="jboss-stop" depends="jboss-ping" if="jboss.running" description="Stops the local JBoss server">
+		<stop-jboss-server />
+		<wait-for-jboss-shutdown />
+	</target>
+
+	<target name="jboss-assert-stopped" depends="jboss-ping" description="Will fail the build if JBoss is running">
+		<fail message="JBoss server is apparently running" if="jboss.running" />
+	</target>
+
+	<target name="jboss-restart" depends="jboss-ping" description="Restarts the local JBoss server, ignoring if the server is not already running">
+		<if>
+			<istrue value="${jboss.running}"/>
+			<then>
+				<antcall target="jboss-stop" />
+			</then>
+		</if>
+		<antcall target="jboss-start" />
+	</target>
+
+	<target name="jboss-ping" description="Queries JBoss JMX server to see if it's running, setting the property 'jboss.running' if it is">
+		<ping-jboss-jmx-server />
+		<if>
+			<istrue value="${jboss.running}"/>
+			<then>
+				<echo>JBoss server is running</echo>
+			</then>
+			<else>
+				<echo>JBoss server is not running</echo>
+			</else>
+		</if>
+	</target>
+
+	<target name="jboss-restore" depends="jboss-assert-stopped" description="Will restore JBoss production server to the clean 'baselined' version">
+		<antcall target="jboss-delete" />
+		<antcall target="jboss-install" />
+		<antcall target="jboss-configure" />
+	</target>
+
+	<target name="jboss-install" description="Install the JBoss server instance (e.g. production) with the contents of the baseline zip">
+		<fail message="Can not locate JBoss server components, please ensure you have updated your third-party libraries folder.">
+			<condition>
+				<or>
+				<not>
+					<available file="${jboss.server.instance.zip}"/>
+				</not>
+				<not>
+					<available file="${jboss.server.conf.zip}"/>
+				</not>
+				<not>
+					<available file="${jboss.gretna.server.deploy.zip}"/>
+				</not>
+				<not>
+					<available file="${jboss.gretna.server.conf.zip}"/>
+				</not>
+				<not>
+					<available file="${jboss.gretna.server.lib-virgin.zip}"/>
+				</not>
+				</or>				
+			</condition>
+		</fail>
+		<mkdir dir="${jboss.server.root}"/>
+		<fileset id="files.refid" dir="${jboss.server.root}">
+			<include name="**/*"/>
+		</fileset>
+		<dirset id="dirs.refid" dir="${jboss.server.root}">
+			<include name="*"/>
+		</dirset>
+		<property name="contents" value="${toString:files.refid}${toString:dirs.refid}"/>
+		<if>
+			<not>
+				<equals arg1="${contents}" arg2=""/>
+			</not>
+			<then>
+				<fail message="JBoss server instance '${jboss.server.root}' not empty, will not install new one of the the remains of an old one, run jboss-delete first" />
+			</then>
+			<else>
+				<echo message="Installing JBoss server components and Gretna customisations"/>
+				<unzip src="${jboss.server.instance.zip}" dest="${jboss.server.root}" />
+				<unzip src="${jboss.server.conf.zip}" dest="${jboss.server.root}" />
+				<unzip src="${jboss.gretna.server.deploy.zip}" dest="${jboss.server.root}" />
+				<unzip src="${jboss.gretna.server.conf.zip}" dest="${jboss.server.root}" />
+				<unzip src="${jboss.gretna.server.lib-virgin.zip}" dest="${jboss.server.root}" />				
+			</else>
+		</if>
+	</target>
+
+	<target name="jboss-configure">
+		<!-- TODO: add filtering capability across specific JBoss install files -->
+	</target>
+
+	<target name="jboss-delete" description="Copies the current JBoss server instance to an 'archive' area (default is '/tmp')">
+		<mkdir dir="${jboss.server.root}"/>
+		<fileset id="files.refid" dir="${jboss.server.root}">
+			<include name="**/*"/>
+		</fileset>
+		<dirset id="dirs.refid" dir="${jboss.server.root}">
+			<include name="*"/>
+		</dirset>
+		<property name="contents" value="${toString:files.refid}${toString:dirs.refid}"/>
+		<if>
+			<not>
+				<equals arg1="${contents}" arg2=""/>
+			</not>
+			<then>
+				<if>
+					<istrue value="${jboss.archive.keep}"/>
+					<then>
+						<antcall target="jboss-archive"/>
+					</then>
+					<else>
+						<echo message="jboss.archive.keep set to 'false', not archiving local JBoss server instance" />
+					</else>					
+				</if>
+				<delete dir="${jboss.server.root}" failonerror="false"/>
+				<mkdir dir="${jboss.server.root}"/>
+			</then>
+			<else>
+				<echo message="JBoss server instance '${jboss.server.root}' already empty/deleted." />
+			</else>
+		</if>
+	</target>
+
+	<target name="jboss-archive" depends="">
+		<property name="jboss.archive.file" value="${jboss.archive.dir}/vmg-jboss-backup-${time.now}.tar.gz" />
+		<var name="jboss.archive.dir" unset="true"/>
+		<echo message="Archiving local JBoss server instance '${jboss.server.root}' to '${jboss.archive.file}'" />
+		<dirname property="jboss.archive.dir" file="${jboss.archive.file}"/>
+		<mkdir dir="${jboss.archive.dir}"/>
+		<var name="jboss.archive.file.tmp" value="${jboss.archive.file}.tmp"/>
+		<delete failonerror="false" file="${jboss.archive.file.tmp}"/>		
+		<tar destfile="${jboss.archive.file.tmp}">
+    	<tarfileset dir="${jboss.server.root}/..">
+    		<include name="production/**"/>
+    		<exclude name="production/log/**"/>
+    		<exclude name="production/data/**"/>
+    		<exclude name="production/work/**"/>
+    		<exclude name="production/tmp/**"/>
+    	</tarfileset>
+  	</tar>	
+		<delete failonerror="false" file="${jboss.archive.file}"/>
+  	<gzip src="${jboss.archive.file.tmp}" destfile="${jboss.archive.file}"/>
+		<delete failonerror="false" file="${jboss.archive.file.tmp}"/>
+  </target>
+  
+</project>

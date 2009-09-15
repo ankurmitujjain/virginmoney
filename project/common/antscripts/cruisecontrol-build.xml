@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<project basedir="." default="cruise-control">
+	
+    <!-- Ant script for common antscript folders, this just tags the repository after they have been updated -->
+    <target name="cruise-control" depends="tag"/>
+    
+
+   <path id="svnant.classpath">           
+           <fileset dir="../../thirdparty/libraries/antsvn/initial-version">
+               <include name="*.jar"/>               
+           </fileset>
+    </path>
+   
+   <!-- task to extract common libraries to local folder -->
+   <taskdef name="svn" classname="org.tigris.subversion.svnant.SvnTask">
+   	<classpath refid="svnant.classpath"/>
+   </taskdef>
+
+   <target name="tag" >
+        <svn username="cruise" password="c0ntr0l" javahl="false" javasvn="false">
+            <copy srcPath="." destUrl="http://boing.eit.wrl.virginmoney.com/svn/svn-repositories/transformation/tags/${label}"
+               message="Cruise Control tagged build ${label}"/>
+        </svn>
+   </target>
+
+</project>

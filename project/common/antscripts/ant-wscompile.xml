@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<project name="ant-wscompile" default="wscompile">
+
+    <!--
+
+    Standard Ant task to run Wscompile for Virgin Money projects which require access to rpc encoded WSDL via JAX/RPC
+    =================================================================================================================
+    
+    
+    ######################################################################################################
+    
+    IMPORTANT !!!  
+    =============
+    
+    Wherever possible, the wscompile script should be used in preference to this one because JAX-RPC has been
+    superceded by JAX-WS, which is the current Virginmoney standard.
+    
+    This script should be used only when JAX-WS is ubale to process an rpc encoded WSDL and issues an error message
+    like this
+    
+         [ERROR] rpc/encoded wsdls are not supported in JAXWS 2.0. 
+                   line 1234 of file:mywsdl.wsdl
+                   
+    
+    ######################################################################################################
+
+
+    To use this script
+    ==================
+
+        1. include the file common.build.properties from this folder into your local build file (see
+           the common.build.properties file for details on how to do this). 
+           
+           This will import standard definitions for all properties needed, including the ${antscripts.dir} referenced below
+
+
+        2. create a task in your own ant buildscript like this :-
+
+          <target name="wscompile" description="Runs wscompile">
+               <ant antfile="${antscripts.dir}/ant-wscompile.xml" inheritall="true"  inheritrefs="true">
+                  <property name="config.filename"      value="${conf.dir}/wsdl/mywsdl.config.xml"/>
+               </ant>
+          </target>
+          
+          NOTE that the WSDL filename and the Java package name are not passed directly into this script; instead,
+          the name of a configuration file must be supplied via the 'config.filename' parameter. An example config file is shown below
+
+
+    Optional parameters
+    ===================
+
+         1. to override the standard folders (set in common.build.properties) for generated source and compiled
+            classes, set the following properties
+
+           src.generated.dir  -  the folder that will contain the generated source code
+           build.main.dir     -  the folder containing the location of the compiled classes
+
+    
+    Sample Config file
+    ==================
+    
+    wscompile requires a configuration file in order to identify the name of the . At its simplest, it looks like this
+    
+    <?xml version="1.0" encoding="UTF-8"?>
+    <configuration xmlns="http://java.sun.com/xml/ns/jax-rpc/ri/config" >
+       <wsdl location="mywsdl.wsdl"
+             packageName="com.virginmoney.mypackage.messages"
+        />
+   </configuration>
+    
+    
+    -->
+    
+    
+
+    <!--
+      re-include the common properties file as it reduces undefined property problems in Intellij
+      the only side-effect is that properties will only be overriden if they are specified inside the ant task, ie
+      <ant antfile=""><property name="" value=""></ant>
+     -->
+     <property file="common.build.properties"/>
+
+
+    <!-- wscompile classpath - includes common libraries and configuration elements plus test version of configuration elements -->
+    <path id="metro.classpath">
+        <fileset dir="${metro.lib}">
+            <include name="*.jar"/>
+            <exclude name="j2ee.jar"/>
+        </fileset>
+    </path>
+
+   <!--define the wscompile taks for JAX-RPC wsdl-to-java conversion -->
+    <taskdef name="wscompile" classname="com.sun.xml.rpc.tools.ant.Wscompile">
+        <classpath refid="metro.classpath"/>
+    </taskdef>
+
+
+    <target name="wscompile" description="generates client java classes from an rpc/encoded wsdl" depends="wscompile-set-serviceProxy" >
+        <mkdir dir="${src.generated.dir}" />
+        <mkdir dir="${build.main.dir}" />
+     
+
+        <echo message="ant-wscompile.xml : wscompile : src.generated.dir =${src.generated.dir}"/>
+        <echo message="ant-wscompile.xml : wscompile : build.main.dir    =${build.main.dir}"/>
+
+        <wscompile
+                 debug="true"
+                 verbose="true"
+                 client="true"
+                 keep="true"
+                 base="${build.main.dir}"
+                 sourceBase="${src.generated.dir}"
+                 config="${config.filename}"
+          >
+              <classpath refid="metro.classpath"/>
+         </wscompile>
+         <echo message="ant-wscompile.xml : wscompile : finished"/>
+
+     </target>
+
+
+    <target name="wscompile-set-serviceProxy" description="sets serviceProxy servers for wsdl generation">
+
+        <echo message="ant-wscompile.xml : wscompile-set-serviceProxy : started"/>
+
+         <!-- depending on where this is run from, it may need to go through a serviceProxy
+              For Windows developers, add these lines
+                  env.proxy.default.host=zoinks.eit.wrl.virginmoney.com
+                  env.proxy.default.port=8888
+                  env.proxy.default.nonproxyhosts=*.unix.vmoney.local|localhost
+              into a file named C:\Documents and Settings\(user id)\etc\env.build.properties
+          -->
+
+            <setproxy proxyhost="${env.proxy.default.host}"
+                       proxyport="${env.proxy.default.port}"
+                       nonproxyhosts="${env.proxy.default.nonproxyhosts}"
+                     />
+
+             <echo message="ant-wscompile.xml : wscompile-set-serviceProxy : proxyhost=${env.proxy.default.host}"/>
+             <echo message="ant-wscompile.xml : wscompile-set-serviceProxy : proxyport= ${env.proxy.default.port}"/>
+             <echo message="ant-wscompile.xml : wscompile-set-serviceProxy : nonproxyhosts=${env.proxy.default.nonproxyhosts}"/>
+
+     </target>
+
+
+
+</project>

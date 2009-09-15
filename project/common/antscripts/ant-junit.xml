@@ -1,0 +1,240 @@
+<?xml version="1.0"?>
+<project name="ant-junit" default="junit">
+
+    <!--
+
+    Standard Ant task to run JUnit for Virgin Money projects
+    ========================================================
+
+     Function
+     ========
+
+        This script runs all the junit tests for a project.
+
+        It is configurable, however if you need to do something significantly different it is recommended that you do not use this script
+        and create your own version instead.
+
+
+    To use this script
+    ==================
+
+        1. include the file common.build.properties from this folder into your local build file (see
+           the common.build.properties file for details on how to do this).
+
+           This will import standard definitions for all properties needed, including the ${antscripts.dir} referenced below
+
+
+        2. create a task in your own ant buildscript like this :-
+
+             <target name="junit" description="Runs junit">
+                  <ant antfile="${antscripts.dir}/ant-junit.xml" inheritall="true"  inheritrefs="true"/>
+             </target>
+
+        3. Define values for these properties (or pass them in via the 'ant' task
+
+             test.classpath  -  the classpath of ALL the classes junit will need, except for junit's own classes which it defines for itself
+
+
+    Optional parameters
+    ===================
+
+         1. Fileset to execute
+             It is possible to use a different fileset for testing, by defining one in your build.xml and then
+                  set property junit-execute-fileset-id to contain its name e.g
+
+                <fileset id="junit-project-fileset" dir="${build.test.dir}">
+                    <include name="**/Test*.*"/>
+                    <exclude name="**/*Ignore*.*"/>
+                </fileset>
+                <property name="junit-execute-fileset-id"  value="junit-project-fileset"/>
+
+               you MUST call the property "junit-execute-fileset-id" otherwise it wont work
+
+         2. jvmarg for JUnit
+            It is possible to set the 'jvmargs' used by junit by setting a parameter named  "junit-jvmarg"
+                <property name="junit-jvmarg"  value="-Dproperty=value"/>
+
+         3. junit forking. The default value is 'false' but this can be overridden by setting a parameter named "junit-fork"
+
+         4. junit report style. Default is the "no frames" style.
+                junit-report-style := frames|noframes.
+
+
+    -->
+
+    <!-- re-include the common properties file as it reduces undefined property problems in Intellij -->
+    <!-- the only side-effect is that properties will only be overriden if they are specified inside the ant task, ie -->
+    <!--    <ant antfile=""><property name="" value=""></ant>   -->
+    <property file="common.build.properties"/>
+
+
+	<!-- pull in ant contrib -->
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<fileset dir="${antcontrib.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</classpath>
+	</taskdef>
+
+
+    <fileset id="junit-default-fileset" dir="${build.test.dir}">
+        <!--
+        defines the default fileset to be executed
+        DO NOT CHANGE THIS WITHOUT GOOD REASON - If you need to user a different fileset create one IN YOUR OWN
+        build.xml and set property junit-execute-fileset-id to contain its name e.g
+
+                <fileset id="junit-project-fileset" dir="${build.test.dir}">
+                    <include name="**/Test*.*"/>
+                    <exclude name="**/*Ignore*.*"/>
+                </fileset>
+                <property name="junit-execute-fileset-id"  value="junit-project-fileset"/>
+        -->
+        <!-- Only Tests called Test* will get run -->
+        <include name="**/Test*.*"/>
+        <!-- BUT some message classes start with Test so we need to ignore these -->
+        <exclude name="**/messages/**.*"/>
+
+        <exclude name="**/*$$*.*"/>
+    </fileset>
+
+    <!--names the fileset to be used in the tests - this can be overridden in the calling script -->
+    <property name="junit-execute-fileset-id"  value="junit-default-fileset"/>
+
+    <!-- values to be passed to junit via the jvmarg property - this can be overridden in the calling script, but -->
+    <!--  do not leave this blank as it causes problems if junit runs with fork="true"-->
+    <property name="junit-jvmarg"  value="-Ddummyproperty=dummyvalue"/>
+
+    <!-- fork ?   this can be overridden in the calling script -->
+    <property name="junit-fork"  value="false"/>
+
+    <!-- fork mode, one per test one per set of tests? massive speed increase in perBatch -->
+		<property name="junit-forkmode" value="perBatch"/>
+		
+    <!-- when forking, this defines the folder that the jvm's use to communication, by creating temporary files -->
+    <property name="junit-tempdir" value="${junit.results.dir}/tempdir" />
+
+    <!-- when producing the junit reports, this controls the formatter used, can be overriden. -->
+    <property name="junit-report-style" value="noframes" />
+    
+    <target name="junit-prepare" description="Sets up folders for junit output">
+         <delete dir="${junit.results.dir}"/>
+         <mkdir dir="${junit.results.dir}"/>
+         <mkdir dir="${junit-tempdir}"/>
+    </target>
+
+    <!-- standard Junit test target - see instructions above for details on how to configure this -->
+    <target name="junit" description="Run JUnit tests">
+			  <stopwatch name="junit-test"/>
+        <echo message="ant-junit.xml : junit : started"/>
+
+        <antcall target="junit-prepare"/>
+        <echo message="ant-junit.xml : junit : junit results dir=${junit.results.dir}"/>
+        <echo message="ant-junit.xml : junit :      fileset name=${junit-execute-fileset-id}"/>
+        <echo message="ant-junit.xml : junit :            jvmarg=${junit-jvmarg}"/>
+        <echo message="ant-junit.xml : junit :     junit-tempdir=${junit-tempdir}"/>
+        <echo message="ant-junit.xml : junit :        junit-fork=${junit-fork}"/>
+        <echo message="ant-junit.xml : junit :    junit-forkmode=${junit-forkmode}"/>
+
+        <junit printsummary="on" fork="${junit-fork}" forkmode="${junit-forkmode}" haltonfailure="false" failureproperty="tests.failed" showoutput="true"   tempdir="${junit-tempdir}">
+
+            <!--FILESET - see instructions above for details on how to set this-->
+            <batchtest todir="${junit.results.dir}" >
+                <fileset refid="${junit-execute-fileset-id}"/>
+            </batchtest>
+
+            <!--JVMARG - see instructions above for details on how to set this-->
+            <jvmarg value="${junit-jvmarg}" />
+						
+            <!--CLASSPATH - see instructions above for details on how to set this-->
+            <classpath>
+                <path refid="test.classpath"/>
+            </classpath>
+
+            <formatter type="xml" usefile="true"/>
+            <formatter type="brief" usefile="false"/>
+
+        </junit>
+        <echo message="ant-junit.xml : junit : tests.failed=${tests.failed}"/>
+
+        <antcall target="junit-report"/>
+        <antcall target="junit-testfailure"/>
+			  <stopwatch name="junit-test" action="total"/>
+        <echo message="ant-junit.xml : junit : finished"/>
+
+    </target>
+
+    <!--cobertura-enabled junit, this expects 'cobertura.classpath' to be predefined
+         See instructions above for details on how to configure this
+   -->
+    <target name="junit-cobertura" description="Run JUnit tests with cobertura enabled">
+			  <stopwatch name="junit-cobertura"/>
+        <echo message="ant-junit.xml : junit-cobertura : started"/>
+        <echo message="ant-junit.xml : junit-cobertura :          junit results dir=${junit.results.dir}"/>
+        <echo message="ant-junit.xml : junit-cobertura :               fileset name=${junit-execute-fileset-id}"/>
+        <echo message="ant-junit.xml : junit-cobertura :                     jvmarg=${junit-jvmarg}"/>
+        <echo message="ant-junit.xml : junit-cobertura :              junit-tempdir=${junit-tempdir}"/>
+        <echo message="ant-junit.xml : junit-cobertura :             junit-forkmode=${junit-forkmode}"/>
+        <echo message="ant-junit.xml : junit-cobertura :         cobertura.datafile=${cobertura.datafile}"/>
+        <echo message="ant-junit.xml : junit-cobertura :      cobertura.results.dir=${cobertura.results.dir}"/>
+        <echo message="ant-junit.xml : junit-cobertura : cobertura.instrumented.dir=${cobertura.instrumented.dir}"/>
+
+        <antcall target="junit-prepare"/>
+
+        <!-- NOTE - setting junit-fork to false stops cobertura producing any results - see http://cobertura.sourceforge.net/anttaskreference.html -->
+        <junit fork="true" forkmode="${junit-forkmode}" printsummary="yes" haltonfailure="no" failureproperty="tests.failed" showoutput="true"  tempdir="${junit-tempdir}">
+
+            <!--JVMARG - see instructions above for details on how to set this-->
+            <jvmarg value="${junit-jvmarg}" />
+
+            <!--CLASSPATH - see instructions above for details on how to set this-->
+            <classpath>
+                <pathelement location="${cobertura.instrumented.dir}" />
+                <path refid="test.classpath" />
+                <path refid="cobertura.classpath" />
+            </classpath>
+
+            <!--FILESET - see instructions above for details on how to set this-->
+            <batchtest todir="${junit.results.dir}" >
+                <fileset refid="${junit-execute-fileset-id}"/>
+            </batchtest>
+
+            <sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.datafile}" />
+
+            <formatter type="xml" usefile="true"/>
+            <formatter type="brief" usefile="false"/>
+        </junit>
+
+        <antcall target="junit-report"/>
+        <antcall target="junit-testfailure"/>
+			  <stopwatch name="junit-cobertura" action="total"/>
+        <echo message="ant-junit.xml : junit-cobertura : finished"/>
+
+    </target>
+
+    <target name="junit-report" description="Produces a junit results report">
+        <echo message="ant-junit.xml : junit-report : started"/>
+        <echo message="ant-junit.xml : junit-report : junit-report-style=${junit-report-style} "/>
+
+        <junitreport todir="${junit.results.dir}">
+            <fileset dir="${junit.results.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="${junit-report-style}" todir="${junit.results.dir}"/>
+        </junitreport>
+
+        <echo message="ant-junit.xml : junit-report : finished"/>
+
+    </target>
+
+     <target name="junit-testfailure"  description="Checks for failure in the JUnit tests" unless="tests.ignore">
+         <echo message="ant-junit.xml : junit-testfailure : tests.failed=${tests.failed}"/>
+          <fail if="tests.failed">
+            tests.failed=${tests.failed}
+            *
+            * One or more Junit tests failed! Check the output...
+            *
+        </fail>
+     </target>
+
+</project>

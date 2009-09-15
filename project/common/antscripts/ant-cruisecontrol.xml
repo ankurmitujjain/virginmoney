@@ -1,0 +1,240 @@
+<?xml version="1.0"?>
+<project default="cc-tag">
+
+    <property file="${cruise.shared.properties}" />
+    <property file="library.version" />
+
+    <!--<property name="project.type.war" value="false" />-->
+    <!--<property name="project.type.library" value="false" />-->
+
+    <path id="svnant.classpath">
+        <fileset dir="${svnant.home}">
+            <include name="*.jar" />
+        </fileset>
+    </path>
+
+    <taskdef name="svn" classname="org.tigris.subversion.svnant.SvnTask">
+        <classpath refid="svnant.classpath" />
+    </taskdef>
+
+    <target name="cc-tag" depends="decide-project-type">
+        <antcall target="cc-tag-war" />
+        <antcall target="cc-tag-library" />
+    </target>
+
+    <target name="cc-no-tag" depends="decide-project-type">
+        <antcall target="cc-no-tag-war" />
+        <antcall target="cc-no-tag-library" />
+    </target>
+
+    <target name="decide-project-type">
+
+        <echo>decising project type (property : ${project.type})</echo>
+        <!-- if a project.type is speified and equals library then set the library flag to true -->
+        <condition property="project.type.library">
+            <matches pattern="library" string="${project.type}" />
+        </condition>
+
+        <!-- if a project.type does NOT equal library then set the war flag to true -->
+        <condition property="project.type.war">
+            <matches pattern="war" string="${project.type}" />
+        </condition>
+
+        <echo>is project libraray? ${project.type.library}</echo>
+        <echo>is project war? ${project.type.war}</echo>
+    </target>
+
+    <!-- Target for Cruise Control to run when performing automated builds -->
+    <target name="cc-tag-war" if="project.type.war">
+        <echo>Starting cc-tag-war</echo>
+        <antcall target="cc-no-tag-war" />
+        <antcall target="tag" />
+    </target>
+
+    <!-- Build on non-dev ci machines e.g. spectrum, fox. -->
+    <target name="cc-no-tag-war" if="project.type.war">
+        <echo>Starting cc-no-tag-war</echo>
+         <antcall target="check-preconditions" />
+         <antcall target="update-libraries" />
+         <antcall target="build" />
+         <antcall target="deploy" />
+    </target>
+
+    <!-- Target for Cruise Control to run when performing automated builds -->
+    <target name="cc-tag-library" if="project.type.library">
+        <echo>Starting cc-tag-library</echo>
+        <antcall target="cc-no-tag-library" />
+        <antcall target="tag" />
+    </target>
+
+    <!-- build for library components -->
+    <target name="cc-no-tag-library" if="project.type.library">
+        <echo>Starting cc-no-tag-library</echo>
+        <antcall target="check-library-preconditions" />
+        <antcall target="update-libraries" />
+        <antcall target="build-library" />
+        <antcall target="deploy-library" />
+    </target>
+
+
+    <target name="check-preconditions">
+      <fail unless="project.path.relative" message="project relative path not set"/>
+      <fail unless="cruise.home" message="common properties file (cruisecontrol.properties) was not loaded"/>
+    </target>
+
+    <target name="check-library-preconditions" depends="check-preconditions">
+      <fail unless="library.base.dir" message="Library build - library.deploy.path property not set"/>
+      <fail unless="library.archive.name" message="Library build - library.archive.name property not set"/>
+
+      <!-- the lib version from the project's version file -->
+      <fail unless="library.version" message="Library build - library.version not found (${library.version})- does the project have a library.version file (${projectVersionFile})?" />      
+    </target>
+    
+    <target name="update-libraries">
+
+      <echo>Updating ${thirdparty.libraries}</echo>
+      <svn username="${cruise.username}" password="${cruise.password}" javahl="false" javasvn="true">
+        <update dir="${thirdparty.libraries} "/>
+      </svn>
+
+      <echo>Updating ${common.antscripts}</echo>
+      <svn username="${cruise.username}" password="${cruise.password}" javahl="false" javasvn="true">
+        <update dir="${common.antscripts} "/>
+      </svn>
+
+      <echo>Updating ${common.components}</echo>
+      <svn username="${cruise.username}" password="${cruise.password}" javahl="false" javasvn="true">
+        <update dir="${common.components}/libraries "/>
+      </svn>      
+    </target>
+    
+    <target name="build" description="Build the component, using default ant target">
+        <echo message="starting build for ${project.path.relative} in ${basedir}" />
+        <ant dir="." target="build" />
+    </target>
+
+    <target name="build-library" description="Builds the library">
+        <echo message="starting build for ${project.path.relative} in ${basedir}" />
+        <ant dir="." target="build" />        
+    </target>
+
+    <target name="deploy">
+        <copy todir="${jboss.home}" preservelastmodified="true" flatten="true">
+            <fileset dir="./deploy/">
+                <include name="**/*.war" />
+            </fileset>
+        </copy>
+
+        <!-- detemine if a client archive is present -->
+        <condition property="deploy.client">
+            <matches pattern="yes" string="${contains.client}" />
+        </condition>
+
+        <echo>war project contains client? ${deploy.client}</echo>
+
+        <antcall target="deploy-client-jar" />
+
+    </target>
+
+    <target name="deploy-client-jar" if="deploy.client">
+        <echo>deploying client jar to: ${common.components}/client/${component.name}</echo>
+
+        <!-- Check if the version is already versioned -->
+        <copy todir="${common.components}/client/${component.name}" preservelastmodified="true" flatten="true">
+            <fileset dir="./deploy/">
+                <include name="**/*.jar" />
+            </fileset>
+        </copy>
+
+        <!-- Check if the version is already versioned -->
+        <svn username="cruise" password="c0ntr0l" javahl="false" javasvn="true">
+            <status path="${common.components}/client/${component.name}" textStatusProperty="client.svn.status" />
+        </svn>
+
+        <echo>client version status: ${client.svn.status}</echo>
+
+        <!-- if it is set a property -->
+        <condition property="client.version.new">
+            <matches pattern="unversioned" string="${client.svn.status}" />
+        </condition>
+
+        <echo>client version new? ${client.version.new}</echo>
+
+        <!-- add it if it's a new version -->
+        <antcall target="client-svn-add" />
+
+        <!-- then commit the file -->
+        <svn username="cruise" password="c0ntr0l" javahl="false" javasvn="true">
+            <commit dir="${common.components}/client/${component.name}" message="Ant: Updated Client Jar(s)" />
+        </svn>
+        
+    </target>
+    
+    <target name="deploy-library" description="Builds and checks in the library">
+
+        <copy todir="${common.components}/libraries/${library.base.dir}/${library.archive.name}-${library.version}" preservelastmodified="true" flatten="true">
+            <fileset dir="./deploy/">
+                <include name="${library.archive.name}.jar" />
+            </fileset>
+        </copy>
+
+        <!-- Check if the version is already versioned -->
+        <svn username="cruise" password="c0ntr0l" javahl="false" javasvn="true">
+            <status path="${common.components}/libraries/${library.base.dir}/${library.archive.name}-${library.version}" textStatusProperty="library.svn.status" />
+        </svn>
+
+        <echo>library version status: ${library.svn.status}</echo>
+
+        <!-- if it is set a property -->
+        <condition property="library.version.new">
+            <matches pattern="unversioned" string="${library.svn.status}" />
+        </condition>
+
+        <echo>library version new? ${library.version.new}</echo>
+
+        <!-- add it if it's a new version -->
+        <antcall target="library-svn-add" />
+
+        <!-- then commit the file -->
+        <svn username="cruise" password="c0ntr0l" javahl="false" javasvn="true">
+            <commit file="${common.components}/libraries/${library.base.dir}/${library.archive.name}-${library.version}/${library.archive.name}.jar" message="Ant: Updated Library" />
+        </svn>
+
+    </target>
+
+    <!-- tag a revision in SVN -->
+    <target name="tag">
+        <svn username="${cruise.username}" password="${cruise.password}" javahl="false" javasvn="false">
+            <copy srcPath="."
+                  destUrl="${svn.host}/${svn.root}/tags/${project.path.relative}/${label}"
+                  message="CC tagged ${label}" />
+        </svn>
+    </target>
+
+    <!-- build for environments where code is not build - just copied from one location to another -->
+    <target name="copyup-deploy">
+        <echo message="copying ${project.war.name} from ${copyup.source.dir}" />
+        
+        <copy file="${copyup.source.dir}/${project.war.name}" 
+              todir="${jboss.home}" />
+    </target>
+
+    <!-- add a new version of the library to SVN (if it's a new version)-->
+    <target name="library-svn-add" if="library.version.new">
+        <echo>Adding new version directory</echo>
+        
+        <svn username="cruise" password="c0ntr0l" javahl="false" javasvn="true">
+            <add dir="${common.components}/libraries/${library.base.dir}/${library.archive.name}-${library.version}" />                      
+            <commit dir="${common.components}/libraries/${library.base.dir}/${library.archive.name}-${library.version}" message="Ant: Added Library" />            
+        </svn>
+    </target>
+
+    <!-- add a new version of the library to SVN (if it's a new version)-->
+    <target name="client-svn-add" if="client.version.new">
+        <svn username="cruise" password="c0ntr0l" javahl="false" javasvn="true">
+            <add dir="${common.components}/client/${component.name}" />
+            <commit dir="${common.components}/client/${component.name}" message="Ant: Updated Library" />
+        </svn>
+    </target>
+    
+</project>

@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<project name="ant-findbugs" default="findbugs">
+
+    <!--
+
+    Standard Ant task to run findbugs for Virgin Money projects
+    ==========================================================================================
+    
+     Function
+     ========
+
+        This script runs the findbug.
+
+
+    To use this script
+    ==================
+
+        1. include the file common.build.properties from this folder into your local build file (see
+           the common.build.properties file for details on how to do this). 
+           
+           This will import standard definitions for all properties needed, including the ${antscripts.dir} referenced below
+
+
+        2. create a task in your own ant buildscript like this :-
+
+          <target name="findbugs" description="Runs findbugs over the source to check the coding bugs">
+               <ant antfile="${antscripts.dir}/ant-findbugs.xml" inheritall="true"   inheritrefs="true"/>
+          </target>
+    -->
+
+    <!-- re-include the common properties file as it reduces undefined property problems in Intellij -->
+    <!-- the only side-effect is that properties will only be overriden if they are specified inside the ant task, ie -->
+    <!--    <ant antfile=""><property name="" value=""></ant>   -->
+    <property file="common.build.properties"/>
+
+    <path id="findbugs.classpath">
+        <fileset dir="${findbugs.home}">
+            <include name="**/*.jar" />
+        </fileset>
+    </path>
+        
+    <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpathref="findbugs.classpath"/>
+
+		<mkdir dir="${findbugs.results.dir}" />
+		<mkdir dir="${findbugs.results.dir}/xml" />
+
+  	<target name="findbugs">
+  	
+	    <findbugs home="${findbugs.home}"
+    	          output="xml:withMessages"
+        	      outputFile="${findbugs.results.dir}/xml/findbugs_result.xml" 
+        	      jvmargs="-Xmx400m" debug="false">
+        	    
+					<auxClasspath refId="required.libraries" />
+		  		<sourcePath path="${src.main.dir}" />
+      		<class location="${build.main.dir}" />
+
+      	</findbugs>
+  	</target>
+
+</project>
