@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>common-build</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>antscripts</name>
+			<type>2</type>
+			<locationURI>VMG_COMMON_HOME/antscripts</locationURI>
+		</link>
+		<link>
+			<name>env.build.properties</name>
+			<type>1</type>
+			<locationURI>VMG_USER_HOME/etc/env.build.properties</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>
