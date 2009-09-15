@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<project name="ant-fitnesse" default="fitnesse">
+
+    <!--
+
+    Standard Ant task to run Fitnesse for Virgin Money projects
+    ===========================================================
+
+     Function
+     ========
+
+        This script executes Fitnesse against a project.
+    
+        It is configurable, however if you need to do something significantly different it is recommended that you do not use this script 
+        and create your own version instead.
+
+
+    To use this script
+    ==================
+
+        1. include the file common.build.properties from this folder into your local build file (see
+           the common.build.properties file for details on how to do this). 
+           
+           This will import standard definitions for all properties needed, including the ${antscripts.dir} referenced below
+
+
+        2. create a task in your own ant buildscript like this :-
+
+             <target name="fitnesse" description="Runs fitnesse">
+                  <ant antfile="${antscripts.dir}/ant-fitnesse.xml" inheritall="true"  inheritrefs="true"/>
+             </target>
+             
+        3. Define values for these properties (or pass them in via the 'ant' task
+
+             test.classpath  -  the classpath of ALL the classes fitnesse will need, except for fitnesse's own classes which it defines for itself
+             fitnesse.test.page - the url of the page (exlcuding server name and port)  of the page to execute
+
+
+    Optional parameters
+    ===================
+
+
+         1. Fitnesse server location
+
+             If you wish to use a server which is different to the default, provide values for the
+             properties "fitnesse.server.name" and "fitnesse.server.port" , e.g ;-
+
+              fitnesse.server.name=dylan.eit.wrl.virginmoney.com
+              fitnesse.server.port=28080
+
+         2. jvmarg for Fitnesse
+            It is possible to set the 'jvmargs' used by fitnesse by setting a parameter named  "fitnesse-jvmarg"
+                <property name="fitnesse-jvmarg"  value="-Dproperty=value"/>
+
+            jvmargs are must useful for setting system properties via the -D option. e.g
+                <property name="fitnesse-jvmarg"  value="-Dservice.url=http://myserver.url" />
+
+    -->
+
+    <!--
+      re-include the common properties file as it reduces undefined property problems in Intellij
+      the only side-effect is that properties will only be overriden if they are specified inside the ant task, ie
+      <ant antfile=""><property name="" value=""></ant>
+     -->
+    <property file="common.build.properties"/>
+
+    <!-- fitnesse classpath - includes common libraries and configuration elements plus test version of configuration elements -->
+    <path id="fit.classpath">
+        <fileset dir="${fitnesse.home}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+
+
+    <!-- values to be passed to fitnesse via the jvmarg property -   this can be overridden in the calling script -->
+    <!--  do not leave this blank as it causes problems if fitnesse runs with fork="true" on Linux/unix-->
+    <property name="fitnesse-jvmarg"  value="-Ddummyproperty=dummyvalue"/>
+
+    <target name="fitnesse" description="Run Fitnesse tests" >
+         <echo message="ant-fitnesse.xml : fitnesse.server.name =${fitnesse.server.name}"/>
+         <echo message="ant-fitnesse.xml : fitnesse.server.port =${fitnesse.server.port}"/>
+         <echo message="ant-fitnesse.xml : fitnesse.test.page   =${fitnesse.test.page}"/>
+         <delete dir="${fitnesse.results.dir}"/>
+         <mkdir dir="${fitnesse.results.dir}"/>
+
+
+         <java classname="fitnesse.runner.TestRunner" fork="true" >
+            <!--JVMARG - can be used to set system properties etc - see instructions above for details on how to set this-->
+            <jvmarg value="${fitnesse-jvmarg}" />
+
+             <classpath>
+                 <path refid="test.classpath"/>
+                 <path refid="fit.classpath"/>
+                 <pathelement location="${fit.home}/fitnesse.jar"/>
+                 <pathelement location="${fit.home}/fitlibrary.jar"/>
+             </classpath>
+             <arg value="-v"/>
+             <arg value="-debug"/>
+             <arg value="-html"/>
+             <arg value="${fitnesse.results.dir}/${fitnesse.test.page}.results.html"/>
+             <arg value="-xml"/>
+             <arg value="${fitnesse.results.dir}/${fitnesse.test.page}.results.xml"/>
+             <arg value="${fitnesse.server.name}"/>
+             <arg value="${fitnesse.server.port}"/>
+             <arg value="${fitnesse.test.page}"/>
+         </java>
+        <echo message="ant-fitnesse.xml : finished"/>
+
+     </target>
+
+
+
+
+</project>

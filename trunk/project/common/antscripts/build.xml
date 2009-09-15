@@ -1,0 +1,289 @@
+<?xml version="1.0"?>
+<project name="AServiceName" basedir="." default="build">
+
+    <!--
+
+    Standard Ant Build file for Virgin Money projects
+    =======================================================
+
+    Function
+    ========
+
+        This script acts as a default build file to use for new projects. It makes use of the default ant targets provided in
+        /dev/common/antscripts.
+
+
+    To use this script
+    ==================
+
+        1. Take a copy of this file and put it in your own project directory.
+
+        2. Change the project name to reflect your own project
+        
+        3. Change the war.name to reflect your own project
+
+        3. The wsdl-gen-exampleservice target needs to be changed to reflect your own project
+
+        4. the required.libraries needs to be changed to the libraries you're using (I've just provided a base set)
+
+        5. The create-war target has a base set of libraries included. Amend this to suit your project.
+        
+        6. The create-database-schema target should work by default if the hibernate files are in 
+        	${conf.main.dir}/WEB-INF/classes/. It will also need a hibernate.dialect set in hibernate.properties
+
+
+    -->
+
+
+    <!-- user-specific properties -->
+    <property file="${user.home}/etc/env.build.properties" />
+
+    <!-- import the build file which predefines all the standard properties -->
+    <property name="antscripts.dir" value="${env.dev.root.dir}/common/antscripts"/>
+    <property file="${antscripts.dir}/common.build.properties" />
+    
+
+    <!-- import all the thirdparty library definitions -->
+    <property name="common.library.dir" value="${env.dev.root.dir}/thirdparty/libraries" />
+    <property file="${common.library.dir}/common.libraries.properties" />
+    
+    <property name="war.name" value="example-ws"/>
+
+    <!-- libraries required by the project. This is a base set of libraries that can be added/amended accordingly where appropriate -->
+    <path id="required.libraries">
+        <fileset dir="${dozer.lib}">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${xerces.lib}">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${metro.lib}">
+            <include name="*.jar"/>
+            <exclude name="j2ee.jar"/>
+        </fileset>
+        <fileset dir="${commons-beanutils.lib}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${commons-collections.lib}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${commons-lang.lib}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${jboss.lib}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${junit.home}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${log4j.lib}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${spring206.lib}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${hibernate.lib}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${oracle.lib}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${joda-time.lib}">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${fitnesse.home}">
+             <include name="**/*.jar"/>
+         </fileset>
+        
+    </path>
+
+
+    <!-- master classpath - includes common libraries and configuration elements -->
+     <path id="master.classpath">
+         <path refid="required.libraries" />
+         <pathelement path="${build.main.dir}"/>
+         <pathelement path="${conf.main.dir}"/>
+     </path>
+
+     <!-- test classpath - includes common libraries and configuration elements plus test version of configuration elements -->
+     <path id="test.classpath">
+         <pathelement path="${conf.test.dir}"/>
+         <pathelement path="${build.test.dir}"/>
+         <path refid="master.classpath" />
+     </path>
+
+
+     <!-- builds and tests the project -->
+     <target name="build" depends="build-no-tests, test-all, javadoc"/>
+
+     <target name="build-no-tests" depends="clean, wsdl-gen-all, compile, create-war" description="builds the project without tests"/>
+
+     <target name="deploy-local-jboss" depends="build-no-tests,test-all" description="Deploy application to local web server">
+     	<!-- jboss.local.deploy.dir should be defined in your local env.build.properties -->
+        <copy verbose="${verbose}" file="${deploy.dir}/${war.name}.war" todir="${jboss.local.deploy.dir}"
+        	preservelastmodified="false">
+        </copy>
+     </target>
+     
+     <target name="deploy-local-jboss-no-tests" depends="build-no-tests" description="Deploy application to local web server">
+        <copy verbose="${verbose}" file="${deploy.dir}/${war.name}.war" todir="${jboss.local.deploy.dir}"
+        	preservelastmodified="false">
+        </copy>
+     </target>
+
+
+    <target name="clean" description="Clean out the build and deployment directories">
+        <ant antfile="${antscripts.dir}/ant-clean.xml" inheritall="true" inheritrefs="true" />
+    </target>
+
+
+    <target name="compile" description="Compiles all source java files">
+         <ant antfile="${antscripts.dir}/ant-compile.xml" inheritall="true" inheritrefs="true" />
+    </target>
+    
+    <!-- A base create-war target. Will need to be amended to include/exclude the relevant libraries.
+         A base set of libraries has been included by default -->
+    <target name="create-war" description="This target creates the deployable WAR file">
+        <mkdir dir="${deploy.dir}"/>
+        <war  destfile="${deploy.dir}/${war.name}.war" webxml="${conf.main.dir}/WEB-INF/web.xml">
+            <!-- take all the compiled code from the build folder, but not the test code -->
+            <classes dir="${build.main.dir}"/>
+
+            <!-- include the main config entries but not the test ones 
+            	note log4j.xml should be placed in con/main/web-inf classes in the project -->
+            <zipfileset  dir="${conf.main.dir}">
+                <include name="**/*.*"/>
+                <exclude name="web.xml"/> <!-- already referenced above -->
+            </zipfileset>
+
+            <lib dir="${spring206minimal.lib}"/>
+            <lib dir="${hibernate3.2.4.lib}"/>
+            <lib dir="${joda-time.lib}"/>
+            <lib dir="${log4j.lib}"/>
+            <lib dir="${dozer.lib}"/>
+            <lib dir="${commons-logging.lib}"/>
+            <lib dir="${commons-collections.lib}"/>
+            <lib dir="${commons-beanutils.lib}"/>
+            <lib dir="${commons-lang.lib}"/>
+
+         </war>
+    </target>
+
+    <target name="javadoc" description="Runs Javadoc">
+          <ant antfile="${antscripts.dir}/ant-javadoc.xml" inheritall="true" inheritrefs="true" >
+             <property name="javadoc.title"  value="${ant.project.name}"/>
+             <property name="javadoc.verbose" value="true"/>
+         </ant>
+    </target>
+      
+
+    <target name="test-all">
+        <ant antfile="${antscripts.dir}/ant-all-metrics.xml" inheritall="true" inheritrefs="true">
+         </ant>
+    </target>
+
+
+    <target name="test-cobertura" description="Runs the Junit tests with Cobertura analysis" depends="compile">
+         <ant antfile="${antscripts.dir}/ant-cobertura.xml" inheritall="true" inheritrefs="true">
+         </ant>
+    </target>
+
+    <target name="test-junit" description="Runs the Junit tests" depends="compile,echoproperties">
+         <ant antfile="${antscripts.dir}/ant-junit.xml" inheritall="true" inheritrefs="true" />
+    </target>
+
+
+    <target name="test-checkstyle" description="Runs checkstyle over the source to check the coding standards">
+         <ant antfile="${antscripts.dir}/ant-checkstyle.xml" inheritall="true" inheritrefs="true" />
+    </target>
+
+    <target name="test-qalab" description="Runs qalab against the test results to record the metrics">
+        <ant antfile="${antscripts.dir}/ant-qalab.xml" inheritall="true" inheritrefs="true" />
+    </target>
+
+
+    <!-- a default fitnesse target. Provide the name of the fitnesse page to test with -->
+    <target name="test-fitnesse" description="Runs the Fitnesse tests" depends="compile">
+        <ant antfile="${antscripts.dir}/ant-fitnesse.xml" inheritall="true" inheritrefs="true">
+            <property name="fitnesse.test.page"
+                      value="a fitnesse page"/>
+
+        </ant>
+    </target>
+
+    <!-- WDSL to Java -->
+    <target name="wsdl-gen-all" description="Generate and compile the java source files from the WSDL">
+        <!-- clean the generated stuff -->
+        <delete dir="${src.generated.dir}"/>
+        <mkdir dir="${src.generated.dir}" />
+        <mkdir dir="${build.main.dir}"/>
+
+        <antcall target="wsdl-gen-exampleservice" />
+     </target>
+
+    <!-- a default wsdl target. Replace example with the name of your service -->
+    <target name="wsdl-gen-exampleservice" description="Generates the wsdl for this service">
+         <ant antfile="${antscripts.dir}/ant-wsimport.xml" inheritall="true" inheritrefs="true">
+             <property name="wsdl.location"        value="${conf.dir}/wsdl/example_service.wsdl"/>
+             <property name="java.package.name"    value="com.virginmoney.example.service.messages"/>
+         </ant>
+     </target>
+
+    <taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
+        <classpath refid="master.classpath"/>
+    </taskdef>
+
+   <target name="echoproperties">
+        <echo message="=============================================================================================="  />
+        <echo message=" Start of properties for project : '${ant.project.name}'"  />
+        <echo message="                         basedir : '${basedir}' "  />
+        <echo message="                        ant file : '${ant.file}'"  />
+        <echo message="=============================================================================================="  />
+        <echoproperties/>
+        <echo message="=============================================================================================="  />
+        <echo message=" End of properties for project : '${ant.project.name}' "  />
+        <echo message="=============================================================================================="  />
+    </target>
+    
+    <taskdef name="hibernatetool"
+             classname="org.hibernate.tool.ant.HibernateToolTask"
+             classpathref="hibernate-toolset.classpath"/>
+
+
+    <path id="hibernate-toolset.classpath">
+    <fileset dir="${hibernate.lib}">
+        <include name="hibernate-tools.jar"/>
+    </fileset>
+
+     <path refid="master.classpath" />
+   </path>
+
+
+    <!-- This target will create a file which maps the database schema from the Hibernate configuration.
+         This file can be used to create the tables etc. in the target database
+    -->
+    <target name="create-database-schema" description="Exports a generated schema to DB and file">
+        <mkdir dir="${deploy.dir}"/>
+        <delete file="${deploy.dir}/${ddl.file}"/>
+
+        <property name="ddl.file" value="${ant.project.name}-ddl.sql"/>
+        <hibernatetool destdir="${deploy.dir}">
+            <classpath refid="master-classpath"/>
+            <classpath path="${build.dir}"/>
+            <annotationconfiguration
+                    configurationfile="${conf.main.dir}/WEB-INF/classes/hibernate.cfg.xml"
+                    propertyfile="${conf.main.dir}/WEB-INF/classes/hibernate.properties"/>
+            <hbm2ddl drop="true"
+                     create="true"
+                     update="false"
+                     export="false"
+                     outputfilename="${ddl.file}"
+                     delimiter=";"
+                     format="true"/>
+        </hibernatetool>
+    </target>
+    
+
+
+
+</project>

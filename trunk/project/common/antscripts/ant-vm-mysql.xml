@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<project name="vm-mysql-helpers" basedir="." default="">
+
+	<!-- a time stamp for now is -->
+	<tstamp>
+		<format property="time.now" pattern="yyyyddMMHHmmss" />
+	</tstamp>
+
+	<!-- pull in OS env -->
+	<property environment="os-env" />
+
+	<!-- pull in ant contrib -->
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<fileset dir="${antcontrib.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</classpath>
+	</taskdef>
+
+	<macrodef name="mysql-run-script">
+		<attribute name="url" />
+		<attribute name="username" />
+		<attribute name="password" />
+		<attribute name="file" />
+		<sequential>
+			<sql driver="com.mysql.jdbc.Driver" url="@{url}" userid="@{username}"
+				password="@{password}" src="@{file}">
+				<classpath>
+					<fileset dir="${mysql.lib}">
+						<include name="**/*.jar" />
+					</fileset>
+				</classpath>
+			</sql>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="mysql-run-sql">
+		<attribute name="url" />
+		<attribute name="username" />
+		<attribute name="password" />
+		<attribute name="sql" />
+		<attribute name="onerror" default="abort" />
+		<sequential>
+			<sql driver="com.mysql.jdbc.Driver" url="@{url}" userid="@{username}"
+				password="@{password}" onerror="@{onerror}">
+				<classpath>
+					<fileset dir="${mysql.lib}">
+						<include name="**/*.jar" />
+					</fileset>
+				</classpath>
+				@{sql}
+			</sql>
+		</sequential>
+	</macrodef>
+
+	<!-- jboss server's start-up class path -->
+	<path id="mysql.groovy-scripts.classpath">
+		<fileset dir="${groovy.lib}">
+			<include name="groovy-all-1.5.7.jar" />
+		</fileset>
+		<fileset dir="${commons-logging.lib}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${jboss.lib}">
+			<include name="asm*.jar" />
+		</fileset>
+		<fileset dir="${antlr.lib}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${mysql.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${bsf.lib}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	
+
+	<taskdef name="groovy"
+     classname="org.codehaus.groovy.ant.Groovy"
+     classpathref="mysql.groovy-scripts.classpath"/>    
+   	
+
+
+	<macrodef name="mysql-select">
+		<attribute name="url" default="${mysql.url}" />
+		<attribute name="username" default="${mysql.root.username}" />
+		<attribute name="password" default="${mysql.root.password}" />
+		<attribute name="sql" />
+		<attribute name="rowproperty" default="row"/>
+		<sequential>
+			<var name="sql" value="@{sql}"/>
+			<var name="username" value="@{username}"/>
+			<var name="password" value="@{password}"/>
+			<var name="url" value="@{url}"/>
+			<var name="rows.count" unset="true"/>
+			<script language="groovy" src="${antscripts.dir}/groovy/mysql-count-rows.groovy" classpathref="mysql.groovy-scripts.classpath" />
+		</sequential>
+	</macrodef>
+
+	
+	<macrodef name="mysql-run-scripts"
+		description="Executes the SQL scripts in the specified directory">
+		<attribute name="url" />
+		<attribute name="username" />
+		<attribute name="password" />
+		<attribute name="sqlDir" />
+		<sequential>
+			<for param="sql-file">
+				<path>
+					<fileset dir="@{sqlDir}" includes="*.sql" />
+				</path>
+				<sequential>
+					<mysql-run-script url="@{url}" username="@{username}"
+						password="@{password}" file="@{sql-file}" />
+				</sequential>
+			</for>
+		</sequential>
+	</macrodef>
+
+	<target name="mysql-assert-running">
+		<var name="tmp.file" value="${java.io.tmpdir}/sql-ping.tmp" />
+		<var name="mysql.running" unset="true" />
+		<delete file="${tmp.file}" />
+		<sql driver="com.mysql.jdbc.Driver" onerror="continue" print="true"
+			output="${tmp.file}" url="${mysql.url}" userid="${mysql.root.username}" password="${mysql.root.password}">
+			<classpath>
+				<fileset dir="${mysql.lib}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+			SELECT DATE('2003-12-31 01:02:03');
+		</sql>
+		<loadfile srcFile="${tmp.file}" property="mysql.running" failonerror="false" />
+		<fail message="MySQL Server is not running" unless="mysql.running"/>
+	</target>
+</project>

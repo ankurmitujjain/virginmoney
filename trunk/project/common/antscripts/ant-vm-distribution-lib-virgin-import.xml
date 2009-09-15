@@ -1,0 +1,592 @@
+<?xml version="1.0"?>
+<project name="vm-distribution-giving-management-lib-virgin-import"
+	default="copy-common-lib-virgin">
+
+	<!--
+
+		Standard Ant task to create a VM distribution folder structure and
+		produce a release tar.
+		==========================================================================================
+
+		Function ======== This script runs the standard metrics currently in
+		use by Virgin Money. To use this script ================== 1. include
+		the file common.build.properties from this folder into your local
+		build file (see the common.build.properties file for details on how to
+		do this). This will import standard definitions for all properties
+		needed, including the ${antscripts.dir} referenced below. 2. create a
+		task in your own ant buildscript like this :- <target
+		name="vm-distribution-import-lib-virgin" description="Creates a VM
+		distribution folder structure, copy all necessary files and produce a
+		release tar."> <ant
+		antfile="${antscripts.dir}/ant-vm-distribution.xml" target="{TARGET TO
+		BE EXECUTED}" inheritall="true" inheritrefs="true"/> </target>
+	-->
+
+
+	<!-- TODO: JOHN ALLEN - CHANGE SO THESE BUNDLES ARE PULLED FROM THE PROJECTS OWN
+	DEFINITION OF ITS LIBS AND NOT REDECLARED HERE -->
+
+	<!-- Common dependencies -->
+	<target name="copy-common-lib-virgin" unless="skip.virgin-libs" description="Copy all common dependencies.">
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/commons" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/commons">
+			<fileset dir="${commons-beanutils.lib}">
+				<include name="commons-beanutils.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/commons">
+			<fileset dir="${commons-beanutils.lib}">
+				<include name="commons-beanutils-bean-collections.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/commons">
+			<fileset dir="${commons-collections.lib}">
+				<include name="commons-collections-3.2.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/commons">
+			<fileset dir="${commons-beanutils.lib}">
+				<include name="commons-beanutils-core.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/commons">
+			<fileset dir="${commons-digester.lib}">
+				<include name="commons-digester-1.8.jar" />
+			</fileset>
+		</copy>
+
+		<copy todir="${distribution.jboss.lib-virgin.dir}/commons">
+			<fileset dir="${commons-lang.lib}">
+				<include name="commons-lang-2.3.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/commons">
+			<fileset dir="${commons-logging.lib}">
+				<include name="commons-logging-1.1.1.jar" />
+			</fileset>
+		</copy>
+
+		<copy todir="${distribution.jboss.lib-virgin.dir}/commons">
+			<fileset dir="${commons-validator130.lib}">
+				<include name="commons-validator-1.3.0.jar" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/oro208" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/oro208">
+			<fileset dir="${commons-validator130.lib}">
+				<include name="oro-2.0.8.jar" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/log4J" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/log4J">
+			<fileset dir="${log4j.lib}">
+				<include name="log4j-1.2.15.jar" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/spring256" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/spring256">
+			<fileset dir="${spring256.lib}">
+				<include name="spring.jar" />
+			</fileset>
+		</copy>
+
+		<copy todir="${distribution.jboss.lib-virgin.dir}/spring256">
+			<fileset dir="${spring256.lib}">
+				<include name="xbean-spring-2.7.jar" />
+			</fileset>
+		</copy>
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/jboss" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/jboss">
+			<fileset dir="${jboss.lib}">
+				<include name="asm-2.2.3.jar" />
+			</fileset>
+		</copy>
+
+		<copy todir="${distribution.jboss.lib-virgin.dir}/jboss">
+			<fileset dir="${jboss.lib}">
+				<include name="cglib-nodep-2.1_3.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- Web application dependencies -->
+	<target name="copy-web-lib-virgin" unless="skip.virgin-libs" depends="copy-common-lib-virgin"
+		description="Copy all web application dependencies.">
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/jakartataglibs112" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/jakartataglibs112">
+			<fileset dir="${taglibs.lib}">
+				<include name="standard.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/jakartataglibs112">
+			<fileset dir="${taglibs.lib}">
+				<include name="jstl.jar" />
+			</fileset>
+		</copy>
+
+		<copy todir="${distribution.jboss.lib-virgin.dir}/commons">
+			<fileset dir="${commons-fileupload.lib}">
+				<include name="commons-fileupload-1.2.jar" />
+			</fileset>
+		</copy>
+
+		<copy todir="${distribution.jboss.lib-virgin.dir}/commons">
+			<fileset dir="${commons-io.lib}">
+				<include name="commons-io-1.4.jar" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/displaytag" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/displaytag">
+			<fileset dir="${displaytag1.2.lib}">
+				<include name="displaytag-1.2.jar" />
+			</fileset>
+		</copy>
+
+		<copy todir="${distribution.jboss.lib-virgin.dir}/jboss">
+			<fileset dir="${jboss.lib}">
+				<include name="jsp-api.jar" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/ognl" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/ognl">
+			<fileset dir="${ognl.lib}">
+				<include name="ognl-2.6.11.jar" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/struts" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/struts">
+			<fileset dir="${struts2014.lib}">
+				<include name="struts2-core-2.0.14.jar" />
+			</fileset>
+		</copy>
+
+		<copy todir="${distribution.jboss.lib-virgin.dir}/struts">
+			<fileset dir="${struts2014.lib}">
+				<include name="struts2-spring-plugin-2.0.14.jar" />
+			</fileset>
+		</copy>
+
+		<copy todir="${distribution.jboss.lib-virgin.dir}/struts">
+			<fileset dir="${struts2014.lib}">
+				<include name="struts2-tiles-plugin-2.0.14.jar" />
+			</fileset>
+		</copy>
+
+		<copy todir="${distribution.jboss.lib-virgin.dir}/struts">
+			<fileset dir="${struts2014.lib}">
+				<include name="tiles-api-2.0.4.jar" />
+			</fileset>
+		</copy>
+
+		<copy todir="${distribution.jboss.lib-virgin.dir}/struts">
+			<fileset dir="${struts2014.lib}">
+				<include name="tiles-core-2.0.4.jar" />
+			</fileset>
+		</copy>
+
+		<copy todir="${distribution.jboss.lib-virgin.dir}/struts">
+			<fileset dir="${struts2014.lib}">
+				<include name="tiles-jsp-2.0.4.jar" />
+			</fileset>
+		</copy>
+
+		<copy todir="${distribution.jboss.lib-virgin.dir}/struts">
+			<fileset dir="${struts2014.lib}">
+				<include name="xwork-2.0.7.jar" />
+			</fileset>
+		</copy>
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/springsecurity204" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/springsecurity204">
+			<fileset dir="${springsecurity204.lib}">
+				<include name="spring-security-acl-2.0.4.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/springsecurity204">
+			<fileset dir="${springsecurity204.lib}">
+				<include name="spring-security-cas-client-2.0.4.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/springsecurity204">
+			<fileset dir="${springsecurity204.lib}">
+				<include name="spring-security-core-2.0.4.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/springsecurity204">
+			<fileset dir="${springsecurity204.lib}">
+				<include name="spring-security-taglibs-2.0.4.jar" />
+			</fileset>
+		</copy>
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/casclientcore313" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/casclientcore313">
+			<fileset dir="${cas3.1.3.lib}">
+				<include name="cas-client-core-3.1.3.jar" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/ehcache" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/ehcache">
+			<fileset dir="${ehcache.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/spring-modules" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/spring-modules">
+			<fileset dir="${springmodules.lib}">
+				<include name="spring-modules-0.9-cache.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+
+	<target name="copy-hibernate-lib-virgin" unless="skip.virgin-libs" description="Copy all web services dependencies.">
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/hibernate" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/hibernate">
+			<fileset dir="${hibernate-3.2.6.lib}">
+				<include name="hibernate3.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/hibernate">
+			<fileset dir="${hibernate-3.2.6.lib}">
+				<include name="hibernate-annotations.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/hibernate">
+			<fileset dir="${hibernate-3.2.6.lib}">
+				<include name="hibernate-commons-annotations.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/hibernate">
+			<fileset dir="${hibernate-3.2.6.lib}">
+				<include name="ejb3-persistence.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/hibernate">
+			<fileset dir="${hibernate-3.2.6.lib}">
+				<include name="hibernate-entitymanager.jar" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/joda-time" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/joda-time">
+			<fileset dir="${joda-time.lib}">
+				<include name="joda-time-1.4.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/joda-time">
+			<fileset dir="${joda-time.lib}">
+				<include name="joda-time-hibernate-0.8.jar" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/mysql" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/mysql">
+			<fileset dir="${mysql.lib}">
+				<include name="mysql-connector-java-5.1.6-bin.jar" />
+			</fileset>
+		</copy>
+
+		<copy todir="${distribution.jboss.lib-virgin.dir}/spring256">
+			<fileset dir="${spring256.lib}">
+				<include name="jaxws-spring-1.8.jar" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/envers" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/envers">
+					<fileset dir="${envers.lib}">
+						<include name="envers-1.2.0.ga-hibernate-3.3.jar" />
+					</fileset>
+				</copy>
+	</target>
+
+	<!-- Web services dependencies -->
+	<target name="copy-web-service-lib-virgin" unless="skip.virgin-libs" depends="copy-common-lib-virgin"
+		description="Copy all web services dependencies.">
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/metro" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/metro">
+			<fileset dir="${metro.lib}">
+				<include name="webservices-api.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/metro">
+			<fileset dir="${metro.lib}">
+				<include name="webservices-extra.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/metro">
+			<fileset dir="${metro.lib}">
+				<include name="webservices-extra-api.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/metro">
+			<fileset dir="${metro.lib}">
+				<include name="webservices-rt.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/metro">
+			<fileset dir="${metro.lib}">
+				<include name="webservices-tools.jar" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/dozer" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/dozer">
+			<fileset dir="${dozer.lib}">
+				<include name="dozer-4.2.jar" />
+			</fileset>
+		</copy>
+		
+		
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/ehcache" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/ehcache">
+			<fileset dir="${ehcache.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/spring-modules" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/spring-modules">
+			<fileset dir="${springmodules.lib}">
+				<include name="spring-modules-0.9-cache.jar" />
+			</fileset>
+		</copy>
+		
+		<copy todir="${distribution.jboss.lib-virgin.dir}/spring256">
+			<fileset dir="${spring256.lib}">
+				<include name="aspectjweaver.jar" />
+			</fileset>
+		</copy>
+		
+		<copy todir="${distribution.jboss.lib-virgin.dir}/spring256">
+			<fileset dir="${spring256.lib}">
+				<include name="aspectjrt.jar" />
+			</fileset>
+		</copy>
+		
+	</target>
+
+	<!-- Email dependencies. -->
+	<target name="copy-email-lib-virgin" unless="skip.virgin-libs" description="Copy all web services dependencies.">
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/xstream" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/xstream">
+			<fileset dir="${xstream.13.lib}">
+				<include name="xpp3_min-1.1.4c.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/xstream">
+			<fileset dir="${xstream.13.lib}">
+				<include name="xstream-1.3.jar" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/freemarker" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/freemarker">
+			<fileset dir="${freemarker.lib}">
+				<include name="freemarker-2.3.8.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copy-giving-batch-service-lib-virgin" unless="skip.virgin-libs"
+		depends="copy-web-lib-virgin, copy-web-service-lib-virgin, copy-hibernate-lib-virgin"
+		description="Copy all batch services dependencies.">
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/stax" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/stax">
+			<fileset dir="${stax.lib}">
+				<include name="stax-1.2.0.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/stax">
+			<fileset dir="${stax.lib}">
+				<include name="stax-api-1.0.1.jar" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/spring-batch" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/spring-batch">
+			<fileset dir="${springbatch201.lib}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+
+	</target>
+
+
+	<!-- Payment management service dependencies. -->
+	<target name="copy-payment-management-ws-lib-virgin" unless="skip.virgin-libs"
+		depends="copy-web-service-lib-virgin, copy-hibernate-lib-virgin, copy-email-lib-virgin "
+		description="Copy all payment management web services dependencies.">
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/groovy" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/groovy">
+			<fileset dir="${groovy.lib}">
+				<include name="groovy-all-1.5.7.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- Security service dependencies. -->
+	<target name="copy-security-ws-lib-virgin" unless="skip.virgin-libs"
+	depends="copy-web-service-lib-virgin, copy-hibernate-lib-virgin, copy-email-lib-virgin "
+	description="Copy all security web services dependencies.">
+	<mkdir dir="${distribution.jboss.lib-virgin.dir}/spring-modules" />
+	<copy todir="${distribution.jboss.lib-virgin.dir}/spring-modules">
+		<fileset dir="${springmodules.lib}">
+			<include name="spring-modules-0.9-cache.jar" />
+		</fileset>
+	</copy>
+</target>
+
+	<target name="copy-giving-management-ws-lib-virgin" unless="skip.virgin-libs"
+		depends="copy-web-service-lib-virgin, copy-hibernate-lib-virgin, copy-email-lib-virgin "
+		description="Copy all giving management web services dependencies.">
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/springldap130" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/springldap130">
+			<fileset dir="${springldap130.lib}">
+				<include name="spring-ldap-core-1.3.0.jar" />
+			</fileset>
+		</copy>
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/springsecurity204" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/springsecurity204">
+			<fileset dir="${springsecurity204.lib}">
+				<include name="spring-security-acl-2.0.4.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${distribution.jboss.lib-virgin.dir}/springsecurity204">
+			<fileset dir="${springsecurity204.lib}">
+				<include name="spring-security-core-2.0.4.jar" />
+			</fileset>
+		</copy>
+		
+		<copy todir="${distribution.jboss.lib-virgin.dir}/spring-modules">
+			<fileset dir="${springmodules.lib}">
+				<include name="spring-modules-0.9-validation.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copy-giving-batch-ext-management-ws-lib-virgin" unless="skip.virgin-libs"
+			depends="copy-web-service-lib-virgin, copy-hibernate-lib-virgin "
+			description="Copy all giving batch extenssion management web services dependencies.">
+	</target>
+
+	<target name="copy-template-email-service-lib-virgin" unless="skip.virgin-libs" depends="copy-web-service-lib-virgin, copy-email-lib-virgin "
+		description="Copy all email service dependencies.">
+	</target>
+
+	<target name="copy-alert-service-lib-virgin" unless="skip.virgin-libs" depends="copy-web-service-lib-virgin"
+		description="Copy all email service dependencies.">
+	</target>
+
+	<target name="copy-operations-web-lib-virgin" unless="skip.virgin-libs" depends="copy-web-lib-virgin, copy-web-service-lib-virgin"
+		description="Copy all the operations web app dependencies.">
+	</target>
+
+	<target name="copy-fundraiser-web-lib-virgin" unless="skip.virgin-libs" depends="copy-web-lib-virgin, copy-web-service-lib-virgin"
+		description="Copy all the fundraiser web app dependencies.">
+
+	</target>
+
+	<target name="copy-charity-web-lib-virgin" unless="skip.virgin-libs" depends="copy-web-lib-virgin, copy-web-service-lib-virgin"
+		description="Copy all the charity web app dependencies.">
+	</target>
+
+	<target name="copy-cas-external-lib-virgin" unless="skip.virgin-libs" depends=""
+		description="Copy all the external CAS web app dependencies.">
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/mysql" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/mysql">
+			<fileset dir="${mysql.lib}">
+				<include name="mysql-connector-java-5.1.6-bin.jar" />
+			</fileset>
+		</copy>
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/groovy" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/groovy">
+			<fileset dir="${groovy.lib}">
+				<include name="groovy-all-1.5.7.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copy-cas-internal-lib-virgin" unless="skip.virgin-libs" depends=""
+		description="Copy all the internal CAS web app dependencies.">
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/groovy" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/groovy">
+			<fileset dir="${groovy.lib}">
+				<include name="groovy-all-1.5.7.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copy-indexer-service-lib-virgin" depends="copy-web-service-lib-virgin" unless="skip.virgin-libs"
+		description="Copy all indexer service dependencies.">
+		<copy todir="${distribution.jboss.lib-virgin.dir}/solr">
+			<fileset dir="${solr.lib}">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copy-stub-glis-lib-virgin" description="Nothing to copy">
+	</target>
+
+	<target name="copy-scheduler-service-lib-virgin" depends="copy-web-service-lib-virgin" unless="skip.virgin-libs"
+		description="Copy all scheduler service dependencies.">
+		<copy todir="${distribution.jboss.lib-virgin.dir}/quartz">
+			<fileset dir="${quartz161.lib}">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- Online Card Payment service dependencies. -->
+	<target name="copy-online-card-payment-ws-lib-virgin"
+		depends="copy-web-service-lib-virgin, copy-hibernate-lib-virgin "
+		description="Copy all Online Card Payment web services dependencies.">
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/groovy" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/groovy">
+			<fileset dir="${groovy.lib}">
+				<include name="groovy-all-1.5.7.jar" />
+			</fileset>
+		</copy>
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/commons" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/commons">
+			<fileset dir="${commons-codec.lib}">
+				 <include name="**/*.jar"/>
+			 </fileset>
+		</copy>
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/spring-modules" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/spring-modules">
+			<fileset dir="${springmodules.lib}">
+				<include name="spring-modules-0.9-validation.jar" />
+			</fileset>
+		</copy>
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/quartz" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/quartz">
+			<fileset dir="${quartz161.lib}">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+	</target>
+	<target name="copy-sugarcrm-service-lib-virgin" depends="copy-web-service-lib-virgin" unless="skip.virgin-libs"
+		description="Copy all sugarcrm service dependencies.">
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/junit381" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/junit381">
+			<fileset dir="${junit38.lib}">
+				<include name="**/junit-3.8.1.jar" />
+	    		</fileset>
+		</copy>
+		<mkdir dir="${distribution.jboss.lib-virgin.dir}/axis" />
+		<copy todir="${distribution.jboss.lib-virgin.dir}/axis">
+			<fileset dir="${axis.lib}">
+				<include name="**/axis.jar" />
+				<include name="**/commons-discovery-0.2.jar" />
+	    		</fileset>
+		</copy>
+
+	</target>
+
+</project>

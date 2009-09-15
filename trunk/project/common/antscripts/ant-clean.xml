@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<project name="ant-clean" default="clean-all">
+
+    <!--
+
+    Standard Ant task to delete all 'temporary' folders and files produced during the build process
+    ==========================================================================================
+    
+     Function
+     ========
+
+        This script runs the standard metrics currently in use by Virgin Money.
+
+
+    To use this script
+    ==================
+
+        1. include the file common.build.properties from this folder into your local build file (see
+           the common.build.properties file for details on how to do this). 
+           
+           This will import standard definitions for all properties needed, including the ${antscripts.dir} referenced below
+
+
+        2. create a task in your own ant buildscript like this :-
+
+          <target name="clean" description="Runs clean over the source to check the coding standards">
+               <ant antfile="${antscripts.dir}/ant-clean.xml" inheritall="true"   inheritrefs="true"/>
+          </target>
+
+       The script also contains individual targets to clean specific folders if required. just add target="(name)" to the ant call
+
+
+    -->
+
+    <target name="clean-all" description="Clean out the build and deployment directories">
+        <echo message="ant-clean-all.xml :  started"/>
+        <antcall target="clean-build"/>
+        <antcall target="clean-deploy"/>
+        <antcall target="clean-testresults"/>
+        <antcall target="clean-javadoc"/>
+        <antcall target="clean-generated-source"/>
+        <echo message="ant-clean-all.xml :  finished"/>
+    </target>
+
+
+    <target name="clean-build" description="Clean out the build directories">
+        <echo message="ant-clean-build.xml :  started"/>
+        <delete dir="${build.dir}"/>
+        <echo message="ant-clean-build.xml :  finished"/>
+    </target>
+
+    <target name="clean-deploy" description="Clean out the deploy directories">
+        <echo message="ant-clean-deploy.xml :  started"/>
+        <delete dir="${deploy.dir}"/>
+        <echo message="ant-clean-deploy.xml :  finished"/>
+    </target>
+
+    <target name="clean-testresults" description="Clean out the testresults directories">
+        <echo message="ant-clean-testresults.xml :  started"/>
+        <delete dir="${testresults.dir}"/>
+        <echo message="ant-clean-testresults.xml :  finished"/>
+    </target>
+
+    <target name="clean-javadoc" description="Clean out the javadoc directories">
+        <echo message="ant-clean-javadoc.xml :  started"/>
+        <delete dir="${javadoc.dir}"/>
+        <echo message="ant-clean-javadoc.xml :  finished"/>
+    </target>
+
+    <target name="clean-generated-source" description="Clean out the generated-source directories">
+        <echo message="ant-clean-generated-source.xml :  started"/>
+        <delete dir="${src.generated.dir}"/>
+        <echo message="ant-clean-generated-source.xml :  finished"/>
+    </target>
+
+
+</project>

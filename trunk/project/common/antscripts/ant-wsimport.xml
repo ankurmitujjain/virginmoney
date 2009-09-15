@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<project name="ant-wsimport" default="wsimport">
+
+    <!--
+
+    Standard Ant task to run Wsimport for Virgin Money projects
+    =============================================================
+
+    To use this script
+    ==================
+
+        1. include the file common.build.properties from this folder into your local build file (see
+           the common.build.properties file for details on how to do this). 
+           
+           This will import standard definitions for all properties needed, including the ${antscripts.dir} referenced below
+
+
+        2. create a task in your own ant buildscript like this :-
+
+          <target name="wsimport" description="Runs wsimport">
+               <ant antfile="${antscripts.dir}/ant-wsimport.xml" inheritall="true"  inheritrefs="true">
+                  <property name="wsdl.location"        value="${conf.dir}/wsdl/bankaccount-validation.wsdl"/>
+                  <property name="java.package.name"    value="com.virginmoney.mypackage.messages"/>
+               </ant>
+          </target>
+
+
+    Optional parameters
+    ===================
+
+         1. to override the standard folders (set in common.build.properties) for generated source and compiled
+            classes, set the following properties
+
+           src.generated.dir  -  the folder that will contain the generated source code
+           build.main.dir     -  the folder containing the location of the compiled classes
+
+         2. allowextension - true or false. The default value (normally false) is defined in common.build.properties file
+            if true wsimport will compile if duplicate names in xsds
+
+    -->
+
+    <!--
+      re-include the common properties file as it reduces undefined property problems in Intellij
+      the only side-effect is that properties will only be overriden if they are specified inside the ant task, ie
+      <ant antfile=""><property name="" value=""></ant>
+     -->
+     <property file="common.build.properties"/>
+
+
+    <!-- wsimport classpath - includes common libraries and configuration elements plus test version of configuration elements -->
+    <path id="jaxws.classpath">
+        <fileset dir="${jaxws.lib}">
+            <include name="*.jar"/>
+            <exclude name="j2ee.jar"/>
+        </fileset>
+    </path>
+
+    <!-- define the task -->
+    <taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
+        <classpath >
+            <fileset dir="${jaxws.lib}">
+                <include name="*.jar"/>
+                <exclude name="j2ee.jar"/>
+            </fileset>
+        </classpath>
+    </taskdef>
+
+     <target name="wsimport" description="generates client java classes from wsdlr" depends="wsimport-set-serviceProxy" >
+         <mkdir dir="${src.generated.dir}" />
+         <mkdir dir="${build.main.dir}" />
+
+         <echo message="ant-wsimport.xml : wsimport : wsdl.location     =${wsdl.location}"/>
+         <echo message="ant-wsimport.xml : wsimport : java.package.name =${java.package.name}"/>
+         <echo message="ant-wsimport.xml : wsimport : src.generated.dir =${src.generated.dir}"/>
+         <echo message="ant-wsimport.xml : wsimport : build.main.dir    =${build.main.dir}"/>
+
+         <wsimport debug="true"
+                   verbose="true"
+                   keep="true"
+                   destdir="${build.main.dir}"
+                   sourcedestdir="${src.generated.dir}"
+                   package="${java.package.name}"
+                   extension="${allowextension}"
+                   wsdl="${wsdl.location}">
+         </wsimport>
+         <echo message="ant-wsimport.xml : wsimport : finished"/>
+
+     </target>
+
+
+    <target name="wsimport-set-serviceProxy" description="sets serviceProxy servers for wsdl generation">
+
+        <echo message="ant-wsimport.xml : wsimport-set-serviceProxy : started"/>
+
+         <!-- depending on where this is run from, it may need to go through a serviceProxy
+              For Windows developers, add these lines
+                  env.proxy.default.host=zoinks.eit.wrl.virginmoney.com
+                  env.proxy.default.port=8888
+                  env.proxy.default.nonproxyhosts=*.unix.vmoney.local|localhost
+              into a file named C:\Documents and Settings\(user id)\etc\env.build.properties
+          -->
+
+            <setproxy proxyhost="${env.proxy.default.host}"
+                       proxyport="${env.proxy.default.port}"
+                       nonproxyhosts="${env.proxy.default.nonproxyhosts}"
+                     />
+
+             <echo message="ant-wsimport.xml : wsimport-set-serviceProxy : proxyhost=${env.proxy.default.host}"/>
+             <echo message="ant-wsimport.xml : wsimport-set-serviceProxy : proxyport=${env.proxy.default.port}"/>
+             <echo message="ant-wsimport.xml : wsimport-set-serviceProxy : nonproxyhosts=${env.proxy.default.nonproxyhosts}"/>
+
+     </target>
+
+
+
+</project>

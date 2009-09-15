@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<project name="ant-junit" default="soapui-after-deployment">
+
+    <!--
+
+    Standard Ant task to run soapUI for Virgin Money projects
+    =========================================================
+
+     Function
+     ========
+
+        This script runs the soapUI test for a project.
+
+        It is configurable, however if you need to do something significantly different it is recommended
+        that you do not use this script and create your own version instead.
+
+
+    To use this script
+    ==================
+
+        1. Include the file common.build.properties from this folder into your local build file (see the
+           common.build.properties file for details on how to do this).
+
+           This will import standard definitions for all properties needed, including the ${antscripts.dir}
+           referenced below.
+
+
+        2. Create a task in your own ant buildscript like this:
+
+           <target name="test-soapui-after-deployment" description="Runs soapUI">
+               <ant antfile="${antscripts.dir}/ant-soapui.xml" inheritall="true" inheritrefs="true" />
+           </target>
+
+
+    Optional parameters
+    ===================
+
+        A. Fileset to execute
+
+           It is possible to use a different fileset for testing, by defining one in your build.xml and then
+           set property soapui-execute-fileset-id to contain its name, for example:
+
+           <fileset id="soapui-project-fileset" dir="${testresults.dir}">
+               <include name="soapui-integration-suite.xml"/>
+               <exclude name="soapui-all-calls.xml"/>
+           </fileset>
+           <property name="soapui-execute-fileset-id"  value="soapui-project-fileset"/>
+
+           NOTE: you MUST call this property "soap-execute-fileset-id" to make it work!
+
+    -->
+
+
+    <!-- re-include the common properties file as it reduces undefined property problems in Intellij -->
+    <!-- the only side-effect is that properties will only be overriden if they are specified inside the ant task, ie -->
+    <!--    <ant antfile=""><property name="" value=""></ant>   -->
+    <property file="common.build.properties"/>
+
+
+    <!-- Defines and names the fileset to be used in the tests - this can be overridden in the calling script (see above A.) -->
+    <fileset id="soapui-default-fileset" dir="${src.test.dir}">
+        <!-- If you need a different fileset PLEASE update YOUR OWN build.xml and set soapui-execute-fileset-id (see above A.) -->
+        <!-- Only test files whose names match "*soapui*.xml" will get run: -->
+        <include name="**/*soapui*.xml"/>
+    </fileset>
+    <property name="soapui-execute-fileset-id"  value="soapui-default-fileset"/>
+
+    <target name="soapui-prepare" description="Sets up folders for soapUI output">
+        <delete dir="${soapui.results.dir}"/>
+        <delete dir="${soapui.temp.dir}"/>
+        <mkdir dir="${soapui.results.dir}"/>
+        <mkdir dir="${soapui.temp.dir}"/>
+    </target>
+
+    <!-- standard soapUI test target - see instructions above for details on how to configure this -->
+    <target name="soapui-after-deployment" description="Run soapUI tests - CAUTION only run this after the necessary services have been deployed."
+        depends="soapui-prepare"
+    >
+        <echo message="ant-soapui.xml: soapui-after-deployment started" />
+
+        <antcall target="soapui-prepare" />
+
+        <echo message="ant-soapui.xml: soapUI results dir=${soapui.results.dir}" />
+        <echo message="ant-soapui.xml: fileset name=${soapui-execute-fileset-id}" />
+
+        <!-- Run the tests! -->
+        <!-- Pseudocode for this batch execution is "for file in ${soapui-execute-fileset-id} { run ${file} }" -->
+        <apply executable="testrunner.sh">
+            <fileset refid="${soapui-execute-fileset-id}" />
+            <!-- NOTE: When we called soapUI *Pro* testrunner with -j we did not seem to need to call soapui-report afterwards: -->
+            <arg line="-j -f${soapui.temp.dir}" />
+        </apply>
+
+        <!-- When using soapUI Free edition we seem to need tyocall this: -->
+        <antcall target="soapui-report" />
+
+        <echo message="ant-soapui.xml: finished" />
+    </target>
+
+    <target name="soapui-report" description="Processes raw soapUI results into JUnit-style pages">
+        <junitreport todir="${soapui.results.dir}">
+          <fileset dir="${soapui.temp.dir}">
+              <include name="TEST-*.xml"/>
+          </fileset>
+          <report format="frames" todir="${soapui.results.dir}" />
+        </junitreport>
+    </target>
+
+</project>

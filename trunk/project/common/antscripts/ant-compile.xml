@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<project name="ant-compile" default="compile">
+
+    <!--
+
+    Standard Ant task to compile java Virgin Money projects
+    =======================================================
+
+    Function
+    ========
+
+        This script peforms a default compile of the 'main' and 'test' source trees into the 'main' and 'test' build folders.
+
+        It is configurable, however if you need to do something significantly different it is recommended that you do not use this script 
+        and create your own version instead.
+
+    To use this script
+    ==================
+
+        1. include the file common.build.properties from this folder into your local build file (see
+           the common.build.properties file for details on how to do this). 
+           
+           This will import standard definitions for all properties needed, including the ${antscripts.dir} referenced below
+
+
+        2. create a task in your own ant buildscript like this :-
+        
+             <target name="compile" description="Runs compile">
+                  <ant antfile="${antscripts.dir}/ant-compile.xml" inheritall="true"  inheritrefs="true">
+                  </ant>
+             </target>
+             
+        3. ensure that your project defines a fileset with the id of master.classpath, containing all the code and jar files
+           that the compiler will need
+
+
+    Optional parameters
+    ===================
+
+         1. to override the standard folders (set in common.build.properties) for generated source and compiled
+            classes, set the following properties
+
+           src.dir            -  the folder that containing the generated source code
+           build.main.dir     -  the folder containing the location of the compiled classes from the src/main folder
+           build.test.dir     -  the folder containing the location of the compiled classes from the src/main folder
+           
+        2. debug - true or false. The default value is defined in common.build.properties file
+
+    -->
+    
+    <!--
+      re-include the common properties file as it reduces undefined property problems in Intellij
+      the only side-effect is that properties will only be overriden if they are specified inside the ant task, ie
+      <ant antfile=""><property name="" value=""></ant>
+     -->
+	<property file="common.build.properties"/>
+
+
+    <target name="compile" description="Compiles all source java files">
+        <mkdir dir="${build.main.dir}"/>
+        <!-- set up flags to indicate if each source folder exists. If a folder doesnt exist it wont be compiled.
+
+        
+        DO NOT provide default values for these flags; doing so will cause the 'if' clause on the
+        respective targets to always succeed, even of the value is false -->
+        <available property="main-src-exists"      file="${src.main.dir}"/>
+        <available property="generated-src-exists" file="${src.generated.dir}"/>
+        <available property="test-src-exists"      file="${src.test.dir}"/>
+
+        <!-- echo the results : if the value is not set it will be displayed with its actual name instead of 'true'; this is normal -->
+        <echo message="ant-compile.xml : compile:      main-src-exists=${main-src-exists}"/>
+        <echo message="ant-compile.xml : compile: generated-src-exists=${generated-src-exists}"/>
+        <echo message="ant-compile.xml : compile:      test-src-exists=${test-src-exists}"/>
+
+
+        <!-- Call each compile task in turn
+             Note that we compile generated code before main as its used by the main tree -->
+        <antcall inheritall="true" inheritrefs="true"  target="compile-generated" />
+        <antcall inheritall="true" inheritrefs="true"  target="compile-main" />
+        <antcall inheritall="true" inheritrefs="true"  target="compile-test" />
+    </target>
+
+    <target name="compile-main" description="Compiles the 'main' java source tree" if="main-src-exists">
+    		<property name="javac.xlint" value=":none"/>
+        <echo message="ant-compile.xml : compile-main : started"/>
+        <mkdir dir="${build.main.dir}"/>
+        <!-- compile the 'main' source tree -->
+        <javac destdir="${build.main.dir}" target="1.5" debug="${debug}" deprecation="false" optimize="false"
+               failonerror="true">
+            <src path="${src.main.dir}"/>
+            <classpath refid="master.classpath"/>
+    				<compilerarg value="-Xlint${javac.xlint}"/>            
+        </javac>
+        <echo message="ant-compile.xml : compile-main : finished"/>
+    </target>
+
+
+    <target name="compile-generated" description="Compiles the 'generated' java source tree"  if="generated-src-exists">
+        <echo message="ant-compile.xml : compile-generated : started"/>
+        <mkdir dir="${build.generated.dir}"/>
+        <!-- compile the 'main' source tree -->
+        <javac destdir="${build.generated.dir}" target="1.5" debug="${debug}" deprecation="false" optimize="false"
+               failonerror="true">
+            <src path="${src.generated.dir}"/>
+            <classpath refid="master.classpath"/>
+        </javac>
+        <echo message="ant-compile.xml : compile-generated : finished"/>
+    </target>
+
+    <target name="compile-test" description="Compiles the 'test' java source tree"  if="test-src-exists">
+        <!-- compile the 'test' source tree -->
+        <echo message="ant-compile.xml : compile-test : started"/>
+        <mkdir dir="${build.test.dir}"/>
+        <javac destdir="${build.test.dir}" target="1.5" debug="${debug}" deprecation="false" optimize="false"
+               failonerror="true">
+            <src path="${src.test.dir}"/>
+            <classpath refid="test.classpath"/>
+        </javac>
+        <echo message="ant-compile.xml : compile-test : finished"/>
+    </target>
+
+</project>

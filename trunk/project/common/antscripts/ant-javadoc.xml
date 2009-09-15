@@ -1,0 +1,257 @@
+<?xml version="1.0"?>
+<project name="ant-javadoc" default="javadoc-html">
+
+    <!--
+
+    Standard Ant task to generate javadoc for Virgin Money projects
+    ===============================================================
+
+     Function
+     ========
+
+        This script generates javadoc for a project. By default it writes all code from the 'source' and 'generated' folders
+        to javadoc/main , and all code from the 'test' folder to javadoc/test
+    
+        It is configurable so that different source files can be documentted, however if you need to do something
+         significantly different it is recommended that you do not use this script and create your own version instead.
+
+    To use this script
+    ==================
+
+        1. include the file common.build.properties from this folder into your local build file (see
+           the common.build.properties file for details on how to do this). 
+           
+           This will import standard definitions for all properties needed, including the ${antscripts.dir} referenced below
+
+
+        2. create a task in your own ant buildscript like this :-
+        
+                  <target name="javadoc" description="Generates Javadoc">
+                        <ant antfile="${antscripts.dir}/ant-javadoc.xml" inheritall="true" inheritrefs="true" />
+                  </target>
+
+
+        3. Define values for these properties (or pass them in via the 'ant' task
+
+             src.dirs  -  the location of the code to be javadoc'ed
+             javadoc.title - title for the javadoc
+
+        Conventions:
+            http://java.sun.com/j2se/javadoc/writingdoccomments/
+
+            Place a file overview.html (alongside build.xml) to provide a brief description of what is being documented.
+            Place a file package.html in each package folder where package-level documentation is required
+
+        Examples:
+
+             <property file="${user.home}/etc/env.build.properties" />
+             <property name="antscripts.dir" value="${env.dev.root.dir}/common/antscripts"/>
+             <property file="${antscripts.dir}/common.build.properties" />
+             <property name="javadoc.title" value="Management Information web service - saves snapshots of business data"/>
+             <fileset dir="." id="src.dirs">
+               <include name="src/main/**/*.java" />
+               <include name="src/generated/mi/**/*.java" />
+             </fileset>
+
+        Conventions:
+            http://java.sun.com/j2se/javadoc/writingdoccomments/
+    -->
+    
+    <!--
+      re-include the common properties file as it reduces undefined property problems in Intellij
+      the only side-effect is that properties will only be overriden if they are specified inside the ant task, ie
+      <ant antfile=""><property name="" value=""></ant>
+     -->
+     <property file="common.build.properties"/>
+
+    <path id="javadoc-main-path">
+             <!--
+             Defines the default set of paths for the 'main' javadoc. DO NOT change this without good reason; instead, define a new
+             fileset with a different name IN YOUR OWN ANT SCRIPT and set the property "javadoc.sourcepath.id"
+             to contain its name
+             -->
+        <pathelement location="${src.main.dir}"/>
+        <pathelement location="${src.generated.dir}"/>
+    </path>
+
+    <path id="javadoc-test-path">
+        <!--
+        Defines the default set of paths for the 'test' javadoc. DO NOT change this without good reason; instead, define a new
+        fileset with a different name IN YOUR OWN ANT SCRIPT and set the property "javadoc.sourcepath.id"
+        to contain its name
+        -->
+        <pathelement location="${src.test.dir}"  />
+    </path>
+
+    <property name="javadoc.overview.page" value="${src.main.dir}/overview.html"/>
+    <property name="javadoc.title" value="Javadoc for project ${ant.project.name}"/>
+    <property name="javadoc.output.dir"     value="${javadoc.main.dir}"/>
+    <property name="javadoc.sourcepath.id" value="javadoc-main-path"/>
+    <property name="javadoc.verbose" value="false"/>
+
+
+
+    <target name="javadoc-prepare" description="Generates Javadoc HTML pages from suitably commented source">
+        <delete dir="${javadoc.dir}" failonerror="false" verbose="true"/>
+    </target>
+
+    <target name="javadoc-html" description="Generates Javadoc HTML pages from suitably commented source">
+
+<!--
+                This target performs a default javadoc run for all code in the main and test source trees
+                and writes the results to javadoc/main and javadoc/test
+
+                Before calling it, you may wish to predefine these variables
+
+                    javadoc.title          = the title for the javadoc, defaults to the Ant project name
+
+                for Example,
+
+
+                    <target name="javadoc">
+
+                        <ant antfile="${antscripts.dir}/ant-javadoc.xml" inheritall="true" inheritrefs="true" >
+                              <property name="javadoc.title"            value="My project documentation -  ${ant.project.name}"/>
+                        </ant>                 
+                    </target>
+-->
+        <antcall target="javadoc-prepare" inheritall="true" inheritrefs="true"/>
+
+        <ant antfile="${antscripts.dir}/ant-javadoc.xml" target="javadoc-from-sourcepath"  inheritall="true" inheritrefs="true" >
+            <property name="javadoc.output.dir"     value="${javadoc.main.dir}"/>
+            <property name="javadoc.sourcepath.id" value="javadoc-main-path"/>
+        </ant>
+
+        <ant antfile="${antscripts.dir}/ant-javadoc.xml" target="javadoc-from-sourcepath"  inheritall="true" inheritrefs="true">
+            <property name="javadoc.output.dir"     value="${javadoc.test.dir}"/>
+            <property name="javadoc.sourcepath.id" value="javadoc-test-path"/>
+        </ant>
+
+    </target>
+
+    <target name="javadoc-from-sourcepath" description="Generates Javadoc HTML pages from a defined sourcepath ">
+
+<!--
+                This target allows javadoc to be generated from a sourcepath
+
+                Before calling it, you need to predefine these variables
+
+                    javadoc.sourcepath.id  = defaults to all 'main' and 'generated' source
+                    javadoc.output.dir     = the location to write the documentation to  - defaults to /javadoc/main
+                    javadoc.title          = the title for the javadoc, defaults to the Ant project name
+                    javadoc.overview.page  = the overview page for the documentation
+
+
+                for Example, to document all the classes with 'Impl' in the name
+
+                    <path id="javadoc-test-path">
+                        <pathelement location="${src.main.dir}"/>
+                    </path>
+
+                    <target name="javadoctest">
+
+                        <ant antfile="${antscripts.dir}/ant-javadoc.xml" target="javadoc-prepare" inheritall="true" inheritrefs="true"/>
+
+                        <ant antfile="${antscripts.dir}/ant-javadoc.xml" target="javadoc-from-sourcepath" inheritall="true" inheritrefs="true" >
+                              <property name="javadoc.title"            value="Main source only- ${ant.project.name}"/>
+                              <property name="javadoc.output.dir"       value="${javadoc.dir}/impldoc"/>
+                              <property name="javadoc.sourcepath.id"     value="javadoc-test-path"/>
+                        </ant>
+                    </target>
+-->
+
+        <echo message="ant-javadoc.xml : javadoc-from-sourcepath : started"/>
+        <echo message="ant-javadoc.xml : javadoc-from-sourcepath :    javadoc.sourcepath.id = ${javadoc.sourcepath.id}"/>
+        <echo message="ant-javadoc.xml : javadoc-from-sourcepath :       javadoc.output.dir = ${javadoc.output.dir}"/>
+        <echo message="ant-javadoc.xml : javadoc-from-sourcepath :            javadoc.title = ${javadoc.title}"/>
+        <echo message="ant-javadoc.xml : javadoc-from-sourcepath :    javadoc.overview.page = ${javadoc.overview.page}"/>
+        <echo message="ant-javadoc.xml : javadoc-from-sourcepath :          javadoc.verbose = ${javadoc.verbose}"/>
+
+        <mkdir dir="${javadoc.output.dir}" />
+
+        <javadoc sourcepathref="${javadoc.sourcepath.id}"
+                 destdir="${javadoc.output.dir}"
+                 author="true"
+                 version="true"
+                 nodeprecated="false"
+                 use="true"
+                 includenosourcepackages="true"
+                 verbose="${javadoc.verbose}"
+                 overview="${javadoc.overview.page}"
+                 windowtitle="${javadoc.title}"
+                 doctitle="${javadoc.title}"
+                 bottom="Copyright &#169; 2000 - 2009 Virgin Money Ltd. All Rights Reserved."
+                 private="false">
+            <classpath refid="master.classpath" />
+            <tag name="vm.creation.date" description="Creation date:" />
+            <tag name="vm.copyright.year" description="Copyright:" />
+        </javadoc>
+        <echo message="ant-javadoc.xml : javadoc-from-sourcepath : finished"/>
+    </target>
+
+
+
+    <target name="javadoc-from-fileset" description="Generates Javadoc HTML pages from defined fileset ">
+
+<!--
+                This target allows javadoc to be generated from a fileset, rather than from a source directory
+                it is more useful when you want to include or exclude files by name rather than by location
+
+                Before calling it, you need to predefine these variables
+
+                    javadoc.fileset.id    = the fileset to generate documentation for
+                    javadoc.output.dir    = the location to write the documentation to
+                    javadoc.title         = the title for the javadoc, defaults to the Ant project name
+                    javadoc.overview.page = the overview page for the documentation
+
+
+                for Example, to document all the classes with 'Impl' in the name
+
+                    <fileset dir="${src.main.dir}" id="impl.fileset">
+                         <include name="**/*Impl*.java"/>
+                    </fileset>
+
+                    <target name="javadoctest">
+
+                        <ant antfile="${antscripts.dir}/ant-javadoc.xml" target="javadoc-prepare" inheritall="true" inheritrefs="true"/>
+
+                        <ant antfile="${antscripts.dir}/ant-javadoc.xml" target="javadoc-from-fileset" inheritall="true" inheritrefs="true" >
+                              <property name="javadoc.title"          value="Classes called Impl - ${ant.project.name}"/>
+                              <property name="javadoc.output.dir"     value="${javadoc.dir}/impldoc"/>
+                              <property name="javadoc.fileset.id"     value="impl.fileset"/>
+                        </ant>
+                    </target>
+-->
+
+
+        <echo message="ant-javadoc.xml : javadoc--from-fileset : started"/>
+        <echo message="ant-javadoc.xml : javadoc--from-fileset :       javadoc.fileset.id = ${javadoc.fileset.id}"/>
+        <echo message="ant-javadoc.xml : javadoc--from-fileset :       javadoc.output.dir = ${javadoc.output.dir}"/>
+        <echo message="ant-javadoc.xml : javadoc--from-fileset :            javadoc.title = ${javadoc.title}"/>
+        <echo message="ant-javadoc.xml : javadoc--from-fileset :    javadoc.overview.page = ${javadoc.overview.page}"/>
+
+        <mkdir dir="${javadoc.output.dir}" />
+
+       <javadoc destdir="${javadoc.output.dir}"
+                 author="true"
+                 version="true"
+                 nodeprecated="false"
+                 use="true"
+                 includenosourcepackages="true"
+                 verbose="${javadoc.verbose}"
+                 overview="${javadoc.overview.page}"
+                 windowtitle="${javadoc.title}"
+                 doctitle="${javadoc.title}"
+                 bottom="Copyright &#169; 2000 - 2008 Virgin Money Ltd. All Rights Reserved."
+                 private="false">
+            <classpath refid="master.classpath" />
+            <tag name="vm.creation.date" description="Creation date:" />
+            <tag name="vm.copyright.year" description="Copyright:" />
+            <fileset refid="${javadoc.fileset.id}" />
+        </javadoc>
+        <echo message="ant-javadoc.xml : javadoc--from-fileset : finished"/>
+    </target>
+
+
+
+</project>

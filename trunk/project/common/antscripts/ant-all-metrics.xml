@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<project name="ant-all-metrics" default="all-metrics">
+
+    <!--
+
+    Standard Ant task to run all the standard test metrics all-metrics for Virgin Money projects
+    ==========================================================================================
+    
+     Function
+     ========
+
+        This script runs the standard metrics currently in use by Virgin Money.
+
+
+    To use this script
+    ==================
+
+        1. include the file common.build.properties from this folder into your local build file (see
+           the common.build.properties file for details on how to do this). 
+           
+           This will import standard definitions for all properties needed, including the ${antscripts.dir} referenced below
+
+
+        2. create a task in your own ant buildscript like this :-
+
+          <target name="all-metrics" description="Runs all-metrics over the source to check the coding standards">
+               <ant antfile="${antscripts.dir}/ant-all-metrics.xml" inheritall="true"   inheritrefs="true"/>
+          </target>
+
+
+
+
+    -->
+
+
+    <target name="all-metrics" description="Run all-metrics code coverage">
+        <!-- 1. Cobertura -->
+        <echo message="ant-all-metrics.xml :  calling cobertura"/>
+        <ant antfile="${antscripts.dir}/ant-cobertura.xml"  inheritall="true" inheritrefs="true"/>
+
+        <!-- 1. Checkstyle -->
+        <echo message="ant-all-metrics.xml :  calling Checkstyle"/>
+        <ant antfile="${antscripts.dir}/ant-checkstyle.xml"  inheritall="true" inheritrefs="true"/>
+
+        <!-- 1. QALAb -->
+        <!-- echo message="ant-all-metrics.xml :  calling QALAb"/>
+        <ant antfile="${antscripts.dir}/ant-qalab.xml"  inheritall="true" inheritrefs="true"/-->
+
+    </target>
+
+</project>
