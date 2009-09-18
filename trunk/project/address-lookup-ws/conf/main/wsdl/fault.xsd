@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+   <schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:faults="http://www.virginmoney.com/vmDataTypes/faults/"
+        targetNamespace="http://www.virginmoney.com/vmDataTypes/faults/"
+        elementFormDefault="qualified">
+
+    <complexType name="ErrorMessage">
+        <sequence>
+            <element name="ErrorMessageKey" type="string" />
+            <element name="ErrorDefaultMessage" type="string" />
+        </sequence>
+    </complexType>
+
+    <complexType name="ErrorList">
+        <sequence>
+            <element name="errors" type="faults:ErrorMessage" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
+
+    <complexType name="ServiceFault">
+        <sequence>
+            <element name="errorCode" type="string" minOccurs="1" maxOccurs="1" />
+            <element name="errorDescription" type="string" minOccurs="1" maxOccurs="1" />
+        </sequence>
+    </complexType>
+
+
+    <element name="ServiceFaultException" type="faults:ServiceFault" />
+    </schema>

@@ -1,0 +1,28 @@
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts><!-- Configuration for the default package. -->
+	
+	<constant name="struts.objectFactory" value="spring" />
+    <constant name="struts.devMode" value="false" />
+	
+    <package name="giving-batch" extends="struts-default">
+    
+       	<action name="testJMS" class="testJMSAction">
+            <result>/testJMS.jsp</result>
+        </action>
+        
+       	<action name="glisTestJMS" class="glisTestJMSAction">
+            <result>/glisTestJMS.jsp</result>
+        </action>
+        
+        <action name="glisResponseTestJMS" class="glisResponseTestJMSAction">
+            <result>/glisResponseTestJMS.jsp</result>
+        </action>
+
+        <!-- Add your actions here -->
+        
+    </package>
+	
+</struts>

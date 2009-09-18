@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" attributeFormDefault="unqualified" version="*$Revision: 180 $" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="inc_global.xsd"/>
+  <xs:element name="fund" type="fundType"/>
+  <xs:element name="fundbyDate" type="fundTypeByDate"/>
+  <xs:element name="fundID">
+    <xs:annotation>
+      <xs:documentation>On a request externalFund elements do not have to be populated as long as the internalFundCode is populated and vise versa.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="internalFundCode">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:minLength value="0"/>
+              <xs:maxLength value="5"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element ref="fundName" minOccurs="0"/>
+        <xs:element name="externalFund" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="externalFundCodeType">
+                <xs:annotation>
+                  <xs:documentation>I=ISIN, S=SEDOL, U=UNKNOWN</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:minLength value="0"/>
+                    <xs:maxLength value="1"/>
+                    <xs:enumeration value="I"/>
+                    <xs:enumeration value="S"/>
+                    <xs:enumeration value="U"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="externalFundCode">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:minLength value="0"/>
+                    <xs:maxLength value="20"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="fundList">
+    <xs:complexType>
+      <xs:sequence minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="fundElements">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="fundID"/>
+              <xs:element ref="fundName"/>
+              <xs:element ref="fundUnitType"/>
+              <xs:element ref="fundStatus"/>
+              <xs:element ref="component"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="fundDetails">
+    <xs:sequence>
+      <xs:element ref="fundID"/>
+      <xs:element ref="fundName"/>
+      <xs:element ref="fundUnitType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="fundEstimatedValue" type="valueAmountType" default="0">
+    <xs:annotation>
+      <xs:documentation>(estValue)</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="fundLastEventDate" type="xs:date">
+    <xs:annotation>
+      <xs:documentation>Last date a dela was done (lastEventDate)</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="fundPFHStartDate" type="xs:date">
+    <xs:annotation>
+      <xs:documentation>Product Fund Holding (PFH)</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="fundName">
+    <xs:annotation>
+      <xs:documentation>the company cash fund etc</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="60"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="fundNetPricedUnits" type="unitAmountType" default="0">
+    <xs:annotation>
+      <xs:documentation>(netPricedUnits)</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="fundNetPricedValue" type="valueAmountType" default="0">
+    <xs:annotation>
+      <xs:documentation>(netPricedValue)</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="fundNoUnits" type="unitAmountType">
+    <xs:annotation>
+      <xs:documentation>Number of Units (netBalance)</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="fundNetUnsettledUnits" type="unitAmountType" default="0">
+    <xs:annotation>
+      <xs:documentation>(netUnsettledUnits)</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="fundNetUnsettledValue" type="valueAmountType" default="0">
+    <xs:annotation>
+      <xs:documentation>(netUnsettledValue)</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="fundSettledUnits" type="unitAmountType" default="0">
+    <xs:annotation>
+      <xs:documentation>(settledUnits)</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="fundSettledValue" type="valueAmountType" default="0">
+    <xs:annotation>
+      <xs:documentation>(settledValue)</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="fundStatus" default="active">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="active"/>
+        <xs:enumeration value="inactive"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:complexType name="fundType">
+    <xs:sequence>
+      <xs:element ref="fundID"/>
+      <xs:element ref="fundName"/>
+      <xs:element ref="fundUnitType"/>
+      <xs:element ref="fundNoUnits"/>
+      <xs:element ref="priceAmount"/>
+      <xs:element ref="vp"/>
+      <xs:element ref="fundNetUnsettledUnits"/>
+      <xs:element ref="fundNetUnsettledValue"/>
+      <xs:element ref="fundSettledUnits"/>
+      <xs:element ref="fundSettledValue"/>
+      <xs:element ref="fundEstimatedValue"/>
+      <xs:element ref="fundNetPricedUnits"/>
+      <xs:element ref="fundNetPricedValue"/>
+      <xs:element ref="fundLastEventDate"/>
+      <xs:element ref="fundPFHStartDate"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="fundUnitType">
+    <xs:annotation>
+      <xs:documentation>inc, acc, cash etc</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="35"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:complexType name="fundTypeByDate">
+    <xs:sequence>
+      <xs:element ref="fundID"/>
+      <xs:element ref="fundName"/>
+      <xs:element ref="fundUnitType"/>
+      <xs:element ref="fundNoUnits"/>
+      <xs:element ref="priceAmount"/>
+      <xs:element ref="vp"/>
+      <xs:element ref="fundLastEventDate"/>
+      <xs:element ref="fundPFHStartDate"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="priceAmount" type="valueAmountType">
+    <xs:annotation>
+      <xs:documentation>The price of one unit</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+</xs:schema>

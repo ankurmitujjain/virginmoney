@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:ws="http://jax-ws.dev.java.net/spring/core"
+	  xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:wss="http://jax-ws.dev.java.net/spring/servlet"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd 
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd 
+			http://jax-ws.dev.java.net/spring/core http://jax-ws.dev.java.net/spring/core.xsd 
+			http://jax-ws.dev.java.net/spring/servlet https://jax-ws.dev.java.net/spring/servlet.xsd 
+			http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd">
+			
+			
+		<!-- Import the static data caching context -->
+		<import resource="giving-static-data-cache.xml" />			
+
+
+	   <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+          <property name="persistenceUnitName" value="VMG"/>
+       </bean> 
+	
+	<bean id="entityManager" class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
+		<property name="entityManagerFactory" ref="entityManagerFactory"/>
+	</bean>
+	
+	<!--
+		Transaction manager for a single JPA EntityManagerFactory (alternative
+		to JTA)
+	-->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
+		p:entityManagerFactory-ref="entityManagerFactory" />
+
+
+	<!--
+		Activates various annotations to be detected in bean classes: Spring's
+		@Required and @Autowired, as well as JSR 250's @PostConstruct,
+		@PreDestroy and @Resource (if available) and JPA's @PersistenceContext
+		and @PersistenceUnit (if available).
+	-->
+	<context:annotation-config />
+
+	<!--
+		Instruct Spring to perform declarative transaction management
+		automatically on annotated classes.
+	-->
+	<tx:annotation-driven />
+
+	<!--
+		Post-processor to perform exception translation on @Repository classes
+		(from native exceptions such as JPA PersistenceExceptions to Spring's
+		DataAccessException hierarchy).
+	-->
+	<bean
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+	
+	<!-- DAO Implementation class configuration -->
+	<bean id="charityDAO" class="com.virginmoneygiving.giving.dao.impl.JPACharityDAOImpl" >
+		<property name="entityManager" ref="entityManager"/>	
+	</bean>
+	<bean id="fundraiserDAO" class="com.virginmoneygiving.giving.dao.impl.JPAFundraiserDAOImpl" >
+	<property name="entityManager" ref="entityManager"/>
+	</bean>
+	<bean id="donorDAO" class="com.virginmoneygiving.giving.dao.impl.JPADonorDAOImpl" >
+	<property name="entityManager" ref="entityManager"/>
+	</bean>
+	<bean id="userManagementDAO" class="com.virginmoneygiving.giving.dao.impl.JPAUserManagementDAOImpl" >
+	<property name="entityManager" ref="entityManager"/>
+	</bean>
+	<bean id="eventDAO" class="com.virginmoneygiving.giving.dao.impl.JPAEventDAOImpl" >
+	<property name="entityManager" ref="entityManager"/>
+	</bean>
+	
+	<!-- Service implementation -->
+	<bean id="givingDBService" class="com.virginmoneygiving.giving.service.impl.GivingServiceImpl">
+		<property name="charityDAO" ref="charityDAO" />
+		<property name="fundraiserDAO" ref="fundraiserDAO" />	
+		<property name="donorDAO" ref="donorDAO" />
+		<property name="userManagementDAO" ref="userManagementDAO" />	
+		<property name="eventDAO" ref="eventDAO" />	
+	</bean>
+
+
+	
+
+</beans>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xmlns:p="http://www.springframework.org/schema/p" 
+		xmlns:context="http://www.springframework.org/schema/context" 
+		xmlns:ws="http://jax-ws.dev.java.net/spring/core" 
+		xmlns:wss="http://jax-ws.dev.java.net/spring/servlet"
+		xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd 
+			http://jax-ws.dev.java.net/spring/core http://jax-ws.dev.java.net/spring/core.xsd 
+			http://jax-ws.dev.java.net/spring/servlet http://jax-ws.dev.java.net/spring/servlet.xsd">
+
+	<!-- ========================= RESOURCE DEFINITIONS ========================= -->
+
+
+	<!--
+		Activates various annotations to be detected in bean classes: Spring's
+		@Required and @Autowired, as well as JSR 250's @PostConstruct,
+		@PreDestroy and @Resource (if available) and JPA's @PersistenceContext
+		and @PersistenceUnit (if available).
+	-->
+	<context:annotation-config/>
+
+
+	<bean id="mapToNVPConverter" class="com.virginmoneygiving.cardpayment.helper.MapToNVPListCustomConverter" />
+
+    <!-- DOZER configuration -->
+    <bean id="dozer" class="net.sf.dozer.util.mapping.DozerBeanMapper">
+        <property name="mappingFiles">
+          <list>
+			<value>/card-payment-dozer-mapping.xml</value>
+          </list>
+        </property>
+        <property name="customConvertersWithId">
+        	<map>
+        		<entry key="mapNVPConverter"><ref bean="mapToNVPConverter" /></entry> 
+        	</map>
+        </property>
+    </bean>
+    <bean id="cardPaymentDataMappingHelper" class="com.virginmoneygiving.cardpayment.helper.OnlineCardPaymentDataMappingHelper" />
+
+	<!-- WS Binding and Endpoint -->
+    <wss:bindings id="jax-ws.http">
+        <wss:bindings>
+        	<!-- This url should match the jax-ws servlet -->
+            <wss:binding url="/onlineCardPayment">
+                <wss:service>
+                    <ws:service bean="#endpoint"/>
+                </wss:service>
+            </wss:binding>
+        </wss:bindings>
+    </wss:bindings>
+	
+	<!-- Had to remove JSR-250 @Resource annotations and manually inject otherwise the @WebService annotation is lost -->
+    <bean id="endpoint" class="com.virginmoneygiving.cardpayment.ws.OnlineCardPaymentEndPoint">
+    	<!-- Request Validation -->
+		<property name="authenticationRequestValidator" ref="authenticationRequestValidator" />
+		<property name="cardRequestValidator" ref="cardRequestValidator"/>
+		<property name="tokenRequestValidator" ref="tokenRequestValidator" />
+    	<!-- Mapping -->
+		<property name="dozer" ref="dozer"/>
+		<property name="cardPaymentDataMappingHelper" ref="cardPaymentDataMappingHelper"/>
+    	<!-- Service -->
+		<property name="onlineCardPaymentService" ref="onlineCardPaymentService"/>
+	</bean>
+
+</beans>

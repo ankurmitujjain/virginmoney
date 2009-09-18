@@ -1,0 +1,357 @@
+<?xml version="1.0"?>
+<project name="cas-external" basedir="." default="deploy-local-jboss-no-tests" xmlns:artifact="urn:maven-artifact-ant" xmlns:test="urn:test-tasks">
+
+    <!-- user-specific properties -->
+    <property file="${user.home}/etc/env.build.properties" />
+
+    <!-- import the build file which predefines all the standard properties -->
+    <property name="antscripts.dir" value="${env.dev.root.dir}/common/antscripts"/>
+    <property file="${antscripts.dir}/common.build.properties" />
+
+    <!-- import all the thirdparty library definitions -->
+    <property name="common.library.dir" value="${env.dev.root.dir}/thirdparty/libraries" />
+    <property file="${common.library.dir}/common.libraries.properties" />
+    <property name="crumb.framework.xsd.dir" value="${env.dev.root.dir}/crumb/framework/service/xsd/1.0" />
+
+    <property name="common.component.dir" value="${env.dev.root.dir}/components" />
+    <property file="${common.component.dir}/common.components.properties" />
+
+	<!-- THIS IS TEMPORARY, WE NEED THIS THING TO BE NAMED cas-external -->
+	<property name="war.name" value="vmgssozone" />
+
+	<!-- import vm deployment and jboss control -->
+	<import file="${antscripts.dir}/ant-vm-deployment.xml" />
+
+	<property name="deploy.exploded.dir" value="${deploy.dir}/exploded/${war.name}" />
+
+	<property name="pages.dir" value="${basedir}/pages" />
+
+	<property name="lib.dir" value="${basedir}/lib" />
+
+	<!-- prep Maven ant tasks -->
+
+	  <target name="init-maven" depends="">
+		<path id="maven-ant-tasks.classpath" path="${maven-ant.lib}/maven-ant-tasks-2.0.9.jar" />
+		<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant"
+				 classpathref="maven-ant-tasks.classpath"/>
+		<artifact:localRepository id="local.repository" path="${basedir}/repository" layout="default"/>
+		<property name="deploy.repository.url" value="${basedir}/repository" />
+		<artifact:remoteRepository id="deploy.repository" url="file://localhost/${deploy.repository.url}" layout="default"/>
+	  </target>
+
+		<!-- if you don't know what a wagon is don't be playing around this -->
+  	<target name="install-m2-ssh-wagon" depends="init-maven">
+  	  <artifact:install-provider artifactId="wagon-ssh" version="1.0-beta-2"/>
+  	</target>
+
+    <!-- Localised property declarations -->
+
+    <patternset id="lib.files.nolog4j">
+       <include name="*.jar"/>
+       <include name="*.zip"/>
+       <exclude name="log4j*.jar" />
+   </patternset>
+
+    <!--required libraries for this project -->
+    <path id="required.libraries">		
+        <fileset dir="${metro.lib}">
+            <patternset refid="lib.files.nolog4j" />
+        </fileset>
+		<fileset dir="${commons-beanutils.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${commons-collections.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${commons-lang.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${jboss.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${log4j.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${spring256.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${hibernate.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${mysql.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${joda-time.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${fitnesse.home}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${jaxb.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${xstream.13.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+    </path>
+
+
+    <!-- master classpath - includes common libraries and configuration elements -->
+	<path id="master.classpath">
+		<path refid="required.libraries" />
+		<pathelement path="${build.main.dir}" />
+		<pathelement path="${conf.main.dir}" />
+	</path>
+
+	<!-- test classpath - includes common libraries and configuration elements plus test version of configuration elements -->
+	<path id="test.classpath">
+		<pathelement path="${conf.test.dir}" />
+		<pathelement path="${build.test.dir}" />
+		<path refid="master.classpath" />
+			<fileset dir="${junit.home}">
+				<include name="**/*.jar" />
+				<exclude name="**/*log4j*.*" />
+			</fileset>
+			<fileset dir="${mockito.lib}">
+				<include name="**/*.jar" />
+			</fileset>
+	</path>
+
+    <target name="echoproperties">
+        <echo message="=============================================================================================="  />
+        <echo message=" Start of properties for project : '${ant.project.name}'"  />
+        <echo message="                         basedir : '${basedir}' "  />
+        <echo message="                        ant file : '${ant.file}'"  />
+        <echo message="=============================================================================================="  />
+        <echoproperties/>
+        <echo message="=============================================================================================="  />
+        <echo message=" End of properties for project : '${ant.project.name}' "  />
+        <echo message="=============================================================================================="  />
+    </target>
+
+	<!-- builds and tests the project -->
+	<target name="build" depends="build-no-tests, compile-test-src, test-all, javadoc" />
+
+	<target name="build-no-tests" depends="clean, compile, create-war" description="builds the project without tests" />
+
+	<target name="clean">
+		<ant antfile="${antscripts.dir}/ant-clean.xml" inheritall="true" inheritrefs="true" />
+		<delete dir="${basedir}/target"/>
+	</target>
+
+	<target name="clean-dist" description="Clean out the distribution directory">
+		<delete dir="${distribution.dir}" failonerror="false" />
+	</target>
+	
+	<target name="compile" depends="build-dependencies">
+	</target>
+
+	<target name="compile-test-src">
+		<!-- HACK : Need to define this property here.As maven is used to compile the main source, compilation task is only called for test source. -->
+		<available property="test-src-exists"      file="${src.test.dir}"/>
+		<ant antfile="${antscripts.dir}/ant-compile.xml" target="compile-test" inheritall="true" inheritrefs="true" />
+	</target>
+
+   <target name="build-dependencies" description="Generates the wsdl for this service" >
+        <echo message=" base Dir : '${src.generated.dir}'"  />
+        <property name="src.generated.dir" value="${build.main.dir}/generated" />
+        <antcall target="wsdl-gen-service-4-cas" />
+        <mkdir dir="${deploy.dir}"/>
+        <jar jarfile="${deploy.dir}/security-ws-messages.jar">
+            <fileset dir="${build.main.dir}">
+                <include name="**/*.class"/>
+            </fileset>
+        </jar>
+    </target>
+
+	<target name="install-dependencies" depends="init-maven, build-dependencies">
+		<artifact:localRepository id="local.repository" path="${basedir}/repository" layout="default"/>
+			<artifact:install file="${deploy.dir}/security-ws-messages.jar">
+		  <pom file="${conf.dir}/main/poms/security-ws-messages.pom"/>
+		</artifact:install>
+			<artifact:install file="${vmgcommons.jar.location}/${vmgcommons.jar.name}">
+		  <pom file="${conf.dir}/main/poms/vmg-commons.pom"/>
+		</artifact:install>
+		<artifact:install file="${bamserviceclient.jar.location}/${bamserviceclient.jar.name}">
+		  <pom file="${conf.dir}/main/poms/bamserviceclient.pom"/>
+		</artifact:install>
+	</target>
+
+	<target name="create-war" depends="install-dependencies">
+		<echo message="Executing Maven 2 build (feel the force, live the dream...)"/>
+		<exec executable="${maven.exe.win32}" osfamily="Windows">
+			<arg value="package"/>
+		</exec>
+		<exec executable="${maven.exe.unix}" osfamily="Unix">
+			<arg value="package"/>
+		</exec>
+		<fail message="Maven 2 build has not produced the expected WAR (${basedir}/target/cas-external.war)">
+			<condition>
+				<not>
+					<available file="${basedir}/target/cas-external.war"/>
+				</not>
+			</condition>
+		</fail>
+		<copy file="${basedir}/target/cas-external.war" tofile="${deploy.dir}/${war.name}.war"/>
+	</target>
+
+		<!-- work around issue of trying to run javadoc against test sources when we have none -->
+		<target name="javadoc-prepare">
+			<ant antfile="${antscripts.dir}/ant-javadoc.xml" target="javadoc-prepare" inheritall="true" inheritrefs="true" />
+		</target>
+
+		<target name="javadoc" description="Runs Javadoc" depends="javadoc-prepare" unless="skip.javadoc">
+			<ant antfile="${antscripts.dir}/ant-javadoc.xml" target="javadoc-from-sourcepath" inheritall="true" inheritrefs="true">
+				<property name="javadoc.title" value="${ant.project.name}" />
+				<property name="javadoc.verbose" value="true" />
+			</ant>
+	</target>
+
+	<target name="deploy-local-jboss" depends="build-no-tests,test-all" description="Deploy application to local web server">
+		<!-- jboss.local.deploy.dir should be defined in your local env.build.properties-->
+		<copy verbose="${verbose}" file="${deploy.dir}/${war.name}.war" todir="${jboss.local.deploy.dir}" preservelastmodified="false">
+		</copy>
+	</target>
+
+	<target name="deploy-local-jboss-no-tests" depends="build-no-tests" description="Deploy application to local web server">
+		<copy verbose="${verbose}" file="${deploy.dir}/${war.name}.war" todir="${jboss.local.deploy.dir}" preservelastmodified="false">
+		</copy>
+	</target>
+
+
+    <!-- WDSL to Java -->
+    <target name="wsdl-gen-service-4-cas" description="Generates the wsdl for this service">
+        <delete dir="${build.main.dir}/generated"/>
+        <delete dir="${build.main.dir}"/>
+        <ant antfile="${antscripts.dir}/ant-wsimport.xml" inheritall="true" inheritrefs="true">
+            <property name="wsdl.location"        value="${security.wsdl.location.web}"/>
+            <property name="java.package.name"    value="com.virginmoney.security.service.client.messages"/>
+            <property name="src.generated.dir"    value="${build.main.dir}/generated"/>
+        </ant>
+    </target>
+
+
+	<target name="dist" depends="clean-dist, build, create-vm-distribution, copy-deployment-instruction, copy-distribution-jboss-deployables,
+	    	copy-distribution-jboss-conf, copy-distribution-external-configuration, copy-distribution-sql-scripts, vm-distribution-import-lib-virgin, create-distribution-tar" description="Creates distribution tar." />
+
+	<target name="create-vm-distribution" description="Create distribution release structure.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="vm-distribution" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="copy-distribution-jboss-deployables" description="Copy war for to distribution release structure.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="copy-jboss-deployables" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="copy-distribution-jboss-conf" description="Copy configuration files required in jboss -> deploy folder.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="copy-jboss-conf" inheritall="true" inheritrefs="true"/>
+	</target>
+
+	<target name="copy-distribution-sql-scripts" description="Copy sql scripts to distribution release structure.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="copy-sql-scripts" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="copy-distribution-external-configuration" description="Copy external configurations to distribution release structure.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="copy-external-configuration" inheritall="true" inheritrefs="true"/>
+	</target>
+
+	<target name="copy-deployment-instruction" description="Copy file that contains tar deployment instructions.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="copy-readme" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="create-distribution-tar" description="Create distribution tar.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="create-gzip" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="vm-distribution-import-lib-virgin" description="Import project specific dependencies.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution-lib-virgin-import.xml" target="copy-cas-external-lib-virgin" inheritall="true" inheritrefs="true" />
+	</target>
+		
+	<target name="test-all">
+		<if>
+			<not><equals arg1="${skip.tests}" arg2="true"/></not>
+			<then>
+      	<if>
+      		<not><equals arg1="${skip.cobertura}" arg2="true"/></not>
+					<then>
+		        <antcall target="test-cobertura"/>
+					</then>
+					<else>
+						<echo message="Property 'skip.cobertura' is set to true, skipping cobertura processing"/>
+		        <antcall target="test-junit"/>
+					</else>
+				</if>
+	      <antcall target="test-checkstyle"/>
+			</then>
+			<else>
+				<echo message="Property 'skip.tests' is set to true, skipping tests"/>
+			</else>
+		</if>
+	</target>
+			
+	<!-- override cobertura to perform maven cobertura run -->
+	<target name="test-cobertura">
+		<echo message="Running cobertura via maven"/>
+		<exec executable="${maven.exe.win32}" osfamily="Windows">
+	    <arg value="cobertura:cobertura"/>
+		</exec>		
+		<exec executable="${maven.exe.unix}" osfamily="Unix">
+	    <arg value="cobertura:cobertura"/>
+	  </exec>
+	</target>
+	
+	<!-- override junit, its done by maven build -->
+	<target name="test-junit"/>
+
+	<target name="test-checkstyle" description="Runs checkstyle over the source to check the coding standards" unless="skip.checkstyle">
+		<ant antfile="${antscripts.dir}/ant-checkstyle.xml" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="test-findbugs" description="Runs findbugs over the source to check the coding bugs" unless="skip.findbugs">
+		<ant antfile="${antscripts.dir}/ant-findbugs.xml" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="test-qalab" description="Runs qalab against the test results to record the metrics" unless="skip.qalab">
+		<ant antfile="${antscripts.dir}/ant-qalab.xml" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<!-- a default fitnesse target. Provide the name of the fitnesse page to test with -->
+	<target name="test-fitnesse" description="Runs the Fitnesse tests" unless="skip.fitnesse">
+		<ant antfile="${antscripts.dir}/ant-fitnesse.xml" inheritall="true" inheritrefs="true">
+			<property name="fitnesse.test.page" value="a fitnesse page" />
+		</ant>
+	</target>
+	
+	<!-- overriden as we have a real database -->
+	<target name="assert-mysql-deployment" description="Assert that the component's database is available">
+		<mysql-run-sql url="${casexternal.ds.url}" username="${casexternal.ds.username}"
+			password="${casexternal.ds.password}" sql="use ${casexternal.ds.dbname};" />
+	</target>
+
+	<!-- DEPLOY THIS COMPONENT -->
+
+	<target name="deploy-dist" depends="jboss-assert-running,
+		unpack-distribution,
+		deploy-database,
+		deploy-libraries,
+		deploy-external-config,
+		deploy-jboss-config,
+		deploy-jboss-deployables"
+		description="Deploy the component, takes the tar ball and deploys it properly into JBoss and MySQL">
+	</target>
+	
+	<!-- overridden as we have a real database -->
+	<target name="deploy-database" description="Execute the component's database initialisation scripts">
+		<deploy-database-from-files dbName="${casexternal.ds.dbname}"
+			dbUsername="${casexternal.ds.username}"
+			dbPassword="${casexternal.ds.password}" />
+	</target>
+
+	<!-- overridden as we have a datasource -->
+	<target name="filter-jboss-deployables">
+		<filter-jboss-datasource dsFile="${distribution.jboss.deploy-virgin.dir}/cas-external-ds.xml"
+			dsUrl="${casexternal.ds.url}"
+			dsUsername="${casexternal.ds.username}"
+			dsPassword="${casexternal.ds.password}" />
+	</target>
+
+</project>

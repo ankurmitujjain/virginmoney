@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.w3.org/2001/XMLSchema" 
+	xmlns:faults="http://www.virginmoneygiving.com/faults/"
+	targetNamespace="http://www.virginmoneygiving.com/faults/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+	elementFormDefault="qualified">
+    <complexType name="ErrorMessage">
+        <sequence>
+            <element name="ErrorField" type="string" />
+            <element name="ErrorMessageKey" type="string" />
+            <element name="ErrorDefaultMessage" type="string" />
+        </sequence>
+    </complexType>
+    <complexType name="ServiceFault">
+        <sequence>
+            <element name="message" type="string" />
+            <element name="exceptionMessage" type="string" />
+            <element name="faultInfo" type="string" />
+            <element name="errorList" type="faults:ErrorMessage" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
+    <element name="ServiceFaultException" type="faults:ServiceFault" />  
+</xsd:schema>

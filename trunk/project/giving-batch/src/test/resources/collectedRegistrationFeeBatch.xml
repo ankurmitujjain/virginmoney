@@ -1,0 +1,21 @@
+<com.virginmoney.glis.messages.CollectedRegistrationFeeBatch>
+  <batchNumber>somebatch</batchNumber>
+  <ok>false</ok>
+  <feePayments>
+ com.virginmoney.glis.messagesages.RegistrationFeePaymentCollected>
+      <invoiceNumber>ICR000000000001</invoiceNumber>
+      <charityReference>VMG:CHARITY_REGISTRATION:1</charityReference>
+      <feeAmount>100.0</feeAmount>
+      <vatAmount>17.5</vatAmountcom.virginmoney.glis.messages.messages.RegistrationFeePaymentCollectcom.virginmoney.glis.messagese.messages.RegistrationFeePaymentCollected>
+      <invoiceNumber>ICR000000000002</invoiceNumber>
+      <charityReference>VMG:CHARITY_REGISTRATION:2</charityReference>
+      <feeAmount>100.0</feeAmount>
+      <vatAmount>17.5</vatcom.virginmoney.glis.messageservice.messages.RegistrationFeePaymentCcom.virginmoney.glis.messagesservice.messages.RegistrationFeePaymentCollected>
+      <invoiceNumber>ICR000000000003</invoiceNumber>
+      <charityReference>VMG:CHARITY_REGISTRATION:3</charityReference>
+      <feeAmount>100.0</feeAmount>
+      <vatAmount>17.com.virginmoney.glis.messagesglis.service.messages.RegistrationFeePacom.virginmoney.glis.messages.glis.service.messages.RegistrationFeePaymentCollected>
+      <invoiceNumber>ICR000000000004</invoiceNumber>
+      <charityReference>VMG:CHARITY_REGISTRATION:4</charityReference>
+      <feeAmount>100.0</feeAmount>
+      <vatAmoucom.virginmoney.glis.messagesiving.glis.service.messages.RegistrationFeePaymentColcom.virginmoney.glis.messagesygiving.glis.service.messages.CollectedRegistrationFeeBatch>

@@ -1,0 +1,685 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+        xmlns="http://schemas.xmlsoap.org/wsdl/"
+        targetNamespace="http://www.virginmoney.com/glis/2009/01"
+        xmlns:glis-service="http://www.virginmoney.com/glis/2009/01"
+        xmlns:glis="http://www.virginmoney.com/type/glis/2009/01"
+        xmlns:fault="http://www.virginmoney.com/type/glis/faults/2008/01"
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <types>
+        <xsd:schema>
+            <xsd:import namespace="http://www.virginmoney.com/type/glis/2009/01"        schemaLocation="glis.xsd"/>
+            <xsd:import namespace="http://www.virginmoney.com/type/glis/faults/2008/01" schemaLocation="fault.xsd"/>
+        </xsd:schema>
+    </types>
+
+    <message name="GlisServiceException">
+        <part name="Fault" element="fault:GlisServiceFaultException"/>
+    </message>
+
+    <message name="ChecksSystemRequest">
+        <part name="Request" element="glis:ChecksSystemRequest"/>
+    </message>
+
+    <message name="ChecksSystemResponse">
+        <part name="Response" element="glis:ChecksSystemResponse"/>
+    </message>
+
+    <message name="RegisterCharitiesRequest">
+        <part name="Request" element="glis:RegisterCharitiesRequest"/>
+    </message>
+
+    <message name="RegisterCharitiesResponse">
+        <part name="Response" element="glis:RegisterCharitiesResponse"/>
+    </message>
+
+    <message name="MaintainCharitiesRequest">
+        <part name="Request" element="glis:MaintainCharitiesRequest"/>
+    </message>
+
+    <message name="MaintainCharitiesResponse">
+        <part name="Response" element="glis:MaintainCharitiesResponse"/>
+    </message>
+
+    <message name="CloseCharitiesRequest">
+        <part name="Request" element="glis:CloseCharitiesRequest"/>
+    </message>
+
+    <message name="CloseCharitiesResponse">
+        <part name="Response" element="glis:CloseCharitiesResponse"/>
+    </message>
+
+    <message name="RegistrationFeesInitiatedRequest">
+        <part name="Request" element="glis:RegistrationFeesInitiatedRequest"/>
+    </message>
+
+    <message name="RegistrationFeesInitiatedResponse">
+        <part name="Response" element="glis:RegistrationFeesInitiatedResponse"/>
+    </message>
+
+    <message name="DonationPaymentsInitiatedRequest">
+        <part name="Request" element="glis:DonationPaymentsInitiatedRequest"/>
+    </message>
+
+    <message name="DonationPaymentsInitiatedResponse">
+        <part name="Response" element="glis:DonationPaymentsInitiatedResponse"/>
+    </message>
+
+    <message name="DonationPaymentsCollectedRequest">
+        <part name="Request" element="glis:DonationPaymentsCollectedRequest"/>
+    </message>
+
+    <message name="DonationPaymentsCollectedResponse">
+        <part name="Response" element="glis:DonationPaymentsCollectedResponse"/>
+    </message>
+
+    <message name="FailedDonationPaymentsRequest">
+        <part name="Request" element="glis:FailedDonationPaymentsRequest"/>
+    </message>
+
+    <message name="FailedDonationPaymentsResponse">
+        <part name="Response" element="glis:FailedDonationPaymentsResponse"/>
+    </message>
+
+    <message name="GiftAidClaimedRequest">
+        <part name="Request" element="glis:GiftAidClaimedRequest"/>
+    </message>
+
+    <message name="GiftAidClaimedResponse">
+        <part name="Response" element="glis:GiftAidClaimedResponse"/>
+    </message>
+
+    <message name="GiftAidReceivedRequest">
+        <part name="Request" element="glis:GiftAidReceivedRequest"/>
+    </message>
+
+    <message name="GiftAidReceivedResponse">
+        <part name="Response" element="glis:GiftAidReceivedResponse"/>
+    </message>
+
+    <message name="TransactionChargePaidRequest">
+        <part name="Request" element="glis:TransactionChargePaidRequest"/>
+    </message>
+
+    <message name="TransactionChargePaidResponse">
+        <part name="Response" element="glis:TransactionChargePaidResponse"/>
+    </message>
+
+    <message name="TransactionFeePaidRequest">
+        <part name="Request" element="glis:TransactionFeePaidRequest"/>
+    </message>
+
+    <message name="TransactionFeePaidResponse">
+        <part name="Response" element="glis:TransactionFeePaidResponse"/>
+    </message>
+
+    <message name="TransitionalReliefClaimedRequest">
+        <part name="Request" element="glis:TransitionalReliefClaimedRequest"/>
+    </message>
+
+    <message name="TransitionalReliefClaimedResponse">
+        <part name="Response" element="glis:TransitionalReliefClaimedResponse"/>
+    </message>
+
+    <message name="TransitionalReliefReceivedRequest">
+        <part name="Request" element="glis:TransitionalReliefReceivedRequest"/>
+    </message>
+
+    <message name="TransitionalReliefReceivedResponse">
+        <part name="Response" element="glis:TransitionalReliefReceivedResponse"/>
+    </message>
+
+    <message name="BACPaymentDueRequest">
+        <part name="Request" element="glis:BACPaymentDueRequest"/>
+    </message>
+
+    <message name="BACPaymentDueResponse">
+        <part name="Response" element="glis:BACPaymentDueResponse"/>
+    </message>
+
+    <message name="BACPaymentCollectedRequest">
+        <part name="Request" element="glis:BACPaymentCollectedRequest"/>
+    </message>
+
+    <message name="BACPaymentCollectedResponse">
+        <part name="Response" element="glis:BACPaymentCollectedResponse"/>
+    </message>
+
+    <message name="ProcessEventRequest">
+        <part name="Request" element="glis:ProcessEventRequest"/>
+    </message>
+
+    <message name="ProcessEventResponse">
+        <part name="Response" element="glis:ProcessEventResponse"/>
+    </message>
+
+    <message name="RegularDonationPmtInitiatedRequest">
+        <part name="Request" element="glis:RegularDonationPmtInitiatedRequest"/>
+    </message>
+
+    <message name="RegularDonationPmtInitiatedResponse">
+        <part name="Response" element="glis:RegularDonationPmtInitiatedResponse"/>
+    </message>
+
+    <message name="RegularDonationPmtCollectedRequest">
+        <part name="Request" element="glis:RegularDonationPmtCollectedRequest"/>
+    </message>
+
+    <message name="RegularDonationPmtCollectedResponse">
+        <part name="Response" element="glis:RegularDonationPmtCollectedResponse"/>
+    </message>
+
+    <message name="RegularDonationPmtFailedRequest">
+        <part name="Request" element="glis:RegularDonationPmtFailedRequest"/>
+    </message>
+
+    <message name="RegularDonationPmtFailedResponse">
+        <part name="Response" element="glis:RegularDonationPmtFailedResponse"/>
+    </message>
+
+    <message name="EventRegistrationPmtInitiatedRequest">
+        <part name="Request" element="glis:EventRegistrationPmtInitiatedRequest"/>
+    </message>
+
+    <message name="EventRegistrationPmtInitiatedResponse">
+        <part name="Response" element="glis:EventRegistrationPmtInitiatedResponse"/>
+    </message>
+
+    <message name="EventRegistrationPmtCollectedRequest">
+        <part name="Request" element="glis:EventRegistrationPmtCollectedRequest"/>
+    </message>
+
+    <message name="EventRegistrationPmtCollectedResponse">
+        <part name="Response" element="glis:EventRegistrationPmtCollectedResponse"/>
+    </message>
+
+    <message name="EventRegistrationPmtFailedRequest">
+        <part name="Request" element="glis:EventRegistrationPmtFailedRequest"/>
+    </message>
+
+    <message name="EventRegistrationPmtFailedResponse">
+        <part name="Response" element="glis:EventRegistrationPmtFailedResponse"/>
+    </message>
+
+    <message name="WaiveRegistrationFeesRequest">
+        <part name="Request" element="glis:WaiveRegistrationFeesRequest"/>
+    </message>
+
+    <message name="WaiveRegistrationFeesResponse">
+        <part name="Response" element="glis:WaiveRegistrationFeesResponse"/>
+    </message>
+
+
+    <portType name="GlisPort">
+        <operation name="ProcessEvent">
+            <input message="glis-service:ProcessEventRequest"/>
+            <output message="glis-service:ProcessEventResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+
+        <operation name="checkGLSystemAvailability">
+            <input message="glis-service:ChecksSystemRequest"/>
+            <output message="glis-service:ChecksSystemResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+        
+        <operation name="RegisterCharities">
+            <input message="glis-service:RegisterCharitiesRequest"/>
+            <output message="glis-service:RegisterCharitiesResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+
+        <operation name="MaintainCharities">
+            <input message="glis-service:MaintainCharitiesRequest"/>
+            <output message="glis-service:MaintainCharitiesResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+
+        <operation name="CloseCharities">
+            <input message="glis-service:CloseCharitiesRequest"/>
+            <output message="glis-service:CloseCharitiesResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+
+        <operation name="CreateRegistrationFees">
+            <input message="glis-service:RegistrationFeesInitiatedRequest"/>
+            <output message="glis-service:RegistrationFeesInitiatedResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+
+        <operation name="WaiveRegistrationFees">
+            <input message="glis-service:WaiveRegistrationFeesRequest"/>
+            <output message="glis-service:WaiveRegistrationFeesResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+
+        <operation name="ProcessDonationPaymentsInitiated">
+            <input message="glis-service:DonationPaymentsInitiatedRequest"/>
+            <output message="glis-service:DonationPaymentsInitiatedResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+
+        <operation name="ProcessDonationPaymentsCollected">
+            <input message="glis-service:DonationPaymentsCollectedRequest"/>
+            <output message="glis-service:DonationPaymentsCollectedResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+
+        <operation name="ProcessFailedDonationPayments">
+            <input message="glis-service:FailedDonationPaymentsRequest"/>
+            <output message="glis-service:FailedDonationPaymentsResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+
+        <operation name="ProcessGiftAidClaimed">
+            <input message="glis-service:GiftAidClaimedRequest"/>
+            <output message="glis-service:GiftAidClaimedResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+
+        <operation name="ProcessGiftAidReceived">
+            <input message="glis-service:GiftAidReceivedRequest"/>
+            <output message="glis-service:GiftAidReceivedResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+
+        <operation name="ProcessTransactionChargePaid">
+            <input message="glis-service:TransactionChargePaidRequest"/>
+            <output message="glis-service:TransactionChargePaidResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+        
+        <operation name="ProcessTransactionFeesPaid">
+            <input message="glis-service:TransactionFeePaidRequest"/>
+            <output message="glis-service:TransactionFeePaidResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+
+        <operation name="ProcessTransitionalReliefClaimed">
+            <input message="glis-service:TransitionalReliefClaimedRequest"/>
+            <output message="glis-service:TransitionalReliefClaimedResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+        
+        <operation name="ProcessTransitionalReliefReceived">
+            <input message="glis-service:TransitionalReliefReceivedRequest"/>
+            <output message="glis-service:TransitionalReliefReceivedResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+        
+        <operation name="BACPaymentDue">
+            <input message="glis-service:BACPaymentDueRequest"/>
+            <output message="glis-service:BACPaymentDueResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+
+        <operation name="BACPaymentCollected">
+            <input message="glis-service:BACPaymentCollectedRequest"/>
+            <output message="glis-service:BACPaymentCollectedResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+
+        <operation name="ProcessRegularDonationPaymentsInitiated">
+            <input message="glis-service:RegularDonationPmtInitiatedRequest"/>
+            <output message="glis-service:RegularDonationPmtInitiatedResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+
+        <operation name="ProcessRegularDonationPaymentsCollected">
+            <input message="glis-service:RegularDonationPmtCollectedRequest"/>
+            <output message="glis-service:RegularDonationPmtCollectedResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+
+        <operation name="ProcessRegularDonationPaymentsFailed">
+            <input message="glis-service:RegularDonationPmtFailedRequest"/>
+            <output message="glis-service:RegularDonationPmtFailedResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+
+        <operation name="ProcessEventRegistrationPaymentsInitiated">
+            <input message="glis-service:EventRegistrationPmtInitiatedRequest"/>
+            <output message="glis-service:EventRegistrationPmtInitiatedResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+
+        <operation name="ProcessEventRegistrationPaymentsCollected">
+            <input message="glis-service:EventRegistrationPmtCollectedRequest"/>
+            <output message="glis-service:EventRegistrationPmtCollectedResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+
+        <operation name="ProcessEventRegistrationPaymentsFailed">
+            <input message="glis-service:EventRegistrationPmtFailedRequest"/>
+            <output message="glis-service:EventRegistrationPmtFailedResponse"/>
+            <fault name="ServiceFault" message="glis-service:GlisServiceException"/>
+        </operation>
+
+
+    </portType>
+
+    <binding name="GlisBinding" type="glis-service:GlisPort">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <operation name="ProcessEvent">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="checkGLSystemAvailability">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="RegisterCharities">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="MaintainCharities">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="CloseCharities">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="CreateRegistrationFees">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="WaiveRegistrationFees">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="ProcessDonationPaymentsInitiated">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="ProcessDonationPaymentsCollected">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="ProcessFailedDonationPayments">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="ProcessGiftAidClaimed">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="ProcessGiftAidReceived">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="ProcessTransactionChargePaid">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="ProcessTransactionFeesPaid">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="ProcessTransitionalReliefClaimed">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="ProcessTransitionalReliefReceived">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="BACPaymentDue">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="BACPaymentCollected">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="ProcessRegularDonationPaymentsInitiated">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="ProcessRegularDonationPaymentsCollected">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="ProcessRegularDonationPaymentsFailed">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="ProcessEventRegistrationPaymentsInitiated">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="ProcessEventRegistrationPaymentsCollected">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+        <operation name="ProcessEventRegistrationPaymentsFailed">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="ServiceFault">
+                <soap:fault name="ServiceFault" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+    </binding>
+
+    <service name="GlisService">
+        <port name="GlisPort" binding="glis-service:GlisBinding">
+            <soap:address location="SOURCE_URL_OF_WSDL"/>
+        </port>
+    </service>
+    
+</definitions>

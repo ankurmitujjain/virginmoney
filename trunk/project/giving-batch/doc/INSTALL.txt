@@ -1,0 +1,170 @@
+
+ ---- Steps to Install and configure the Giving-batch application -------- 
+
+1) update 
+		payment-management
+		giving-management
+		giving-db
+		payment-db
+		
+2) Check out the project giving-batch from SVN.
+3) Copy jms-giving-batch-destination-service.xml
+		File Location- config/deployment/jms
+	
+	and paste inside jboss->deploy folder.		
+
+4) Open env.build.properties set the following properties :
+	
+	 i) server.url = http://localhost:8080 
+		
+		If your Giving mangement and payment management layers running on 
+		local sytem use localhost otherwise refer the location of the           
+        GivingManagement and Payment Management
+
+	 ii)  giving-batch.givingmanagement.service.wsdl.location = ${server.url}/giving-management-ws/givingManagement?wsdl     
+	 iii) giving-batch.paymentmanagement.service.wsdl.location =${server.url}/payment-management-ws/paymentManagement?wsdl	
+	 iv)  giving-batch.glis.service.wsdl.location = location of the glis wsdl
+			Ex:    C:/VMG-workspace/giving-batch/config/wsdl/glis_1.wsdl
+
+5) Copy giving-batch-service.properties and paste in side external-confighration folder.
+	File Location -config/deployment/properties
+
+6) Add the follwing line to your external-configuration giving-webservice.properties file.
+       
+       glis.url.system.property = http://localhost:8080/virginmoneyGiving.com
+		// This URL is going to change once Oracle financial webservice is up.					
+			   	 	
+7) Delete the following  jars, if already there in Jboss/server/[production/default]/lib folder
+		 cglib.jar
+	 	 asm.jar
+8) Add/move following jars to lib-virgin
+		
+		xpp3_min-1.1.4c.jar
+		stax-api-1.0.1
+		stax-1.2.0
+		xstream-1.2.1
+		org.springframework.batch.core-2.0.0.M3
+		org.springframework.batch.infrastructure-2.0.0.M3
+		
+--------- How to run the giving-batch application -------------------
+ 1. build the application using build.xml  by clicking   deploy-local-jboss-no-test
+       
+      2. After that Start/Restart server
+
+      3. After successfull deployment Call the  deployed application through Browser
+           
+	    Eg:  http://localhost:8080/giving-batch-service
+
+      4. After  run the application through browser 
+             
+	     Add the follwing Jobs script  one by one in text area to test the application.
+		 Make sure in Job script <sheduledDate> and <time> should be vary to one job to another job.
+
+ Following are the Job scripts:
+ 
+  1.		<GivingJobParameter>
+  	  			<jobName>paymentInitiatedJob</jobName>  
+          		<scheduledDate>2008-01-08</scheduledDate>
+         		<scheduledTime>6:10</scheduledTime>
+       		</GivingJobParameter>
+
+  2.   		<GivingJobParameter>
+          		<jobName>paymentCollectedJob</jobName>  
+          		<scheduledDate>2008-02-11</scheduledDate>
+          		<scheduledTime>12:53</scheduledTime>
+       		</GivingJobParameter>
+
+  3.   		<GivingJobParameter>
+           		<jobName>giftAidReceivedJob</jobName>  
+           		<scheduledDate>2008-01-08</scheduledDate>
+           		<scheduledTime>6:25</scheduledTime>
+       		</GivingJobParameter>
+
+  4.    	<GivingJobParameter>
+           	 	<jobName>giftAidClaimedJob</jobName>  
+            	<scheduledDate>2008-01-08</scheduledDate>
+            	<scheduledTime>6:30</scheduledTime>
+        	</GivingJobParameter>
+
+  5.     	<GivingJobParameter>
+            	 <jobName>charityRegistrationPartTwoJob</jobName>  
+             	<scheduledDate>2008-01-08</scheduledDate>
+             	<scheduledTime>6:38</scheduledTime>
+         	</GivingJobParameter>
+
+  6.        <GivingJobParameter>
+  				<jobName>charityRegistrationJob</jobName>  
+ 		 		<scheduledDate>2008-01-08</scheduledDate>
+  				<scheduledTime>6:42</scheduledTime>
+			</GivingJobParameter>
+
+7.			<GivingJobParameter>
+  				<jobName>transactionFeePaidJob</jobName>  
+  				<scheduledDate>2008-01-08</scheduledDate>
+  				<scheduledTime>6:43</scheduledTime>
+			</GivingJobParameter>
+
+8.			<GivingJobParameter>
+  				<jobName>transactionChargePaidJob</jobName>  
+  				<scheduledDate>2008-01-08</scheduledDate>
+  				<scheduledTime>6:45</scheduledTime>
+			</GivingJobParameter>
+			
+9.			<GivingJobParameter>
+  				<jobName>regularDonationPaymentInitiatedJob</jobName>  
+  				<scheduledDate>2008-01-22</scheduledDate>
+  				<scheduledTime>6:45</scheduledTime>
+			</GivingJobParameter>
+						
+10.			<GivingJobParameter>
+  				<jobName>eventRegistrationPaymentInitiatedJob</jobName>  
+  				<scheduledDate>2008-01-22</scheduledDate>
+  				<scheduledTime>6:45</scheduledTime>
+			</GivingJobParameter>
+11.
+           <GivingJobParameter>
+  				<jobName>regularDonationPaymentFailedJob</jobName>  
+  				<scheduledDate>2008-01-22</scheduledDate>
+  				<scheduledTime>6:45</scheduledTime>
+			</GivingJobParameter>			
+12.			
+			<GivingJobParameter>
+  				<jobName>eventRegistrationPaymentFailedJob</jobName>  
+  				<scheduledDate>2008-01-23</scheduledDate>
+  				<scheduledTime>5:45</scheduledTime>
+			</GivingJobParameter>	
+
+12.			<GivingJobParameter>
+  				<jobName>paymentSettledJob</jobName>  
+  				<scheduledDate>2008-01-28</scheduledDate>
+  				<scheduledTime>11:45</scheduledTime>
+			</GivingJobParameter>				
+			
+			
+			1)regularDonationPaymentInitiatedJob
+			2)regularDonationPaymentFailedJob
+			3)eventRegistrationPaymentInitiatedJob
+			4)eventRegistrationPaymentFailedJob
+			5)regularDonationPaymentCollectedJob
+			6)eventRegistrationFeePaymentCollectedJob
+			7)paymentCollectedJob
+			8)regularDonationTransactionChargePaidJob
+			9)eventRegistrationFeeTransactionChargePaidJob
+			10)regularDonationtransactionFeePaidJob
+			11)eventRegistrationTransactionFeePaidJob
+			12)transactionFeePaidJob
+			13)transactionChargePaidJob
+			14)paymentInitiatedJob
+			15)giftAidReceivedJob
+			16)giftAidClaimed
+			17)charityRegistrationJob
+			18)charityRegistrationPartTwoJob
+			19)charityRegistrationAmendSupplierJob
+			20)waiveCharityRegFeeJob
+			21)createRegistrationFeesJob
+			
+Generated xml files will be available in   --- C:\GivingBatch\output - folder
+
+	 	 
+	
+

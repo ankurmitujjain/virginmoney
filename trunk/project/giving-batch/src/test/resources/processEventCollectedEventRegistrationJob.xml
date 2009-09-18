@@ -1,0 +1,9 @@
+<com.virginmoney.glis.messages.EventRegistrationFeePaidBatch>
+  <batchNumber>somebatch</batchNumber>
+  <ok>false</ok>
+  <feePayments>
+ com.virginmoney.glis.messagesages.EventRegistrationFeePaid>
+      <invoiceNumber>ICR000000000005</invoiceNumber>
+      <eventRegistrationFeeAmount>100</eventRegistrationFeeAmount>
+com.virginmoney.glis.messagesessages.EventRegistrationFeePaid>
+  </feePaymcom.virginmoney.glis.messages.messages.EventRegistrationFeePaidBatch>

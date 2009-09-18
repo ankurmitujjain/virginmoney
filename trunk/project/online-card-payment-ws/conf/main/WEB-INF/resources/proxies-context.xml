@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<!-- Alert service proxy -->
+	<bean id="alertService" class="com.virginmoneygiving.cardpayment.serviceproxy.impl.AlertServiceProxyImpl">
+		<property name="port" ref="alertServicePort"/>
+	</bean>	
+	<bean id="alertServicePort" class="org.springframework.remoting.jaxws.JaxWsPortProxyFactoryBean">
+		<property name="namespaceUri" value="http://www.virginmoneygiving.com/alert-service/" />
+		<property name="serviceName" value="alertService"/>
+		<property name="portName" value="AlertPort"/>
+		<property name="serviceInterface" value="com.virginmoneygiving.alert.service.messages.AlertPort" />
+		<property name="lookupServiceOnStartup" value="false" />
+		<property name="wsdlDocumentUrl" value="${alertservice.url.system.property}" />
+	</bean>
+
+	<!-- Logic Group service proxy -->
+	<bean id="paymentProviderServiceProxy" class="com.virginmoneygiving.cardpayment.serviceproxy.impl.LogicGroupPaymentProvider">
+		<property name="dao" ref="cardPaymentDAO"/>
+		<property name="paymentTypeToSourceMap">
+			<map>
+				<!-- SID values from TLG: 
+				  first 2 are meant to be the same as these use the same Merchant ID
+				  regular use a Continuous Authority Merchant ID
+				  registration fees use a 3rd Merchant ID as they go into a sep bank a/c
+				 -->
+				<entry key="PAYMENT" value="ID01"/>
+				<entry key="EVENT_FEE" value="ID01"/>
+				<entry key="REGULAR_INITIAL" value="ID01"/>
+				<entry key="REGULAR_UPDATE" value="ID01"/>
+				<entry key="REGULAR" value="RT99"/>
+				<entry key="REGISTRATION_FEE" value="CR23"/>
+			</map>
+		</property>
+		<property name="paymentTypeToLoginToken">
+			<map>
+				<!-- Default entry - used for complete/cancel -->
+				<entry key="_DEFAULT" value="C2EB096D-CCE9-4eb8-A537-B71636469A5C"/>
+				<!-- payment types -->
+				<entry key="PAYMENT" value="C2EB096D-CCE9-4eb8-A537-B71636469A5C"/>
+				<entry key="EVENT_FEE" value="C2EB096D-CCE9-4eb8-A537-B71636469A5C"/>
+				<entry key="REGISTRATION_FEE" value="C2EB096D-CCE9-4eb8-A537-B71636469A5C"/>
+				<entry key="REGULAR_INITIAL" value="C2EB096D-CCE9-4eb8-A537-B71636469A5C"/>
+				<entry key="REGULAR_UPDATE" value="C2EB096D-CCE9-4eb8-A537-B71636469A5C"/>
+				<!-- REGULAR use batch login token -->
+				<entry key="REGULAR" value="C2EB096D-CCE9-4eb8-A537-B71636469A5C"/>
+				
+			</map>
+		</property>
+		<property name="locator" ref="tlgWsLocator"/>
+	</bean>
+
+	<!-- Web Service Locator  -->
+	<bean id="tlgWsLocator" class="com.virginmoneygiving.cardpayment.webservicelocator.HATLGWebServiceLocatorImpl">
+	    <!-- constructor: String primaryHost, String secondaryHost -->
+		<constructor-arg index="0" value="${tlg.ha.primary.tlgHostname}" />
+		<constructor-arg index="1" value="${tlg.ha.secondary.tlgHostname}" />
+		<property name="delegate" ref="tlgJaxWsHelper"/>
+	</bean>
+	
+	<!-- Delegate to handle JaxWs -->
+	<bean id="tlgJaxWsHelper" class="com.virginmoneygiving.cardpayment.webservicelocator.TLGJaxWsHelperImpl">
+		<property name="connectionTimeoutMs"><value>${tlg.connection.timeout}</value></property> 
+		<property name="responseTimeoutMs"><value>${tlg.response.timeout}</value></property>
+		<property name="basicPortMap">
+			<map>
+				<entry key="${tlg.ha.primary.tlgHostname}" value-ref="primaryBasicTlgPort" />
+				<entry key="${tlg.ha.secondary.tlgHostname}" value-ref="secondaryBasicTlgPort" />
+			</map>
+		</property> 
+		<property name="extendedPortMap">
+			<map>
+				<entry key="${tlg.ha.primary.tlgHostname}" value-ref="primaryExtendedTlgPort" />
+				<entry key="${tlg.ha.secondary.tlgHostname}" value-ref="secondaryExtendedTlgPort" />
+			</map>
+		</property> 
+	</bean>	
+
+	<!-- Port creation - abstract parent per type, concrete bean per site by type -->	
+	<bean id="abstractBasicTlgPort" class="org.springframework.remoting.jaxws.JaxWsPortProxyFactoryBean" abstract="true">
+		<property name="namespaceUri" value="http://secure-payment-processing.com/" />
+		<property name="serviceName" value="PaymentAPI"/>
+		<property name="portName" value="PaymentAPISoap"/>
+		<property name="serviceInterface" value="com.logicgroup.basic.service.messages.PaymentAPISoap" />
+		<property name="lookupServiceOnStartup" value="false" />
+	</bean>
+	<bean id="abstractExtendedTlgPort" class="org.springframework.remoting.jaxws.JaxWsPortProxyFactoryBean" abstract="true">
+		<property name="namespaceUri" value="http://secure-payment-processing.com/" />
+		<property name="serviceName" value="ExtendedPaymentAPI"/>
+		<property name="portName" value="ExtendedPaymentAPISoap"/>
+		<property name="serviceInterface" value="com.logicgroup.extended.service.messages.ExtendedPaymentAPISoap" />
+		<property name="lookupServiceOnStartup" value="false" />
+	</bean>
+	<!-- concrete definitions -->
+	<bean id="primaryBasicTlgPort" parent="abstractBasicTlgPort">
+		<property name="wsdlDocumentUrl" value="${tlg.primary.basic.wsdl}" />
+	</bean>
+	<bean id="secondaryBasicTlgPort" parent="abstractBasicTlgPort">
+		<property name="wsdlDocumentUrl" value="${tlg.secondary.basic.wsdl}" />
+	</bean>
+	<bean id="primaryExtendedTlgPort" parent="abstractExtendedTlgPort">
+		<property name="wsdlDocumentUrl" value="${tlg.primary.extended.wsdl}" />
+	</bean>
+	<bean id="secondaryExtendedTlgPort" parent="abstractExtendedTlgPort">
+		<property name="wsdlDocumentUrl" value="${tlg.secondary.extended.wsdl}" />
+	</bean>
+	
+	
+	<!-- TLG Heartbeat -->
+	<bean id="tlgHeartbeat" class="com.virginmoneygiving.cardpayment.transport.TLGHeartbeatImpl">
+		<property name="active" value="${tlg.ha.useheartbeat}"/>
+		<property name="failover" ref="tlgWsLocator"/>
+		<property name="primaryHost" value="${tlg.ha.primary.tlgHostname}"/>
+		<property name="primaryUrl" value="${tlg.primary.basic.wsdl}"/>
+		<property name="secondaryHost" value="${tlg.ha.secondary.tlgHostname}"/>
+		<property name="secondaryUrl" value="${tlg.secondary.basic.wsdl}"/>
+		<property name="probe" ref="java5EndpointProbeService"/>
+	</bean>
+	
+	<!-- Hostname verification disabler -->
+	<bean class="com.virginmoneygiving.cardpayment.transport.DummyHostnameVerifier">
+		<constructor-arg type="boolean" value="${ssl.hostnameverification.usedummy}"/>	
+	</bean>
+	
+	
+	<!-- Java 5 ProxySelector -->
+	<bean class="com.virginmoneygiving.cardpayment.transport.TLGProxySelector">
+		<constructor-arg type="boolean" value="${tlg.ha.useproxy}"/>
+		<property name="primaryProxyHost" value="${tlg.ha.primary.proxyHost}" />
+		<property name="primaryProxyPort" value="${tlg.ha.primary.proxyPort}" />
+		<property name="primaryTlgHostname" value="${tlg.ha.primary.tlgHostname}" />
+		<property name="secondaryProxyHost" value="${tlg.ha.secondary.proxyHost}" />
+		<property name="secondaryProxyPort" value="${tlg.ha.secondary.proxyPort}" />
+		<property name="secondaryTlgHostname" value="${tlg.ha.secondary.tlgHostname}" />
+	</bean>
+	
+	<!-- TLGPortWatcherAspect to failover on exceptions -->
+	<bean class="com.virginmoneygiving.cardpayment.transport.TLGPortWatcherAspect">
+		<property name="failover" ref="tlgWsLocator" />
+		<property name="primaryHost" value="${tlg.ha.primary.tlgHostname}" />
+		<property name="secondaryHost" value="${tlg.ha.secondary.tlgHostname}" />
+	</bean>
+</beans>

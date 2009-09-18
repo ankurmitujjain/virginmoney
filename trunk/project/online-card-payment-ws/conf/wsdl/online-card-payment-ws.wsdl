@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:online-card-payment-ws="http://www.virginmoneygiving.com/online-card-payment/"
+	xmlns:online-card-payment="http://www.virginmoneygiving.com/type/online-card-payment/"
+	xmlns:fault="http://www.virginmoneygiving.com/faults/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="online-card-payment-ws"
+	targetNamespace="http://www.virginmoneygiving.com/online-card-payment/">
+	<wsdl:types>
+		<xsd:schema> 
+			<xsd:import
+				namespace="http://www.virginmoneygiving.com/type/online-card-payment/"
+				schemaLocation="online-card-payment-ws.xsd" />
+			<xsd:import namespace="http://www.virginmoneygiving.com/type/header/"
+				schemaLocation="header.xsd" />				
+			<xsd:import namespace="http://www.virginmoneygiving.com/faults/"
+				schemaLocation="fault.xsd" />
+		</xsd:schema> 
+	</wsdl:types>
+
+	<wsdl:message name="onlineCardPaymentServiceFaultException">
+		<wsdl:part element="fault:ServiceFaultException" name="onlineCardPaymentServiceFaultException" />
+	</wsdl:message>
+
+	<wsdl:message name="authoriseWithCardRequest">
+		<wsdl:part name="authoriseWithCardRequest"
+			element="online-card-payment:AuthoriseWithCardRequest">
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="authoriseWithCardResponse">
+		<wsdl:part name="authoriseWithCardResponse"
+			element="online-card-payment:AuthoriseWithCardResponse">
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="authoriseWithTokenRequest">
+		<wsdl:part name="authoriseWithTokenRequest"
+			element="online-card-payment:AuthoriseWithTokenRequest">
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="authoriseWithTokenResponse">
+		<wsdl:part name="authoriseWithTokenResponse"
+			element="online-card-payment:AuthoriseWithTokenResponse">
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="authoriseWithAuthenticationRequest">
+		<wsdl:part name="authoriseWithAuthenticationRequest"
+			element="online-card-payment:AuthoriseWithAuthenticationRequest">
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="authoriseWithAuthenticationResponse">
+		<wsdl:part name="authoriseWithAuthenticationResponse"
+			element="online-card-payment:AuthoriseWithAuthenticationResponse">
+		</wsdl:part>
+	</wsdl:message>
+
+	<wsdl:portType name="online-card-payment-ws">
+		<wsdl:operation name="authoriseWithCard">
+			<wsdl:documentation>Attempts to authorisation a online card
+				payment using the supplied card details. If the card provider
+				insists upon a 3D authentication challenge this methods will return
+				an unsuccessful AuthenticationResult object containing the
+				3D challenge data (challengeRequestData) required to perform 
+				the authentication process. Once this has been completed call 
+				the 'authoriseWithAuthentication()' operation with the 
+				resulting challengeResponseData to try and authorise the 
+				payment again.
+			</wsdl:documentation>
+			<wsdl:input message="online-card-payment-ws:authoriseWithCardRequest">
+			</wsdl:input>
+			<wsdl:output message="online-card-payment-ws:authoriseWithCardResponse">
+			</wsdl:output>
+			<wsdl:fault name="exception"
+				message="online-card-payment-ws:onlineCardPaymentServiceFaultException" />
+		</wsdl:operation>
+		<wsdl:operation name="authoriseWithToken">
+			<wsdl:documentation>Attempts to authorisation a online card
+				payment using the supplied token.
+			</wsdl:documentation>
+			<wsdl:input message="online-card-payment-ws:authoriseWithTokenRequest">
+			</wsdl:input>
+			<wsdl:output message="online-card-payment-ws:authoriseWithTokenResponse">
+			</wsdl:output>
+			<wsdl:fault name="exception"
+				message="online-card-payment-ws:onlineCardPaymentServiceFaultException" />
+		</wsdl:operation>
+		<wsdl:operation name="authoriseWithAuthentication">
+			<wsdl:documentation>Attempts to authorisation a online card
+				payment using the supplied 3D authentication challenge result data.
+				To generate the 3D challenge result data you must call the 
+				createAuthenticationChallenge() operation.
+			</wsdl:documentation> 
+			<wsdl:input message="online-card-payment-ws:authoriseWithAuthenticationRequest">
+			</wsdl:input>
+			<wsdl:output message="online-card-payment-ws:authoriseWithAuthenticationResponse">
+			</wsdl:output>
+			<wsdl:fault name="exception"
+				message="online-card-payment-ws:onlineCardPaymentServiceFaultException" />
+		</wsdl:operation>		
+	</wsdl:portType>
+
+	<wsdl:binding name="online-card-payment-ws-port"
+		type="online-card-payment-ws:online-card-payment-ws">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="authoriseWithCard">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="exception">
+				<soap:fault use="literal" name="exception" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="authoriseWithToken">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="exception">
+				<soap:fault use="literal" name="exception" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="authoriseWithAuthentication">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="exception">
+				<soap:fault use="literal" name="exception" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="online-card-payment-ws">
+		<wsdl:port binding="online-card-payment-ws:online-card-payment-ws-port"
+			name="online-card-payment-ws-port">
+			<soap:address
+				location="http://localhost:8080/online-card-payment-ws/onlineCardPayment" />
+		</wsdl:port>
+	</wsdl:service>
+
+</wsdl:definitions>

@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" attributeFormDefault="unqualified" version="*$Revision: 180 $" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="inc_global.xsd"/>
+  <xs:include schemaLocation="inc_fund.xsd"/>
+  <xs:include schemaLocation="inc_address.xsd"/>
+  <xs:element name="account" type="bankAccountType"/>
+  <xs:element name="bank" type="bankType"/>
+  <xs:element name="BACSID" type="xs:string"/>
+  <xs:element name="BACSRef">
+    <xs:annotation>
+      <xs:documentation>Alpha numeric BACS reference</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="1"/>
+        <xs:maxLength value="18"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:complexType name="bankAccountType">
+    <xs:sequence>
+      <xs:element ref="bankAccountNumber"/>
+      <xs:element ref="bankAccountName" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="bankType">
+    <xs:sequence>
+      <xs:element ref="bankSortCode"/>
+      <xs:element ref="bankName" minOccurs="0"/>
+      <xs:element ref="bankBranch" minOccurs="0"/>
+      <xs:element ref="address" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="bankSortCode">
+    <xs:annotation>
+      <xs:documentation>E.g. 60-01-31</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="bankBranch">
+    <xs:annotation>
+      <xs:documentation>AYLESBURY</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="35"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="buildingSocietyRoleNo">
+    <xs:annotation>
+      <xs:documentation>E.g 1234567890accdefgh</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="18"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="bankAccountName">
+    <xs:annotation>
+      <xs:documentation>E.g. John Smith</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="30"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="bankAccountNumber">
+    <xs:annotation>
+      <xs:documentation>E.g. 00000019</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="12"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="bankName">
+    <xs:annotation>
+      <xs:documentation>E.g. NatWest</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="30"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="collectionID">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:length value="10"/>
+        <xs:pattern value="[0-9]{10}"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="DDIs">
+    <xs:annotation>
+      <xs:documentation>Direct Debit Instruction</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="DDI" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="DDI_ID"/>
+              <xs:element name="bank">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element ref="bankName"/>
+                    <xs:element ref="bankBranch"/>
+                    <xs:element ref="bankSortCode"/>
+                    <xs:element ref="bankAccountNumber"/>
+                    <xs:element ref="bankAccountName"/>
+                    <xs:element ref="buildingSocietyRoleNo"/>
+                    <xs:element ref="postCode"/>
+                    <xs:element name="address">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="lines">
+                            <xs:complexType>
+                              <xs:sequence maxOccurs="5">
+                                <xs:element ref="line"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element ref="RSF_Period"/>
+              <xs:element ref="RSFs"/>
+              <xs:element ref="BACSRef" minOccurs="0"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DDIs_Adhoc">
+    <xs:annotation>
+      <xs:documentation>Direct Debit Instruction Adhoc</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="DDI" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="DDI_ID"/>
+              <xs:element name="bank">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element ref="bankName"/>
+                    <xs:element ref="bankBranch"/>
+                    <xs:element ref="bankSortCode"/>
+                    <xs:element ref="bankAccountNumber"/>
+                    <xs:element ref="bankAccountName"/>
+                    <xs:element ref="buildingSocietyRoleNo"/>
+                    <xs:element ref="postCode"/>
+                    <xs:element name="address">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="lines">
+                            <xs:complexType>
+                              <xs:sequence maxOccurs="5">
+                                <xs:element ref="line"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="adhocCollections">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="adhocCollection" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element ref="collectionID"/>
+                          <xs:element name="collectionAmount" type="valueAmountType"/>
+                          <xs:element ref="deal" minOccurs="0"/>
+                          <xs:element name="collectionDate" type="xs:date"/>
+                          <xs:element name="collectionSplit">
+                            <xs:annotation>
+                              <xs:documentation>How investments will be split accross funds</xs:documentation>
+                            </xs:annotation>
+                            <xs:complexType>
+                              <xs:sequence maxOccurs="unbounded">
+                                <xs:element name="byFund">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element ref="fundID"/>
+                                      <xs:element ref="component"/>
+                                      <xs:element name="splitCollectionAmount" type="valueAmountType" default="0"/>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element ref="BACSRef" minOccurs="0"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DDI_ID">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:length value="10"/>
+        <xs:pattern value="(0000000000)|[0-9]{10}"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="firstCollection" type="firstCollectionType"/>
+  <xs:complexType name="firstCollectionType">
+    <xs:sequence>
+      <xs:element name="date" type="xs:date"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="fundsByPercentage">
+    <xs:complexType>
+      <xs:sequence maxOccurs="unbounded">
+        <xs:element name="percentFund">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="fundID"/>
+              <xs:element ref="component"/>
+              <xs:element ref="percentage"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="fundsByAmount">
+    <xs:complexType>
+      <xs:sequence maxOccurs="unbounded">
+        <xs:element name="amountFund">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="fundID"/>
+              <xs:element ref="component"/>
+              <xs:element name="splitCollectionAmount" type="valueAmountType"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="incrementStatus">
+    <xs:annotation>
+      <xs:documentation>active, inactive</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="lastCollection" type="lastCollectionType"/>
+  <xs:complexType name="lastCollectionType">
+    <xs:sequence>
+      <xs:element name="date" type="xs:date"/>
+      <xs:element name="amount" type="valueAmountType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="mandate">
+    <xs:annotation>
+      <xs:documentation>regular savings mandate overview</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="bank">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="bankName"/>
+              <xs:element ref="bankBranch"/>
+              <xs:element ref="bankSortCode"/>
+              <xs:element ref="bankAccountNumber"/>
+              <xs:element ref="bankAccountName"/>
+              <xs:element ref="buildingSocietyRoleNo"/>
+              <xs:element ref="postCode"/>
+              <xs:element name="address">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="lines">
+                      <xs:complexType>
+                        <xs:sequence maxOccurs="5">
+                          <xs:element ref="line"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mandateID" type="xs:int"/>
+  <xs:element name="mandate_details">
+    <xs:annotation>
+      <xs:documentation>regular savings mandate details</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="mandateID"/>
+        <xs:element name="mandateActive" type="xs:boolean" default="false"/>
+        <xs:element ref="bankSortCode"/>
+        <xs:element ref="bankAccountName"/>
+        <xs:element ref="bankAccountNumber"/>
+        <xs:element ref="address"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="nextCollection" type="nextCollectionType"/>
+  <xs:complexType name="nextCollectionType">
+    <xs:sequence>
+      <xs:element name="nextCollectionDate" type="xs:date"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="payment">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="DDI_ID"/>
+        <xs:element name="bank">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="bankAccountNumber"/>
+              <xs:element ref="bankSortCode"/>
+              <xs:element ref="bankAccountName"/>
+              <xs:element ref="address"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ref="RSF_Period"/>
+        <xs:element ref="RSFsCreate"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="paymentCreate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="bank">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="bankAccountNumber"/>
+              <xs:element ref="bankSortCode"/>
+              <xs:element ref="bankAccountName"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ref="RSF_Period"/>
+        <xs:element ref="RSFsCreate"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RSFs">
+    <xs:annotation>
+      <xs:documentation>RSF</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="RSF" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="RSF_ID"/>
+              <xs:element ref="RSF_Status"/>
+              <xs:element name="totalPlanAmount" type="valueAmountType"/>
+              <xs:element ref="firstCollection" minOccurs="0"/>
+              <xs:element ref="lastCollection" minOccurs="0"/>
+              <xs:element name="originalPlanStartdate" type="xs:date"/>
+              <xs:element name="holiday" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="startDate" type="xs:date"/>
+                    <xs:element name="endDate" type="xs:date"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="increments">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="increment" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element ref="incrementStatus"/>
+                          <xs:element name="incrementID" type="xs:short"/>
+                          <xs:element name="incrementAmount" type="valueAmountType" default="0"/>
+                          <xs:element ref="nextCollection" minOccurs="0"/>
+                          <xs:element name="collection">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="startDate" type="xs:date"/>
+                                <xs:element name="endDate" type="xs:date" minOccurs="0"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="incrementSplit">
+                            <xs:annotation>
+                              <xs:documentation>How investments will be split accross funds</xs:documentation>
+                            </xs:annotation>
+                            <xs:complexType>
+                              <xs:sequence maxOccurs="unbounded">
+                                <xs:element name="byFund">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element ref="fundID"/>
+                                      <xs:element ref="component"/>
+                                      <xs:element name="splitIncrementAmount" type="valueAmountType" default="0"/>
+                                      <xs:element ref="percentage"/>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RSFsCreate">
+    <xs:annotation>
+      <xs:documentation>RSF</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="RSF" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="RSF_ID" minOccurs="0"/>
+              <xs:element name="totalPlanAmount" type="valueAmountType"/>
+              <xs:element ref="firstCollection" minOccurs="0"/>
+              <xs:element name="holiday" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="startDate" type="xs:date"/>
+                    <xs:element name="endDate" type="xs:date"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="increments">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="increment" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="incrementID" type="xs:short" minOccurs="0"/>
+                          <xs:element name="incrementAmount" type="valueAmountType" default="0"/>
+                          <xs:element ref="nextCollection" minOccurs="0"/>
+                          <xs:element name="collection">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="startDate" type="xs:date"/>
+                                <xs:element name="endDate" type="xs:date" minOccurs="0"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="incrementSplit">
+                            <xs:annotation>
+                              <xs:documentation>How investments will be split accross funds</xs:documentation>
+                            </xs:annotation>
+                            <xs:complexType>
+                              <xs:sequence maxOccurs="unbounded">
+                                <xs:element name="byFund">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element ref="fundID"/>
+                                      <xs:element ref="component"/>
+                                      <xs:element name="splitIncrementAmount" type="valueAmountType" default="0"/>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RSF_Frequency">
+    <xs:annotation>
+      <xs:documentation>adhoc, monthly, weekly</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="interval">
+          <xs:simpleType>
+            <xs:restriction base="xs:string"/>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="dayToCollect">
+          <xs:simpleType>
+            <xs:restriction base="xs:short">
+              <xs:minInclusive value="1"/>
+              <xs:maxInclusive value="31"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="month" type="xs:gMonth" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RSF_Period">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="startDate" type="xs:date"/>
+        <xs:element name="endDate" type="xs:date" minOccurs="0"/>
+        <xs:element ref="RSF_Frequency"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RSF_ID">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:length value="10"/>
+        <xs:pattern value="[0-9]{10}"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="RSF_Status">
+    <xs:annotation>
+      <xs:documentation>Active, Holiday, Ended, Pending, Suspended etc...</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="splitPayment">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element name="fundsByAmount">
+          <xs:complexType>
+            <xs:sequence maxOccurs="unbounded">
+              <xs:element name="amountFund">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element ref="fundID"/>
+                    <xs:element ref="component"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

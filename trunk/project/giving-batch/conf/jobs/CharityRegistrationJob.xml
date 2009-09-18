@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
+
+	<description>
+		Charity Registration Job 
+	</description>
+	
+	<import resource="classpath:/property-context.xml" />
+	
+	<!-- Job Configuration - Start-->
+	<bean id="charityRegistrationJob" parent="simpleJob">
+		<property name="name" value="Charity Registration Job" />
+		<property name="steps">
+			<list>
+				<bean id="step1" parent="givingSimpleStep">
+					<property name="itemReader" ref="charityRegistrationJpaPagingItemReader" />
+					<property name="itemProcessor" ref="compositeItemProcessor" />
+					<property name="itemWriter" ref="charityRegistrationXmlWriter" />
+					<property name="listeners">
+						<list>
+							<ref bean="charityTransformer" />
+							<ref bean="charityRegistrationTask" />
+						</list>
+					</property>
+					<property name="commitInterval" value="1000" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<!-- Job Configuration - End-->
+
+	<!-- Tasklet Configuration -->
+	<bean id="charityRegistrationTask"
+		class="com.virginmoneygiving.givingbatch.listener.CharityRegistrationUploadListener">
+		<property name="batchDelegate" ref="batchDelegate" />
+	</bean>
+
+	<bean class="org.springframework.batch.core.scope.StepScope" />
+
+    <!-- JPAPagingItemReader -->
+	<bean id="charityRegistrationJpaPagingItemReader"
+		class="org.springframework.batch.item.database.JpaPagingItemReader" scope="step">
+		<property name="entityManagerFactory" ref="givingEntityManagerFactory" />
+		<property name="queryString"
+			value="select p from Charity p where p.charityStatus.code = 'IRC' and p.batchStatus is null
+			        and date(p.createdDateTime) &lt;= STR_TO_DATE('#{jobParameters[cutOffDate]}', '%d-%m-%Y %H:%i:%s') " />
+		<property name="pageSize" value="1000" />
+	</bean>
+
+	<!-- Composite Item Processor Configuration - Start -->
+	<bean id="compositeItemProcessor"
+		class="org.springframework.batch.item.support.CompositeItemProcessor">
+		<property name="itemProcessors">
+			<list>
+				<ref bean="charityRegistrationItemProcessor" />
+				<ref bean="charityTransformer" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="charityRegistrationItemProcessor"
+		class="com.virginmoneygiving.givingbatch.processor.CharityRegistrationProcessor">
+		<property name="givingService" ref="givingService" />
+	</bean>
+
+	<bean id="charityTransformer"
+		class="com.virginmoneygiving.givingbatch.transformer.CharityTransformer">
+		<property name="locatorImpl" ref="givingBatchExtServiceLocator"/>
+	</bean>	
+	
+	<!-- Composite Item Processor Configuration - End -->
+
+	<!-- XMLItemWriter Configuration -->
+	<bean class="org.springframework.batch.item.xml.StaxEventItemWriter"
+		id="charityRegistrationXmlWriter">
+		<property name="resource" value="file:${givingbatch.output.folder}/charityRegistration.xml" />
+		<property name="marshaller" ref="charityMarshallingSerializer" />
+		<property name="rootTagName" value="charitieBatch" />
+		<property name="overwriteOutput" value="true" />
+	</bean>
+
+	<!-- XStreamMarshaller Configuration - Start -->
+	<bean class="org.springframework.oxm.xstream.XStreamMarshaller"
+		id="charityMarshallingSerializer">
+		<property name="aliases" ref="aliases" />
+	</bean>
+
+	<util:map id="aliases">
+		<entry key="charity" value="com.virginmoneygiving.givingbatch.domain.Charities" />
+		<entry key="charityStatus" value="java.lang.String" />
+		<entry key="transactionDate" value="java.util.Date" />
+		<entry key="charityName" value="java.lang.String" />
+		<entry key="registrationNumber" value="java.lang.String" />
+		<entry key="vmgCharityRefId" value="java.lang.String" />
+		<entry key="category" value="java.lang.String" />
+		<entry key="paymentGroup" value="java.lang.String" />
+		<entry key="charityRegisteredAddressLine1" value="java.lang.String" />
+		<entry key="charityRegisteredAddressLine2" value="java.lang.String" />
+		<entry key="charityRegisteredAddressLine3" value="java.lang.String" />
+		<entry key="charityRegisteredAddressLine4" value="java.lang.String" />
+		<entry key="charityRegisteredAddressLine5" value="java.lang.String" />
+		<entry key="charityRegisteredPostCode" value="java.lang.String" />
+		<entry key="charityAdminAddressLine1" value="java.lang.String" />
+		<entry key="charityAdminAddressLine2" value="java.lang.String" />
+		<entry key="charityAdminAddressLine3" value="java.lang.String" />
+		<entry key="charityAdminAddressLine4" value="java.lang.String" />
+		<entry key="charityAdminAddressLine5" value="java.lang.String" />
+		<entry key="charityAdminPostCode" value="java.lang.String" />
+		<entry key="eventRef" value="java.lang.Integer" />
+	</util:map>
+	<!-- XStreamMarshaller Configuration - End -->
+
+	<!-- Dozer Mapping Configuration -->
+	<bean id="dozerMapper" class="net.sf.dozer.util.mapping.DozerBeanMapper">
+		<property name="mappingFiles">
+			<list>
+				<value>batch-dozer-mapping.xml</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>

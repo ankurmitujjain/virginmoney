@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+			http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.5.xsd">
+
+
+	<bean id="onlineCardPaymentService"
+		class="com.virginmoneygiving.cardpayment.service.impl.OnlineCardPaymentServiceImpl">
+		<property name="paymentDecisionManager" ref="paymentDecisionManager"/>
+		<property name="threeDSecureHelper" ref="threeDSecureHelper"/>
+		<property name="paymentProviderServiceProxy" ref="paymentProviderServiceProxy"/>
+		<property name="endpointProbeService" ref="java5EndpointProbeService"/>
+		<property name="primary3DUrl" value="${mpi.primary.url}" />
+		<property name="secondary3DUrl" value="${mpi.secondary.url}" />
+	</bean>
+
+	<!-- J2SE HttpsUrlConnection-based implementation -->
+	<bean id="java5EndpointProbeService"
+		class="com.virginmoneygiving.cardpayment.service.impl.Java5EndpointProbeServiceImpl">
+	</bean>
+
+	<!-- Groovy script -->
+	<lang:groovy id="paymentDecisionManager"
+		script-source="file:${GIVING_CONF_HOME}/groovy/GroovyPaymentDecisionManagerImpl.groovy" 
+		refresh-check-delay="180000" />
+
+</beans>

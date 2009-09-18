@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.w3.org/2001/XMLSchema" 
+	xmlns:businessActivityEvent="http://www.virginmoneygiving.com/type/business-activity-monitoring/businessActivityEvent"
+	targetNamespace="http://www.virginmoneygiving.com/type/business-activity-monitoring/businessActivityEvent"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+	elementFormDefault="qualified">	
+	
+	<xsd:complexType name="BusinessActivityEvent">
+		<xsd:sequence>
+				<xsd:element type="string" name="date" nillable="false"/>
+				<xsd:element type="string" name="time" nillable="false"/>
+				<xsd:element type="string" name="user" />
+				<xsd:element type="string" name="ipAddress" nillable="false"/>
+				<xsd:element type="string" name="sessionId" />
+				<xsd:element type="string" name="systemTransactionId" />
+				<xsd:element type="string" name="correlationId" />
+				<xsd:element type="string" name="vmgAccount" />
+				<xsd:element type="businessActivityEvent:OriginatingService" name="originatingService" />
+				<xsd:element type="businessActivityEvent:OriginatingServiceSubsystem" name="originatingServiceSubsystem" />
+				<xsd:element type="businessActivityEvent:BusinessActivityEventType" name="eventType" nillable="false"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:simpleType name="BusinessActivityEventType">
+		<!-- Restricting the values to a set of value using 'enumeration' -->
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="FUNDRAISER_PAGE_CREATED" />
+			<xsd:enumeration value="CHARITY_REGISTRATION_PART_1_COMPLETED" />
+			<xsd:enumeration value="USER_LOGIN_SUCCESS" />
+			<xsd:enumeration value="USER_LOGIN_FAILURE" />
+			<xsd:enumeration value="USER_ACCOUNT_LOCKED" />
+			<xsd:enumeration value="PASSWORD_CHANGED" />
+			<xsd:enumeration value="FORGOTTEN_PASSWORD" />
+			<xsd:enumeration value="FUNDRAISER_REGISTRATION_FAILURE" />
+			<xsd:enumeration value="DONOR_REGISTRATION_FAILURE" />
+			<xsd:enumeration value="FUNDRAISER_REGISTRATION_SUCCESS" />
+			<xsd:enumeration value="DONOR_REGISTRATION_SUCCESS" />
+			<xsd:enumeration value="CHARITY_LOGO_RESIZE_SUCCESS" />
+			<xsd:enumeration value="CHARITY_LOGO_RESIZE_FAILURE" />
+			<xsd:enumeration value="FUNDRAISER_PICTURE_UPLOAD_SUCCESS" />
+			<xsd:enumeration value="FUNDRAISER_PICTURE_UPLOAD_FAILURE" />
+			<xsd:enumeration value="EVENT_PICTURE_UPLOAD_SUCCESS" />
+			<xsd:enumeration value="EVENT_PICTURE_UPLOAD_FAILURE" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="OriginatingService">
+		<!-- Restricting the values to a set of value using 'enumeration' -->
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="GIVING" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="OriginatingServiceSubsystem">
+		<!-- Restricting the values to a set of value using 'enumeration' -->
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="GIVING_MANAGEMENT_WS" />
+			<xsd:enumeration value="PAYMENT_MANAGEMENT_WS" />
+			<xsd:enumeration value="ONLINE_CARD_PAYMENT_WS" />
+			<xsd:enumeration value="SECURITY_WS" />
+			<xsd:enumeration value="CAS_INTERNAL" />
+			<xsd:enumeration value="CAS_EXTERNAL" />
+			<xsd:enumeration value="CHARITY_WEB" />
+			<xsd:enumeration value="FUNDRAISER_WEB" />
+			<xsd:enumeration value="GIVING_BATCH" />
+			<xsd:enumeration value="OPERATIONS_WEB" />
+			<xsd:enumeration value="TEMPLATE_EMAIL_SERVICE" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+</xsd:schema>

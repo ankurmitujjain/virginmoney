@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" attributeFormDefault="unqualified" version="*$Revision: 180 $" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="inc_payments.xsd"/>
+  <xs:element name="RSFsCreatePension">
+    <xs:annotation>
+      <xs:documentation>RSF</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="RSF" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="RSF_ID" minOccurs="0"/>
+              <xs:element name="totalPlanAmount" type="valueAmountType"/>
+              <xs:element ref="firstCollection" minOccurs="0"/>
+              <xs:element name="holiday" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="startDate" type="xs:date"/>
+                    <xs:element name="endDate" type="xs:date"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="increments">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="increment" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="incrementID" type="xs:short" minOccurs="0"/>
+                          <xs:element name="incrementAmount" type="valueAmountType" default="0"/>
+                          <xs:element ref="nextCollection" minOccurs="0"/>
+                          <xs:element name="collection">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="startDate" type="xs:date"/>
+                                <xs:element name="endDate" type="xs:date" minOccurs="0"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:choice>
+                            <xs:element ref="fundsByPercentage"/>
+                            <xs:element ref="fundsByAmount"/>
+                            <xs:element name="useSchemaDefault" default="true">
+                              <xs:simpleType>
+                                <xs:restriction base="xs:boolean">
+                                  <xs:pattern value="true"/>
+                                </xs:restriction>
+                              </xs:simpleType>
+                            </xs:element>
+                            <xs:element ref="investmentStrategy"/>
+                          </xs:choice>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="paymentCreatePension">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="bank">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="bankAccountNumber"/>
+              <xs:element ref="bankSortCode"/>
+              <xs:element ref="bankAccountName"/>
+              <xs:element ref="buildingSocietyRoleNo" minOccurs="0"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ref="RSF_Period"/>
+        <xs:element ref="RSFsCreatePension"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="investmentStrategy">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="8"/>
+        <xs:enumeration value="VIRSTRAT"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+</xs:schema>

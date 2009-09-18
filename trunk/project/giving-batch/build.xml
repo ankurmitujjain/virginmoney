@@ -1,0 +1,599 @@
+<?xml version="1.0"?>
+<project name="giving-batch-service" basedir="." default="build">
+
+	<!--
+
+    Standard Ant Build file for Virgin Money projects
+    =======================================================
+
+    Function
+    ========
+
+        This script acts as a default build file to use for new projects. It makes use of the default ant targets provided in
+        /dev/common/antscripts.
+
+
+    To use this script
+    ==================
+
+        1. Take a copy of this file and put it in your own project directory.
+
+        2. Change the project name to reflect your own project
+        
+        3. Change the war.name to reflect your own project
+
+        3. The wsdl-gen-exampleservice target needs to be changed to reflect your own project
+
+        4. the required.libraries needs to be changed to the libraries you're using (I've just provided a base set)
+
+        5. The create-war target has a base set of libraries included. Amend this to suit your project.
+        
+        6. The create-database-schema target should work by default if the hibernate files are in 
+        	${web.conf.main.dir}/WEB-INF/classes/. It will also need a hibernate.dialect set in hibernate.properties
+
+
+    -->
+
+
+	<!-- user-specific properties -->
+	
+	<property name="jboss.deploy.timeout" value="300"/>
+	
+	<property file="${user.home}/etc/env.build.properties" />
+
+	<!-- import the build file which predefines all the standard properties -->
+	<property name="antscripts.dir" value="${env.dev.root.dir}/common/antscripts" />
+	<property file="${antscripts.dir}/common.build.properties" />
+
+	<!-- import all the thirdparty library definitions -->
+	<property name="common.library.dir" value="${env.dev.root.dir}/thirdparty/libraries" />
+	<property file="${common.library.dir}/common.libraries.properties" />
+
+	<property name="war.name" value="giving-batch-service" />
+
+	<!-- import vm deployment and jboss control -->
+	<import file="${antscripts.dir}/ant-vm-deployment.xml" />
+
+	<property name="deploy.exploded.dir" value="${deploy.dir}/exploded/${war.name}" />
+
+	<property name="pages.dir" value="${basedir}/pages" />
+
+	<property name="lib.dir" value="${basedir}/lib" />
+
+	<property name="proxy.host" value="${env.proxy.default.host}" />
+
+	<target name="probe-proxy" if="env.proxy.default.host">
+		<condition property="proxy.enabled">
+			<and>
+				<isset property="proxy.host" />
+				<isreachable host="${proxy.host}" />
+			</and>
+		</condition>
+	</target>
+
+	<target name="proxy" depends="probe-proxy" if="proxy.enabled">
+		<property name="proxy.port" value="${env.proxy.default.port}" />
+		<property name="proxy.user" value="${env.proxy.default.user}" />
+		<property name="proxy.pass" value="${env.proxy.default.pass}" />
+		<setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}" proxyuser="${proxy.user}" proxypassword="${proxy.pass}" />
+	</target>
+
+	<!-- libraries required by the project. This is a base set of libraries that can be added/amended accordingly where appropriate-->
+	<path id="required.libraries">
+		<fileset dir="${dozer.lib}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${struts2011.lib}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${xerces.lib}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${metro.lib}">
+			<include name="*.jar" />
+			<exclude name="j2ee.jar" />
+		</fileset>
+		<fileset dir="${commons-beanutils.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${commons-collections.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${commons-lang.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${jboss.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${log4j.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${spring256.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${springbatch201.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${spring256.test.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${hibernate.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${mysql.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${joda-time.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${fitnesse.home}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${jaxb.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${xstream.13.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${givingdb.jar.location}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${paymentdb.jar.location}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${batchassimilator.jar.location}">
+			<include name="**/*.jar" />
+		</fileset>
+    	<fileset dir="${mockito.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${indexerserviceclient.jar.location}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${envers.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!-- master classpath - includes common libraries and configuration elements -->
+	<path id="master.classpath">
+		<path refid="required.libraries" />
+		<pathelement path="${build.main.dir}" />
+		<pathelement path="${web.conf.main.dir}" />
+	</path>
+
+	<!-- test classpath - includes common libraries and configuration elements plus test version of configuration elements -->
+	<path id="test.classpath">
+		<path refid="required.libraries" />
+		<pathelement path="${web.conf.test.dir}" />
+		<pathelement path="${build.test.dir}" />
+		<path refid="master.classpath" />
+		<fileset dir="${junit.home}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+
+	<!-- builds and tests the project -->
+	<target name="build" depends="build-no-tests, test-all, javadoc" />
+
+	<target name="build-no-tests" depends="clean, assert-dependencies, wsdl-gen-all, compile, create-war" description="builds the project without tests" />
+
+	<target name="deploy-local-jboss" depends="build-no-tests,test-all" description="Deploy application to local web server">
+		<!-- jboss.local.deploy.dir should be defined in your local env.build.properties -->
+		<copy verbose="${verbose}" file="${deploy.dir}/${war.name}.war" todir="${jboss.local.deploy.dir}" preservelastmodified="false">
+		</copy>
+	</target>
+
+	<target name="deploy-local-jboss-no-tests" depends="build-no-tests" description="Deploy application to local web server">
+		<copy verbose="${verbose}" file="${deploy.dir}/${war.name}.war" todir="${jboss.local.deploy.dir}" preservelastmodified="false">
+		</copy>
+	</target>
+
+	<target name="deploy-local-jboss-no-tests-no-build" depends="delete-lib, compile, create-war" description="Deploy application to local web server">
+		<copy verbose="${verbose}" file="${deploy.dir}/${war.name}.war" todir="${jboss.local.deploy.dir}" preservelastmodified="false">
+		</copy>
+	</target>
+
+	<target name="delete-lib" description="Deploy application to local web server">
+		<delete dir="${deploy.exploded.dir}/WEB-INF/lib" />
+	</target>
+
+	<target name="clean" depends="clean-dist" description="Clean out the build and deployment directories">
+		<ant antfile="${antscripts.dir}/ant-clean.xml" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="clean-dist" description="Clean out the distribution directory">
+		<delete dir="${distribution.dir}" failonerror="false" />
+	</target>
+
+	<target name="compile" description="Compiles all source java files">
+		<ant antfile="${antscripts.dir}/ant-compile.xml" inheritall="true" inheritrefs="true" />
+
+		<copy verbose="${verbose}" todir="${build.main.dir}" preservelastmodified="false">
+			<fileset dir="${src.main.dir}">
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+
+	</target>
+
+	<!-- A base create-war target. Will need to be amended to include/exclude the relevant libraries.
+         A base set of libraries has been included by default -->
+	<target name="create-war" description="This target creates the deployable WAR file">
+		<mkdir dir="${deploy.dir}" />
+
+		<!-- The following temp directory will serve to copy all the contents such as pages, layouts, and tlds etc
+    	into war's WEB-INF directory. This will be deleted while clean target is run. -->
+		<mkdir dir="${deploy.exploded.dir}" />
+		<mkdir dir="${deploy.exploded.dir}/WEB-INF/classes" />
+
+		<echo message="Copying WEB-INF" />
+		<copy verbose="${verbose}" todir="${deploy.exploded.dir}/WEB-INF" preservelastmodified="false">
+
+			<fileset dir="${conf.main.dir}/WEB-INF">
+				<include name="**/*.*" />
+			</fileset>
+
+		</copy>
+
+		<copy verbose="${verbose}" todir="${deploy.exploded.dir}/WEB-INF/classes" preservelastmodified="false">
+
+			<fileset dir="${conf.main.dir}">
+				<exclude name="**/WEB-INF/**" />
+				<exclude name="**/META-INF/**" />
+				<exclude name="**/tlds/**" />
+            </fileset>
+		</copy>
+
+		<echo message="Copying META-INF" />
+		<copy verbose="${verbose}" todir="${deploy.exploded.dir}/META-INF" preservelastmodified="false">
+
+			<fileset dir="${conf.main.dir}/META-INF">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+
+		<echo message="Copying tlds" />
+		<copy verbose="${verbose}" todir="${deploy.exploded.dir}/WEB-INF/tlds" preservelastmodified="false">
+
+			<fileset dir="${conf.main.dir}/tlds">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+
+		<echo message="Copying assets" />
+		<copy verbose="${verbose}" todir="${deploy.exploded.dir}" preservelastmodified="false">
+			<fileset dir="${assets.main.dir}" />
+		</copy>
+
+		<echo message="Copying jobs" />
+		<copy verbose="${verbose}" todir="${deploy.exploded.dir}/WEB-INF/classes" preservelastmodified="false">
+
+			<fileset dir="${conf.dir}/jobs">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+
+		<echo message="Copying Spring configuration" />
+		<copy verbose="${verbose}" todir="${deploy.exploded.dir}/WEB-INF/classes/resources" preservelastmodified="false">
+			<fileset dir="${conf.main.dir}/WEB-INF/resources">
+				<include name="**/*.*" />
+                <exclude name="**/log4j.*" />
+            </fileset>
+		</copy>
+
+		<echo message="Copying Log4J configuration" />
+		<copy verbose="${verbose}" todir="${deploy.exploded.dir}/WEB-INF/classes" preservelastmodified="false">
+			<fileset dir="${conf.main.dir}/WEB-INF/resources">
+				<include name="**/log4j.*" />
+			</fileset>
+		</copy>
+
+        <echo message="Copying classes" />
+		<copy verbose="${verbose}" todir="${deploy.exploded.dir}/WEB-INF/classes" preservelastmodified="false">
+			<fileset dir="${build.main.dir}" />
+			<fileset dir="${build.generated.dir}" />
+		</copy>
+
+		<echo message="Creating war" />
+		<war destfile="${deploy.dir}/${war.name}.war" needxmlfile="false">
+
+			<zipfileset dir="${deploy.exploded.dir}" />
+			<lib file="${paymentdb.jar.location}/${paymentdb.jar.name}" />
+			<lib file="${givingdb.jar.location}/${givingdb.jar.name}" />
+      <lib file="${batchassimilator.jar.location}/${batchassimilator.jar.name}" />
+      <lib file="${commons-collections.lib}/commons-collections-3.2.jar" />
+			<lib file="${commons-lang2.1.lib}/commons-lang-2.1.jar" />
+			<lib dir="${springbatch201.lib}">
+				<include name="*.jar" />
+			</lib>
+			<lib file="${indexerserviceclient.jar.location}/${indexerserviceclient.jar.name}" />
+		</war>
+
+		<!-- Deleting Library File-->
+		<echo message="Start Deleting Libraries" />
+		<!--delete>
+            	<fileset dir="${src.lib.directory}">
+            		<include name="/*" />
+            	</fileset>
+            </delete-->
+		<echo message="Deletion Completed" />
+
+	</target>
+
+	<target name="javadoc" description="Runs Javadoc" >
+		<if>
+			<not><equals arg1="${skip.javadoc}" arg2="true"/></not>
+			<then>
+				<ant antfile="${antscripts.dir}/ant-javadoc.xml" target="javadoc-html" inheritall="true" inheritrefs="true">
+					<property name="javadoc.title" value="${ant.project.name}" />
+					<property name="javadoc.verbose" value="false" />
+				</ant>
+			</then>
+			<else>
+				<echo message="Property 'skip.javadoc' is set to true, skipping javadoc"/>
+			</else>
+		</if>
+	</target>
+
+	<target name="test-all">
+		<if>
+			<not><equals arg1="${skip.tests}" arg2="true"/></not>
+			<then>
+      	<if>
+      		<not><equals arg1="${skip.cobertura}" arg2="true"/></not>
+					<then>
+		        <antcall target="test-cobertura"/>
+					</then>
+					<else>
+						<echo message="Property 'skip.cobertura' is set to true, skipping cobertura processing"/>
+		        <antcall target="test-junit"/>
+					</else>
+				</if>
+			</then>
+			<else>
+				<echo message="Property 'skip.tests' is set to true, skipping tests"/>
+			</else>
+		</if>
+    <antcall target="test-checkstyle"/>
+    <antcall target="test-findbugs"/>
+	</target>
+
+	<target name="test-cobertura" description="Runs the Junit tests with Cobertura analysis" depends="compile">
+		<if>
+			<not><equals arg1="${skip.cobertura}" arg2="true"/></not>
+			<then>
+				<ant antfile="${antscripts.dir}/ant-cobertura.xml" inheritall="true" inheritrefs="true"/>
+			</then>
+			<else>
+				<echo message="Property 'skip.cobertura' is set to true, skipping cobertura tests"/>
+			</else>
+		</if>
+	</target>
+
+	<target name="test-junit" description="Runs the Junit tests" depends="compile">
+		<if>
+			<not><equals arg1="${skip.tests}" arg2="true"/></not>
+			<then>
+				<ant antfile="${antscripts.dir}/ant-junit.xml" inheritall="true" inheritrefs="true" />
+			</then>
+			<else>
+				<echo message="Property 'skip.tests' is set to true, skipping tests"/>
+			</else>
+		</if>				
+	</target>
+
+	<target name="test-checkstyle" description="Runs checkstyle over the source to check the coding standards">
+		<if>
+			<not><equals arg1="${skip.checkstyle}" arg2="true"/></not>
+			<then>
+				<ant antfile="${antscripts.dir}/ant-checkstyle.xml" inheritall="true" inheritrefs="true" />
+			</then>
+			<else>
+				<echo message="Property 'skip.checkstyle' is set to true, skipping checkstyle analysis"/>
+			</else>
+		</if>				
+	</target>
+
+	<target name="test-findbugs" description="Runs findbugs over the source to check the coding bugs">
+		<if>
+			<not><equals arg1="${skip.findbugs}" arg2="true"/></not>
+			<then>
+				<ant antfile="${antscripts.dir}/ant-findbugs.xml" inheritall="true" inheritrefs="true" />
+			</then>
+			<else>
+				<echo message="Property 'skip.findbugs' is set to true, skipping findbugs analysis"/>
+			</else>
+		</if>				
+	</target>
+
+	<!-- a default fitnesse target. Provide the name of the fitnesse page to test with -->
+	<target name="test-fitnesse" description="Runs the Fitnesse tests" unless="skip.fitnesse">
+		<ant antfile="${antscripts.dir}/ant-fitnesse.xml" inheritall="true" inheritrefs="true">
+			<property name="fitnesse.test.page" value="a fitnesse page" />
+		</ant>
+	</target>
+
+	<target name="test-qalab" description="Runs qalab against the test results to record the metrics" unless="skip.qalab">
+		<ant antfile="${antscripts.dir}/ant-qalab.xml" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<!-- WDSL to Java -->
+	<target name="wsdl-gen-all" description="Generate and compile the java source files from the WSDL">
+		<!-- clean the generated stuff -->
+		<delete dir="${src.generated.dir}" />
+		<mkdir dir="${src.generated.dir}" />
+		<mkdir dir="${build.main.dir}" />
+
+		<antcall target="wsdl-gen-giving-management-service" />
+		<antcall target="wsdl-gen-payment-management-service" />
+		<!--<antcall target="wsdl-gen-glis-service" />-->
+        <antcall target="wsdl-gen-glis-service-serialized" />
+        <antcall target="wsdl-gen-alert-service" />
+	    <antcall target="wsdl-gen-giving-batch-ext-management-ws" />
+	    <antcall target="wsdl-gen-templateemail-xsd" />
+	</target>
+
+	<!-- Wsdl gen for this project's message classes -->
+	<target name="wsdl-gen-giving-management-service" depends="proxy" description="Generates the wsdl for this giving-batch-service">
+		<ant antfile="${antscripts.dir}/ant-wsimport.xml" inheritall="true" inheritrefs="true">
+			<property name="wsdl.location" value="${givingmanagement.wsdl.location.web}" />
+			<property name="java.package.name" value="com.virginmoneygiving.givingmanagement.service.messages" />
+		</ant>
+	</target>
+
+	<!-- Wsdl gen for this project's message classes -->
+	<target name="wsdl-gen-payment-management-service" depends="proxy" description="Generates the wsdl for this giving-batch-service">
+		<ant antfile="${antscripts.dir}/ant-wsimport.xml" inheritall="true" inheritrefs="true">
+			<property name="wsdl.location" value="${paymentmanagement.wsdl.location.web}" />
+			<property name="java.package.name" value="com.virginmoneygiving.paymentmanagement.service.messages" />
+		</ant>
+	</target>
+
+
+	<!-- Wsdl gen for this project's message classes -->
+	<target name="wsdl-gen-glis-service" depends="proxy" description="Generates the wsdl for this giving-batch-service">
+		<ant antfile="${antscripts.dir}/ant-wsimport.xml" inheritall="true" inheritrefs="true">
+			<!-- property name="wsdl.location"        value="${giving-batch.glis.service.wsdl.location}"/ -->
+			<property name="wsdl.location" value="${glis.wsdl.location.web}" />
+			<property name="java.package.name" value="com.virginmoney.glis.messages" />
+		</ant>
+	</target>
+
+    <taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
+        <classpath refid="master.classpath"/>
+    </taskdef>
+
+    <target name="wsdl-gen-glis-service-serialized" depends="proxy" description="generates client java classes from wsdlr. Creates Serializable objects"  >
+        <wsimport debug="true"
+                  verbose="true"
+                  keep="true"
+                  destdir="${build.main.dir}"
+                  sourcedestdir="${src.generated.dir}"
+                  package="com.virginmoney.glis.messages"
+                  extension="false"
+                  wsdl="${glis.wsdl.location.web}">
+            <binding dir="${conf.main.dir}/WEB-INF/resources" includes="glis-bindings.xml" />
+        </wsimport>
+        <echo message="ant-wsimport.xml : wsimport : finished"/>
+
+    </target>
+
+    <target name="wsdl-gen-alert-service" description="Generates the alert-service messages">
+		<ant antfile="${antscripts.dir}/ant-wsimport.xml" inheritall="true" inheritrefs="true">
+			<property name="wsdl.location" value="${alertservice.wsdl.location.web}" />
+			<property name="java.package.name" value="com.virginmoneygiving.alert.service.messages" />
+		</ant>
+	</target>
+	
+		
+	<!-- Wsdl gen for giving batch extension -->
+	<target name="wsdl-gen-giving-batch-ext-management-ws" description="Generates the wsdl for this giving-batch-ext-management-ws">
+		<ant antfile="${antscripts.dir}/ant-wsimport.xml" inheritall="true" inheritrefs="true">
+			<property name="wsdl.location" value="${givingbatchextmanagement.wsdl.location.web}" />
+			<property name="java.package.name" value="com.virginmoneygiving.givingbatchextmanagement.service.messages" />
+		</ant>
+	</target>
+
+	<!-- define the XJC task for wsdl-gen-IFDS-xsd to use to convert xsd's to Java-->
+	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+		<classpath>
+			<fileset dir="${metro.lib}">
+				<include name="*.jar" />
+				<exclude name="j2ee.jar" />
+			</fileset>
+		</classpath>
+	</taskdef>	
+	
+	<target name="wsdl-gen-templateemail-xsd" description="Convert templateemail XSD files to Java code">
+        <xjc destdir="${src.generated.dir}" package="com.virginmoneygiving.templateemail.service.messages" 
+        schema="${templateemail.xsd.location}"/>
+        <!--Unlike wsimport and wscompile, XJC doesnt automatically compile what it generates, so do it here-->
+        <javac destdir="${build.main.dir}" target="1.5" debug="${debug}" deprecation="false" optimize="false"
+            failonerror="true" verbose="true">
+            <src path="${src.generated.dir}"/>
+            <classpath refid="master.classpath"/>
+        </javac>
+	</target>	
+
+	<target name="echoproperties">
+		<echo message="==============================================================================================" />
+		<echo message=" Start of properties for project : '${ant.project.name}'" />
+		<echo message="                         basedir : '${basedir}' " />
+		<echo message="                        ant file : '${ant.file}'" />
+		<echo message="==============================================================================================" />
+		<echoproperties />
+		<echo message="==============================================================================================" />
+		<echo message=" End of properties for project : '${ant.project.name}' " />
+		<echo message="==============================================================================================" />
+	</target>
+
+
+	<!-- BUILD DISTRIBUTION BUNDLE -->
+
+	<target name="dist" depends="clean-dist, build, create-vm-distribution, copy-deployment-instruction, copy-distribution-jboss-deployables, 
+	    	copy-distribution-jboss-conf, copy-distribution-external-configuration, copy-distribution-sql-scripts, vm-distribution-import-lib-virgin, create-distribution-tar" description="Creates distribution tar." />
+
+	<target name="dist-only" depends="create-vm-distribution, copy-deployment-instruction, copy-distribution-jboss-deployables, 
+	    	copy-distribution-jboss-conf, copy-distribution-external-configuration, copy-distribution-sql-scripts, vm-distribution-import-lib-virgin, create-distribution-tar" description="Creates distribution tar." />
+
+	<target name="create-vm-distribution" description="Create distribution release structure.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="vm-distribution" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="copy-distribution-jboss-deployables" description="Copy war for to distribution release structure.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="copy-jboss-deployables" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="copy-distribution-jboss-conf" description="Copy configuration files required in jboss -> deploy folder.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="copy-jboss-conf" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="copy-distribution-sql-scripts" description="Copy sql scripts to distribution release structure.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="copy-sql-scripts" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="copy-distribution-external-configuration" description="Copy external configurations to distribution release structure.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="copy-external-configuration" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="copy-deployment-instruction" description="Copy file that contains tar deployment instructions.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="copy-readme" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="create-distribution-tar" description="Create distribution tar.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="create-gzip" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="vm-distribution-import-lib-virgin" description="Import project specific dependencies.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution-lib-virgin-import.xml" target="copy-giving-batch-service-lib-virgin" inheritall="true" inheritrefs="true" />
+	</target>
+
+
+	<!-- ASSERT THAT OUR DEPENDENCIES ARE AVAILABLRE -->
+
+	<target name="assert-build-dependencies" description="Asserts that all of the component's external build dependencies are available">
+		<ant antfile="${gretna.root.dir}/giving-db/build.xml" target="assert-deployment" inheritall="false" inheritrefs="false" />
+		<ant antfile="${gretna.root.dir}/payment-db/build.xml" target="assert-deployment" inheritall="false" inheritrefs="false" />
+		<ant antfile="${gretna.root.dir}/payment-management-ws/build.xml" target="assert-deployment" inheritall="false" inheritrefs="false" />
+		<ant antfile="${gretna.root.dir}/giving-management-ws/build.xml" target="assert-deployment" inheritall="false" inheritrefs="false" />
+		<ant antfile="${gretna.root.dir}/stub-glis-service-ws/build.xml" target="assert-deployment" inheritall="false" inheritrefs="false" />
+		<ant antfile="${gretna.root.dir}/alert-service/build.xml" target="assert-deployment" inheritall="false" inheritrefs="false" />
+		<ant antfile="${gretna.root.dir}/template-email-service/build.xml" target="assert-deployment" inheritall="false" inheritrefs="false" />
+	</target>
+
+
+	<!-- DEPLOY THIS COMPONENT -->
+
+	<target name="deploy-dist" depends="
+		unpack-distribution, 
+		deploy-database, 
+		deploy-libraries, 
+		deploy-external-config, 
+		deploy-jboss-config, 
+		deploy-jboss-deployables" description="Deploy the component, takes the tar ball and deploys it properly into JBoss and MySQL">
+	</target>
+
+</project>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
+
+	<description>
+		Gift Aid Claim Process For March and October only Job.
+	</description>
+
+	<import resource="classpath:/property-context.xml" />
+
+	<!--
+		Job Configuration for claims initiated in months of MARCH and OCTOBER
+		-Start
+	-->
+	<bean id="giftAidClaimProcessMARandOCTJob" parent="simpleJob">
+		<property name="name" value="Gift Aid Claim Process Job" />
+		<property name="steps">
+			<list>
+				<bean id="step1" parent="paymentSimpleStep">
+					<property name="listeners">
+						<list>
+							<ref bean="summaryCallback" />
+							<ref bean="giftAidClaimTask"/>
+							<ref bean="giftAidClaimReportProcessor"/>
+                            <ref bean="giftAidClaimItemProcessor"/>
+                        </list>
+					</property>
+					<property name="itemReader" ref="giftAidClaimJpaPagingItemReader" />
+					<property name="itemProcessor" ref="compositeItemProcessor" />
+					<property name="itemWriter" ref="itemWriter" />
+                    <property name="commitInterval" value="10000" />
+                </bean>
+				 <bean id="step2" parent="taskletStep">
+					<property name="tasklet" ref="giftAidClaimTask" />
+				</bean>	
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Job Configuration -End -->
+	<bean id="giftAidClaimTask"
+		class="com.virginmoneygiving.givingbatch.listener.GiftAidClaimMarAndOctListener">
+		<property name="batchDelegate" ref="batchDelegate" />
+		<property name="paymentService" ref="paymentService" />
+		<property name="giftAidClaimServiceProxy" ref="giftAidClaimServiceProxy" />
+	</bean>
+	
+	<!-- JPAPagingItemReader -->
+	<bean id="giftAidClaimJpaPagingItemReader"
+		class="org.springframework.batch.item.database.JpaPagingItemReader">
+		<property name="entityManagerFactory" ref="paymentEntityManagerFactory" />
+		<property name="queryString"
+			value="select p from Payment p join p.giftAidAmount g where  
+			 	date(g.createdDateTime) &gt;= (select giftAidClaimFromDate from LastGiftAidClaim la where la.status = 'current')and
+				date(g.createdDateTime) &lt;= (select giftAidClaimToDate from LastGiftAidClaim la where la.status = 'current')and 
+				p.paymentStatus.code in ('WEBPAYCOLL', 'WEBDONSTLD') and g.giftAidStatus.code = 'GIFTAIDDUE' order by p.paymentTarget asc" />
+		<property name="pageSize" value="1000" />
+	</bean>
+
+	<!-- Composite Item Processor Configuration - Start -->
+	<bean id="compositeItemProcessor"
+		class="org.springframework.batch.item.support.CompositeItemProcessor">
+		<property name="itemProcessors">
+			<list>
+				<ref bean="giftAidClaimItemProcessor" />
+				<ref bean="giftAidClaimReportProcessor" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="giftAidClaimItemProcessor"
+		class="com.virginmoneygiving.givingbatch.processor.GiftAidClaimProcessor">
+        <property name="paymentService" ref="paymentService" />
+        <property name="giftAidClaimServiceProxy" ref="giftAidClaimServiceProxy" />
+        <property name="givingBatchExtServiceLocator" ref="givingBatchExtServiceLocator"/>
+	</bean>
+
+	<bean id="giftAidClaimReportProcessor"
+		class="com.virginmoneygiving.givingbatch.processor.GiftAidClaimReportProcessor">
+		<property name="paymentService" ref="paymentService" />
+		<property name="giftAidClaimServiceProxy" ref="giftAidClaimServiceProxy" />
+	</bean>
+	<!-- Composite Item Processor Configuration - End -->
+
+	<!-- DAO Configuration -Start-->
+	<bean id="paymentDAO"
+		class="com.virginmoneygiving.payment.dao.impl.JPAPaymentDAOImpl" />
+
+	<bean id="givingCharityDAO" class="com.virginmoneygiving.giving.dao.impl.JPACharityDAOImpl" />
+	<bean id="givingDonorDAO" class="com.virginmoneygiving.giving.dao.impl.JPADonorDAOImpl"></bean>
+	
+	<!-- DAO Configuration -End-->
+
+	<!-- Service Proxy Configuration -->
+	<bean id="giftAidClaimServiceProxy"
+		class="com.virginmoneygiving.givingbatch.serviceproxy.impl.GiftAidClaimServiceProxyImpl">
+		<property name="givingManagementServiceLocator" ref="givingManagementServiceLocator" />
+		<property name="paymentManagementServiceLocator" ref="paymentManagementServiceLocator" />
+	</bean>
+
+	<!-- Properties Configuration - Start -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="searchSystemEnvironment" value="true" />
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_FALLBACK" />
+		<property name="locations" ref="propertyFileLocations" />
+	</bean>
+
+	<bean id="propertyFileLocations" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<value>file:${GIVING_CONF_HOME}/giving-batch-service.properties</value>
+			</list>
+		</constructor-arg>
+	</bean>
+	<!-- Properties Configuration - Start -->
+
+	<!-- ItemWriter -->
+	<bean id="itemWriter"
+		class="com.virginmoneygiving.givingbatch.writer.GiftAidClaimDataWriter">
+		<property name="resource" value="file:${givingbatch.output.folder}/giftAidClaimProcess.txt" />
+		<property name="lineAggregator">
+			<bean
+				class="com.virginmoneygiving.givingbatch.writer.DelegatingGiftAidLineAggregator">
+				<property name="giftAidClaimStartAggregator" ref="giftAidClaimStartAggregator" />
+				<property name="giftAidClaimScheduleAggregator" ref="giftAidClaimScheduleAggregator" />
+				<property name="giftAidClaimEndAggregator" ref="giftAidClaimEndAggregator" />
+			</bean>
+		</property>
+		<property name="footerCallback" ref="summaryCallback" />
+		<property name="headerCallback" ref="summaryCallback" />
+	</bean>
+
+	<bean id="summaryCallback"
+		class="com.virginmoneygiving.givingbatch.writer.GiftAidClaimSummaryCallback">
+		<property name="giftAidClaimHeaderAggregator" ref="giftAidClaimHeaderAggregator" />
+		<property name="giftAidClaimEndAggregator" ref="giftAidClaimEndAggregator" />
+		<property name="giftAidClaimFooterAggregator" ref="giftAidClaimFooterAggregator" />
+        <property name="paymentService" ref="paymentService" />
+    </bean>
+
+	<bean id="giftAidClaimHeaderAggregator"
+		class="org.springframework.batch.item.file.transform.FormatterLineAggregator">
+		<property name="fieldExtractor">
+			<bean
+				class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+				<property name="names"
+					value="recordType,jobStartDate,claimPeriodStart,claimPeriodEnd" />
+			</bean>
+		</property>
+		<property name="format" value="%-3s%-14s%-8s%-8s" />
+	</bean>
+
+	<bean id="giftAidClaimStartAggregator"
+		class="org.springframework.batch.item.file.transform.FormatterLineAggregator">
+		<property name="fieldExtractor">
+			<bean
+				class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+				<property name="names"
+					value="recordType,hmrcRef,charityName,accountingPeriodEndDate" />
+			</bean>
+		</property>
+		<property name="format" value="%-3s%-7s%-150s%-8s" />
+	</bean>
+
+	<bean id="giftAidClaimScheduleAggregator"
+		class="org.springframework.batch.item.file.transform.FormatterLineAggregator">
+		<property name="fieldExtractor">
+			<bean
+				class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+				<property name="names"
+					value="recordType,donorSurname,donorForename,donationDate,donationAmount" />
+			</bean>
+		</property>
+		<property name="format" value="%-3s%-40s%-40s%-8s%08.0f" />
+	</bean>
+
+	<bean id="giftAidClaimEndAggregator"
+		class="org.springframework.batch.item.file.transform.FormatterLineAggregator">
+		<property name="fieldExtractor">
+			<bean
+				class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+				<property name="names"
+					value="recordType,donationCount,donationTotal,giftAidTotal" />
+			</bean>
+		</property>
+		<property name="format" value="%-3s%-5s%09.0f%09.0f" />
+	</bean>
+
+	<bean id="giftAidClaimFooterAggregator"
+		class="org.springframework.batch.item.file.transform.FormatterLineAggregator">
+		<property name="fieldExtractor">
+			<bean
+				class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+				<property name="names"
+					value="recordType,jobEndDateTime,charityRecordCount,donationRecordCount,donationGrandTotal,giftAidGrandTotal" />
+			</bean>
+		</property>
+		<property name="format" value="%-3s%-14s%05d%06d%010.0f%010.0f" />
+	</bean>
+</beans>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+			http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd 
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+
+	<!-- Load giving web service property using the system variable. -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="searchSystemEnvironment">
+			<value>true</value>
+		</property>
+		<property name="systemPropertiesModeName">
+			<value>SYSTEM_PROPERTIES_MODE_FALLBACK</value>
+		</property>
+		<property name="locations" ref="propertyFileLocations" />
+	</bean>
+
+	<bean id="propertyFileLocations" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<!--  value > classpath:web-service-clients.properties< / value -->
+				<value>file:${GIVING_CONF_HOME}/online-card-payment-ws.properties</value>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- Helper classes (excluding dozer mapping) -->
+	<bean id="threeDSecureHelper" class="com.virginmoneygiving.cardpayment.helper.LogicGroup3DSecureHelper">
+		<property name="digestAlgorithm" value="SHA-1"/>
+		<property name="saltAlgorithm" value="SHA1PRNG"/>
+		<property name="sharedSecret" value="${threed.sharedsecret}"/>
+		<property name="merchantId" value="${threed.merchantid}"/>
+		<property name="currencyCodeMappings">
+			<map>
+				<entry key="GBP" value="826"/>
+			</map>
+		</property>
+		<!-- set 3D Secure return URLs by payment type -->
+		<property name="badUrlsByPaymentType">
+			<!--  types EVENT_FEE, PAYMENT, REGISTRATION_FEE, REGULAR, REGULAR_INITIAL, REGULAR_UPDATE -->
+			<map>
+				<entry key="EVENT_FEE" value="${threed.eventreg.bad.url}"/>
+				<entry key="PAYMENT" value="${threed.donation.bad.url}"/>
+				<entry key="REGULAR_INITIAL" value="${threed.donation.bad.url}"/>
+				<entry key="REGULAR_UPDATE" value="${threed.regulardonation.bad.url}"/>
+			</map>
+		</property>
+		<property name="goodUrlsByPaymentType">
+			<!--  types EVENT_FEE, PAYMENT, REGISTRATION_FEE, REGULAR, REGULAR_INITIAL, REGULAR_UPDATE -->
+			<map>
+				<entry key="EVENT_FEE" value="${threed.eventreg.good.url}"/>
+				<entry key="PAYMENT" value="${threed.donation.good.url}"/>
+				<entry key="REGULAR_INITIAL" value="${threed.donation.good.url}"/>
+				<entry key="REGULAR_UPDATE" value="${threed.regulardonation.good.url}"/>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="securePaymentHelper" class="com.virginmoneygiving.cardpayment.helper.LogicGroupSecurePaymentHelperImpl">
+		<property name="schemeIdToProtocolNameMap">
+			<map>
+				<!-- 1=Visa, 2=Mastercard -->
+				<entry key="1">
+					<util:constant static-field="com.logicgroup.extended.service.messages.ProtocolNameEnum.THREE_D_SECURE"/>
+				</entry>
+				<entry key="2">
+					<util:constant static-field="com.logicgroup.extended.service.messages.ProtocolNameEnum.U_CAF"/>
+				</entry>
+			</map>
+		</property>
+		<property name="mdStatusToSecurityModeMap">
+			<map>
+				<entry key="1">
+					<util:constant static-field="com.logicgroup.extended.service.messages.TransactionSecurityEnum.BY_CARDHOLDER_CERTIFICATE"/>
+				</entry>
+				<entry key="2">
+					<util:constant static-field="com.logicgroup.extended.service.messages.TransactionSecurityEnum.BY_MERCHANT_CERTIFICATE"/>
+				</entry>
+				<entry key="4">
+					<util:constant static-field="com.logicgroup.extended.service.messages.TransactionSecurityEnum.BY_MERCHANT_CERTIFICATE"/>
+				</entry>
+				<entry key="_DEFAULT">
+					<util:constant static-field="com.logicgroup.extended.service.messages.TransactionSecurityEnum.BY_SECURE_SESSION"/>
+				</entry>
+			</map>
+		</property>
+		<property name="mdStatusToProtocolResultMap">
+			<map>
+				<entry key="1">
+					<util:constant static-field="com.logicgroup.extended.service.messages.ProtocolResultEnum.SUCCESSFUL"/>
+				</entry>
+				<entry key="2">
+					<util:constant static-field="com.logicgroup.extended.service.messages.ProtocolResultEnum.UNABLE_TO_VERIFY"/>
+				</entry>
+				<entry key="4">
+					<util:constant static-field="com.logicgroup.extended.service.messages.ProtocolResultEnum.ATTEMPTED"/>
+				</entry>
+				<entry key="_DEFAULT">
+					<util:constant static-field="com.logicgroup.extended.service.messages.ProtocolResultEnum.NONE"/>
+				</entry>
+			</map>
+		</property>
+		<property name="recurringPaymentTypes">
+			<!--  types EVENT_FEE, PAYMENT, REGISTRATION_FEE, REGULAR, REGULAR_INITIAL, REGULAR_UPDATE -->
+			<set>
+				<value>REGULAR</value>
+			</set>
+		</property>
+	</bean>
+</beans>

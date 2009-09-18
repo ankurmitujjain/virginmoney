@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration xmlns="http://java.sun.com/xml/ns/jax-rpc/ri/config" >
+   <wsdl location="conf/main/WEB-INF/wsdl/ifds/wsdl/OnlineServicesSoapHttpuri-Address-Search-Only.wsdl" packageName="uk.co.ifdsgroup.onlineservices.messages.soap"/>
+</configuration>

@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+      http://www.springframework.org/schema/util    http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+    <!--<import resource="classpath:/WEB-INF/resources/giving-batch-controller-context.xml" />-->
+    
+    <util:map id="threadInitiationJobMap">
+        <!-- Thread A: A/R Payments -->
+        <entry key="THREAD0" value="batchStartupJob"/>
+        <entry key="THREADA" value="paymentInitiatedJob"/>
+        <entry key="THREADB" value="charityRegistrationJob"/>
+        <entry key="THREADC" value="processEventCollectedRegistrationFeesJob"/>
+        <entry key="THREADD" value="paymentCollectedJob"/>
+        <entry key="THREADE" value="giftAidClaimedJob"/>
+        <entry key="THREADF" value="charityTrusteeDetailsJob"/>
+        <entry key="THREADG" value="giftAidClaimProcessJob"/>
+        <entry key="THREADH" value="giftAidClaimProcessMARandOCTJob"/>
+        <entry key="THREADI" value="eventPublishJob"/>
+        <entry key="THREAD99" value="batchFinishedJob"/>
+    </util:map>
+
+    <util:map id="threadGroupMap">
+        <entry key="SET-0" value="THREAD0"/>
+        <entry key="SET-1" value="THREADA:THREADB"/>
+        <entry key="SET-2" value="THREADD:THREADE"/>
+        <entry key="SET-3" value="THREADC"/>
+        <entry key="SET-4" value="THREADF"/>
+        <entry key="SET-5" value="THREADG"/>
+        <entry key="SET-6" value="THREADH"/>
+        <entry key="SET-7" value="THREADI"/>
+        <entry key="SET-99" value="THREAD99"/>
+    </util:map>
+
+    <util:map id="threadGroupRelationshipMap">
+        <entry key="SET-0" value="SET-1"/>
+        <entry key="SET-1" value="SET-2"/>
+        <entry key="SET-2" value="SET-3"/>
+        <entry key="SET-3" value="SET-4"/>
+        <entry key="SET-4" value="SET-7"/>
+        <entry key="SET-5" value=""/>
+        <entry key="SET-6" value=""/>
+        <entry key="SET-7" value="SET-99"/>
+        <entry key="SET-99" value=""/>
+    </util:map>
+
+    <util:map id="jobSequenceMap">
+        <!-- Thread 0: batch Startup -->
+        <entry key="batchStartupJob" value=""/>
+
+        <!-- Thread A: A/R Payments -->
+        <entry key="paymentInitiatedJob" value="webDonationPaymentFailedJob"/>
+        <entry key="webDonationPaymentFailedJob" value="regularDonationPaymentInitiatedJob"/>
+        <entry key="regularDonationPaymentInitiatedJob" value="regularDonationPaymentFailedJob"/>
+        <entry key="regularDonationPaymentFailedJob" value="eventRegistrationPaymentInitiatedJob"/>
+        <entry key="eventRegistrationPaymentInitiatedJob" value="eventRegistrationPaymentFailedJob"/>
+        <entry key="eventRegistrationPaymentFailedJob" value=""/>
+
+        <!-- Thread B: Charity Registration/Amendments -->
+        <entry key="charityRegistrationJob" value="createRegistrationFeesJob"/>
+        <entry key="createRegistrationFeesJob" value="waiveCharityRegFeeJob"/>
+        <entry key="waiveCharityRegFeeJob" value="charityRegistrationAmendSupplierJob"/>
+        <!--<entry key="charityRegistrationPartTwoJob" value="charityRegistrationAmendSupplierJob"/>-->
+        <entry key="charityRegistrationAmendSupplierJob" value=""/>
+
+        <!-- Thread C: Financials to PaymentHub -->
+        <entry key="processEventCollectedRegistrationFeesJob" value="processSettledJob"/>
+        <entry key="processSettledJob" value=""/>
+
+        <!-- Thread D: A/P Payments -->
+        <entry key="paymentCollectedJob" value="regularDonationPaymentCollectedJob"/>
+        <entry key="regularDonationPaymentCollectedJob" value="eventRegistrationFeePaymentCollectedJob"/>
+        <entry key="eventRegistrationFeePaymentCollectedJob" value="transactionChargePaidJob"/>
+        <entry key="transactionChargePaidJob" value="eventRegistrationFeeTransactionChargePaidJob"/>
+        <entry key="eventRegistrationFeeTransactionChargePaidJob" value="regularDonationTransactionChargePaidJob"/>
+        <entry key="regularDonationTransactionChargePaidJob" value="transactionFeePaidJob"/>
+        <entry key="transactionFeePaidJob" value="eventRegistrationTransactionFeePaidJob"/>
+        <entry key="eventRegistrationTransactionFeePaidJob" value="regularDonationtransactionFeePaidJob"/>
+        <entry key="regularDonationtransactionFeePaidJob" value="giftAidReceivedJob"/>
+        <entry key="giftAidReceivedJob" value="transitionalReliefReceivedJob"/>
+        <entry key="transitionalReliefReceivedJob" value=""/>
+
+        <!-- Thread E: A/R  -->
+        <entry key="giftAidClaimedJob" value="transitionalReliefClaimedJob"/>
+        <entry key="transitionalReliefClaimedJob" value=""/>
+
+        <!-- Thread F: Charity Live jobs  -->
+        <entry key="charityTrusteeDetailsJob" value="putCharityLiveBatchJob"/>
+        <entry key="putCharityLiveBatchJob" value="charityRegistrationPartTwoJob"/>
+        <entry key="charityRegistrationPartTwoJob" value=""/>
+
+        <!-- Thread G: Gift Aid claim processer jobs  -->
+        <entry key="giftAidClaimProcessJob" value=""/>
+
+        <!-- Thread H: Gift Aid claim processer for March and October jobs  -->
+        <entry key="giftAidClaimProcessMARandOCTJob" value=""/>
+
+        <!-- Thread I: Event Publish/Unpublish/Collect Regular Donations job  -->
+        <entry key="eventPublishJob" value="eventUnpublishJob"/>
+        <entry key="eventUnpublishJob" value="collectRegularDonationJob"/>
+        <entry key="collectRegularDonationJob" value=""/>
+
+        <!-- Thread 99: batch Startup -->
+        <entry key="batchFinishedJob" value=""/>
+
+    </util:map>
+
+    <util:map id="jobThreadRelationshipMap">
+        <!-- Thread 0: Batch Startup -->
+        <entry key="batchStartupJob" value="THREAD0"/>
+
+        <!-- Thread A: A/R Payments -->
+        <entry key="paymentInitiatedJob" value="THREADA"/>
+        <entry key="webDonationPaymentFailedJob" value="THREADA"/>
+        <entry key="regularDonationPaymentInitiatedJob" value="THREADA"/>
+        <entry key="regularDonationPaymentFailedJob" value="THREADA"/>
+        <entry key="eventRegistrationPaymentInitiatedJob" value="THREADA"/>
+        <entry key="eventRegistrationPaymentFailedJob" value="THREADA"/>
+
+        <!-- Thread B: Charity Registration/Amendments -->
+        <entry key="charityRegistrationJob" value="THREADB"/>
+        <entry key="createRegistrationFeesJob" value="THREADB"/>
+        <entry key="waiveCharityRegFeeJob" value="THREADB"/>
+        <!--<entry key="charityRegistrationPartTwoJob" value="THREADB"/>-->
+        <entry key="charityRegistrationAmendSupplierJob" value="THREADB"/>
+
+        <!-- Thread C: Financials to PaymentHub -->
+        <entry key="processEventCollectedRegistrationFeesJob" value="THREADC"/>
+        <entry key="processSettledJob" value="THREADC"/>
+
+        <!-- Thread D: A/P Payments -->
+        <entry key="paymentCollectedJob" value="THREADD"/>
+        <entry key="regularDonationPaymentCollectedJob" value="THREADD"/>
+        <entry key="eventRegistrationFeePaymentCollectedJob" value="THREADD"/>
+        <entry key="transactionChargePaidJob" value="THREADD"/>
+        <entry key="eventRegistrationFeeTransactionChargePaidJob" value="THREADD"/>
+        <entry key="regularDonationTransactionChargePaidJob" value="THREADD"/>
+        <entry key="transactionFeePaidJob" value="THREADD"/>
+        <entry key="eventRegistrationTransactionFeePaidJob" value="THREADD"/>
+        <entry key="regularDonationtransactionFeePaidJob" value="THREADD"/>
+        <entry key="giftAidReceivedJob" value="THREADD"/>
+        <entry key="transitionalReliefReceivedJob" value="THREADD"/>
+
+        <!-- Thread E: A/R  -->
+        <entry key="giftAidClaimedJob" value="THREADE"/>
+        <entry key="transitionalReliefClaimedJob" value="THREADE"/>
+
+        <!-- Thread F: A/R  -->
+        <entry key="charityTrusteeDetailsJob" value="THREADF"/>
+        <entry key="putCharityLiveBatchJob" value="THREADF"/>
+        <entry key="charityRegistrationPartTwoJob" value="THREADF"/>
+
+        <!-- Thread G: Gift Aid claim processer jobs  -->
+        <entry key="giftAidClaimProcessJob" value="THREADG"/>
+
+        <!-- Thread H: Gift Aid claim processer for March and October jobs  -->
+        <entry key="giftAidClaimProcessMARandOCTJob" value="THREADH"/>        
+
+        <!-- Thread I: Event Publish/Unpublish  -->
+        <entry key="eventPublishJob" value="THREADI"/>
+        <entry key="eventUnpublishJob" value="THREADI"/>
+        <entry key="collectRegularDonationJob" value="THREADI"/>
+
+        <!-- Thread 99: Batch Finished -->
+        <entry key="batchFinishedJob" value="THREAD99"/>
+
+    </util:map>
+
+    <bean id="batchAssimilatorHelper" class="com.virginmoneygiving.givingbatch.common.BatchAssimilatorHelperImpl">
+		<property name="threadInitiationJobMap"     ref="threadInitiationJobMap" />
+		<property name="threadGroupMap"             ref="threadGroupMap"/>
+		<property name="threadGroupRelationshipMap" ref="threadGroupRelationshipMap"/>
+        <property name="jobSequenceMap"             ref="jobSequenceMap"/>
+        <property name="jobThreadRelationshipMap"   ref="jobThreadRelationshipMap"/>
+        <property name="startupThreadGroup"         value="SET-0"/>
+    </bean>
+
+	<bean name="jobChainProcessor" class="com.virginmoneygiving.givingbatch.common.JobChainProcessorImpl">
+	</bean>
+
+    <!--  JMS Destination for Completions -->
+    <bean name="completionsDestinationQueue" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName">
+			<value>${si_completions.queue.name}</value>
+		</property>
+	</bean>
+
+	<!--  JMS Destination for batches -->
+    <bean name="batchDestinationQueue" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName">
+			<value>${si_batches.queue.name}</value>
+		</property>
+	</bean>
+
+    <!--  JMS Destination for Triggers -->
+    <bean name="triggersDestinationQueue" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName">
+            <value>${si_triggers.queue.name}</value>
+        </property>
+    </bean>
+
+    <!-- jmsTemplate for Completion clients -->
+	<bean name="completionsJmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="defaultDestination" ref="completionsDestinationQueue" />
+		<property name="receiveTimeout" value="1" />
+	</bean>
+
+    <!-- jmsTemplate for batches clients -->
+	<bean name="batchJmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="defaultDestination" ref="batchDestinationQueue" />
+		<property name="receiveTimeout" value="1" />
+	</bean>
+
+    <!-- jmsTemplate for Triggers clients -->
+	<bean name="triggerJmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="defaultDestination" ref="triggersDestinationQueue" />
+		<property name="receiveTimeout" value="1" />
+	</bean>
+
+    <!-- MBean definition -->
+    <bean id="exporter" class="org.springframework.jmx.export.MBeanExporter" lazy-init="false">
+        <property name="assembler" ref="assembler"/>
+        <property name="namingStrategy" ref="namingStrategy"/>
+        <property name="autodetect" value="true"/>
+    </bean>
+
+    <bean id="jmxAttributeSource" class="org.springframework.jmx.export.annotation.AnnotationJmxAttributeSource"/>
+
+    <bean id="assembler" class="org.springframework.jmx.export.assembler.MetadataMBeanInfoAssembler">
+        <property name="attributeSource" ref="jmxAttributeSource"/>
+    </bean>
+
+    <bean id="namingStrategy" class="org.springframework.jmx.export.naming.MetadataNamingStrategy">
+        <property name="attributeSource" ref="jmxAttributeSource"/>
+    </bean>
+
+    <bean id="batchControllerMBean" class="com.virginmoneygiving.givingbatch.mbean.BatchControllerMBeanImpl">
+        <property name="messageManager"        ref="messageManager"/>
+        <property name="batchAssimilatorHelper" ref="batchAssimilatorHelper"/>
+    </bean>
+
+</beans>

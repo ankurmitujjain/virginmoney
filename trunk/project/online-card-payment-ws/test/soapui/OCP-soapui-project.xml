@@ -1,0 +1,1441 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project name="OCP" resourceRoot="" soapui-version="2.5.1" xmlns:con="http://eviware.com/soapui/config"><con:settings><con:setting id="ProjectSettings@projectRoot">P:\projects\VMG\arrk_svn\trunk\root\giving\online-card-payment-ws\test\soapui</con:setting></con:settings><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="online-card-payment-ws-port" type="wsdl" bindingName="{http://www.virginmoneygiving.com/online-card-payment/}online-card-payment-ws-port" soapVersion="1_1" anonymous="optional" definition="file:/P:/projects/VMG/arrk_svn/trunk/root/giving/online-card-payment-ws/conf/wsdl/online-card-payment-ws.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/P:/projects/VMG/arrk_svn/trunk/root/giving/online-card-payment-ws/conf/wsdl/online-card-payment-ws.wsdl"><con:part><con:url>file:\P:\projects\VMG\arrk_svn\trunk\root\giving\online-card-payment-ws\conf\wsdl\fault.xsd</con:url><con:content><![CDATA[<xsd:schema targetNamespace="http://www.virginmoneygiving.com/faults/" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:faults="http://www.virginmoneygiving.com/faults/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xmime="http://www.w3.org/2005/05/xmlmime">
+  <complexType name="ErrorMessage">
+    <sequence>
+      <element name="ErrorField" type="string"/>
+      <element name="ErrorMessageKey" type="string"/>
+      <element name="ErrorDefaultMessage" type="string"/>
+    </sequence>
+  </complexType>
+  <complexType name="ServiceFault">
+    <sequence>
+      <element name="message" type="string"/>
+      <element name="exceptionMessage" type="string"/>
+      <element name="faultInfo" type="string"/>
+      <element name="errorList" type="faults:ErrorMessage" minOccurs="0" maxOccurs="unbounded"/>
+    </sequence>
+  </complexType>
+  <element name="ServiceFaultException" type="faults:ServiceFault"/>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\P:\projects\VMG\arrk_svn\trunk\root\giving\online-card-payment-ws\conf\wsdl\online-card-payment-ws.xsd</con:url><con:content><![CDATA[<xsd:schema targetNamespace="http://www.virginmoneygiving.com/type/online-card-payment/" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ocp="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:cardpayment="http://www.virginmoneygiving.com/type/online-card-payment/card-payment" xmlns:header="http://www.virginmoneygiving.com/type/header/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xmime="http://www.w3.org/2005/05/xmlmime">
+  <xsd:import namespace="http://www.virginmoneygiving.com/type/header/" schemaLocation="header.xsd"/>
+  <xsd:import namespace="http://www.virginmoneygiving.com/type/online-card-payment/card-payment" schemaLocation="card-payment.xsd"/>
+  <xsd:element name="AuthoriseWithCardRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Header" type="header:MessageHeader"/>
+        <xsd:element name="guid" type="xsd:string" nillable="false"/>
+        <xsd:element name="paymentDetails" type="cardpayment:ServicePaymentDetails" nillable="false"/>
+        <xsd:element name="cardDetails" type="cardpayment:ServiceCardDetails" nillable="false"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="AuthoriseWithCardResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="result" type="cardpayment:ServiceAuthorisationResult"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="AuthoriseWithTokenRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Header" type="header:MessageHeader"/>
+        <xsd:element name="guid" type="xsd:string" nillable="false"/>
+        <xsd:element name="paymentDetails" type="cardpayment:ServicePaymentDetails" nillable="false"/>
+        <xsd:element name="cardDetails" type="cardpayment:ServiceCardDetails" nillable="false"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="AuthoriseWithTokenResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="result" type="cardpayment:ServiceAuthorisationResult"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="AuthoriseWithAuthenticationRequest">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Header" type="header:MessageHeader"/>
+        <xsd:element name="guid" type="xsd:string" nillable="false"/>
+        <xsd:element name="paymentDetails" type="cardpayment:ServicePaymentDetails" nillable="false"/>
+        <xsd:element name="cardDetails" type="cardpayment:ServiceCardDetails" nillable="false"/>
+        <xsd:sequence>
+          <xsd:element name="authResponseData" minOccurs="0" maxOccurs="unbounded" type="cardpayment:ServiceNameValuePair"/>
+        </xsd:sequence>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="AuthoriseWithAuthenticationResponse">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="result" type="cardpayment:ServiceAuthorisationResult"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:/P:/projects/VMG/arrk_svn/trunk/root/giving/online-card-payment-ws/conf/wsdl/online-card-payment-ws.wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="online-card-payment-ws" targetNamespace="http://www.virginmoneygiving.com/online-card-payment/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:online-card-payment-ws="http://www.virginmoneygiving.com/online-card-payment/" xmlns:online-card-payment="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:fault="http://www.virginmoneygiving.com/faults/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xsd:schema>
+      <xsd:import namespace="http://www.virginmoneygiving.com/type/online-card-payment/" schemaLocation="online-card-payment-ws.xsd"/>
+      <xsd:import namespace="http://www.virginmoneygiving.com/type/header/" schemaLocation="header.xsd"/>
+      <xsd:import namespace="http://www.virginmoneygiving.com/faults/" schemaLocation="fault.xsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="onlineCardPaymentServiceFaultException">
+    <wsdl:part element="fault:ServiceFaultException" name="onlineCardPaymentServiceFaultException"/>
+  </wsdl:message>
+  <wsdl:message name="authoriseWithCardRequest">
+    <wsdl:part name="authoriseWithCardRequest" element="online-card-payment:AuthoriseWithCardRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="authoriseWithCardResponse">
+    <wsdl:part name="authoriseWithCardResponse" element="online-card-payment:AuthoriseWithCardResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="authoriseWithTokenRequest">
+    <wsdl:part name="authoriseWithTokenRequest" element="online-card-payment:AuthoriseWithTokenRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="authoriseWithTokenResponse">
+    <wsdl:part name="authoriseWithTokenResponse" element="online-card-payment:AuthoriseWithTokenResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="authoriseWithAuthenticationRequest">
+    <wsdl:part name="authoriseWithAuthenticationRequest" element="online-card-payment:AuthoriseWithAuthenticationRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="authoriseWithAuthenticationResponse">
+    <wsdl:part name="authoriseWithAuthenticationResponse" element="online-card-payment:AuthoriseWithAuthenticationResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="online-card-payment-ws">
+    <wsdl:operation name="authoriseWithCard">
+      <wsdl:documentation>Attempts to authorisation a online card
+				payment using the supplied card details. If the card provider
+				insists upon a 3D authentication challenge this methods will return
+				an unsuccessful AuthenticationResult object containing the
+				3D challenge data (challengeRequestData) required to perform 
+				the authentication process. Once this has been completed call 
+				the 'authoriseWithAuthentication()' operation with the 
+				resulting challengeResponseData to try and authorise the 
+				payment again.</wsdl:documentation>
+      <wsdl:input message="online-card-payment-ws:authoriseWithCardRequest"></wsdl:input>
+      <wsdl:output message="online-card-payment-ws:authoriseWithCardResponse"></wsdl:output>
+      <wsdl:fault name="exception" message="online-card-payment-ws:onlineCardPaymentServiceFaultException"/>
+    </wsdl:operation>
+    <wsdl:operation name="authoriseWithToken">
+      <wsdl:documentation>Attempts to authorisation a online card
+				payment using the supplied token.</wsdl:documentation>
+      <wsdl:input message="online-card-payment-ws:authoriseWithTokenRequest"></wsdl:input>
+      <wsdl:output message="online-card-payment-ws:authoriseWithTokenResponse"></wsdl:output>
+      <wsdl:fault name="exception" message="online-card-payment-ws:onlineCardPaymentServiceFaultException"/>
+    </wsdl:operation>
+    <wsdl:operation name="authoriseWithAuthentication">
+      <wsdl:documentation>Attempts to authorisation a online card
+				payment using the supplied 3D authentication challenge result data.
+				To generate the 3D challenge result data you must call the 
+				createAuthenticationChallenge() operation.</wsdl:documentation>
+      <wsdl:input message="online-card-payment-ws:authoriseWithAuthenticationRequest"></wsdl:input>
+      <wsdl:output message="online-card-payment-ws:authoriseWithAuthenticationResponse"></wsdl:output>
+      <wsdl:fault name="exception" message="online-card-payment-ws:onlineCardPaymentServiceFaultException"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="online-card-payment-ws-port" type="online-card-payment-ws:online-card-payment-ws">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="authoriseWithCard">
+      <soap:operation soapAction=""/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="exception">
+        <soap:fault use="literal" name="exception"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="authoriseWithToken">
+      <soap:operation soapAction=""/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="exception">
+        <soap:fault use="literal" name="exception"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="authoriseWithAuthentication">
+      <soap:operation soapAction=""/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="exception">
+        <soap:fault use="literal" name="exception"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="online-card-payment-ws">
+    <wsdl:port binding="online-card-payment-ws:online-card-payment-ws-port" name="online-card-payment-ws-port">
+      <soap:address location="http://localhost:8080/online-card-payment-ws/onlineCardPayment"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>file:\P:\projects\VMG\arrk_svn\trunk\root\giving\online-card-payment-ws\conf\wsdl\card-payment.xsd</con:url><con:content><![CDATA[<xsd:schema targetNamespace="http://www.virginmoneygiving.com/type/online-card-payment/card-payment" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:cardpayment="http://www.virginmoneygiving.com/type/online-card-payment/card-payment" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xmime="http://www.w3.org/2005/05/xmlmime">
+  <xsd:complexType name="ServiceAuthorisationResult">
+    <xsd:sequence>
+      <xsd:element name="outcome" type="cardpayment:ServiceAuthorisationOutcomeTypeEnum"/>
+      <xsd:element name="message" type="xsd:string" nillable="true"/>
+      <xsd:element name="code" type="xsd:int" nillable="false"/>
+      <xsd:element name="processorTransactionId" type="xsd:string" nillable="true">
+        <xsd:annotation>
+          <xsd:documentation>Provided by the external card payment processer</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="cardToken" type="xsd:string" nillable="true"/>
+      <xsd:sequence>
+        <xsd:element name="authRequestData" minOccurs="0" maxOccurs="unbounded" type="cardpayment:ServiceNameValuePair"/>
+      </xsd:sequence>
+      <xsd:element name="authTargetUrl" type="xsd:string" nillable="true"/>
+      <xsd:sequence>
+        <xsd:element name="extra" minOccurs="0" maxOccurs="unbounded" type="cardpayment:ServiceNameValuePair"/>
+      </xsd:sequence>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ServicePaymentDetails">
+    <xsd:sequence>
+      <xsd:element name="currencyCode" type="xsd:string" nillable="false"/>
+      <xsd:element name="amount" type="xsd:decimal" nillable="false"/>
+      <xsd:element name="paymentRef" type="xsd:string" nillable="false"/>
+      <xsd:element name="paymentType" type="cardpayment:ServicePaymentTypeEnum" nillable="false"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:simpleType name="ServiceAuthorisationOutcomeTypeEnum">
+    <!--Restricting the values to a set of value using 'enumeration'-->
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="SUCCESS"/>
+      <xsd:enumeration value="AUTHENTICATION_REQUIRED"/>
+      <xsd:enumeration value="ERROR"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ServicePaymentTypeEnum">
+    <!--Restricting the values to a set of value using 'enumeration'-->
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="REGISTRATION_FEE"/>
+      <xsd:enumeration value="EVENT_FEE"/>
+      <xsd:enumeration value="REGULAR"/>
+      <xsd:enumeration value="PAYMENT"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="ServiceCardDetails">
+    <xsd:sequence>
+      <xsd:element name="pan" type="xsd:string" nillable="true"/>
+      <xsd:element name="maskedPan" type="xsd:string" nillable="true"/>
+      <xsd:element name="startMonth" type="xsd:int" nillable="true"/>
+      <xsd:element name="startYear" type="xsd:int" nillable="true"/>
+      <xsd:element name="endMonth" type="xsd:int" nillable="false"/>
+      <xsd:element name="endYear" type="xsd:int" nillable="false"/>
+      <xsd:element name="issueNumber" type="xsd:int" nillable="true"/>
+      <xsd:element name="token" type="xsd:string" nillable="true"/>
+      <xsd:element name="securityInfo" type="cardpayment:ServiceCardSecurityInformation" nillable="true"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ServiceCardSecurityInformation">
+    <xsd:sequence>
+      <xsd:element name="csc" type="xsd:string" nillable="false">
+        <xsd:annotation>
+          <xsd:documentation>Card Security Code 3 or 4 digits</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="houseNumber" type="xsd:int" nillable="true">
+        <xsd:annotation>
+          <xsd:documentation>Apartment/House number or null if not applicable</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="postcode" type="xsd:string" nillable="false">
+        <xsd:annotation>
+          <xsd:documentation>The numeric digits from the postcode e.g. W14
+						4RL becomes 144</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ServiceNameValuePair">
+    <xsd:sequence>
+      <xsd:element name="Name" type="xsd:string" nillable="false"/>
+      <xsd:element name="Value" type="xsd:string" nillable="true"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\P:\projects\VMG\arrk_svn\trunk\root\giving\online-card-payment-ws\conf\wsdl\header.xsd</con:url><con:content><![CDATA[<schema targetNamespace="http://www.virginmoneygiving.com/type/header/" elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:header="http://www.virginmoneygiving.com/type/header/">
+  <!--this common header should be in a separate resource component
+	and shared by those that need it, instead this is a copy of what 
+	payment-management was/us using-->
+  <complexType name="MessageHeader">
+    <sequence>
+      <element name="SourceSystemId" minOccurs="1" maxOccurs="1">
+        <simpleType>
+          <restriction base="token">
+            <minLength value="1"/>
+          </restriction>
+        </simpleType>
+      </element>
+      <element name="SourceSubSystemId" type="token" minOccurs="0" maxOccurs="1"/>
+      <element name="BrandReference" type="token" minOccurs="0" maxOccurs="1"/>
+      <element name="SystemTransactionID" minOccurs="1" maxOccurs="1">
+        <simpleType>
+          <restriction base="token">
+            <minLength value="4"/>
+          </restriction>
+        </simpleType>
+      </element>
+      <element name="IPAddress" type="token"/>
+      <element name="SessionID" type="token"/>
+      <element name="UserName" minOccurs="1" maxOccurs="1">
+        <simpleType>
+          <restriction base="token">
+            <minLength value="4"/>
+          </restriction>
+        </simpleType>
+      </element>
+    </sequence>
+  </complexType>
+  <element name="MessageHeader" type="header:MessageHeader"/>
+</schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:endpoint>http://gretna-test.opsera.com:8080/online-card-payment-ws/onlineCardPayment</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="authoriseWithAuthentication" bindingOperationName="authoriseWithAuthentication" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithAuthenticationRequest>
+         <onl:Header>
+            <head:SourceSystemId>?</head:SourceSystemId>
+            <!--Optional:-->
+            <head:SourceSubSystemId>?</head:SourceSubSystemId>
+            <!--Optional:-->
+            <head:BrandReference>?</head:BrandReference>
+            <head:SystemTransactionID>?</head:SystemTransactionID>
+            <head:IPAddress>?</head:IPAddress>
+            <head:SessionID>?</head:SessionID>
+            <head:UserName>?</head:UserName>
+         </onl:Header>
+         <onl:guid>?</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>?</card:currencyCode>
+            <card:amount>?</card:amount>
+            <card:paymentRef>?</card:paymentRef>
+            <card:paymentType>?</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card::pan>?</card:pan>
+            <card:maskedPan>?</card:maskedPan>
+            <card:startMonth>?</card:startMonth>
+            <card:startYear>?</card:startYear>
+            <card:endMonth>?</card:endMonth>
+            <card:endYear>?</card:endYear>
+            <card:issueNumber>?</card:issueNumber>
+            <card:token>?</card:token>
+            <card:securityInfo>
+               <card:csc>?</card:csc>
+               <card:houseNumber>?</card:houseNumber>
+               <card:postcode>?</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+         <!--Zero or more repetitions:-->
+         <onl:authResponseData>
+            <card:Name>?</card:Name>
+            <card:Value>?</card:Value>
+         </onl:authResponseData>
+      </onl:AuthoriseWithAuthenticationRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithAuthenticationRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="authoriseWithCard" bindingOperationName="authoriseWithCard" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithCardRequest>
+         <onl:Header>
+            <head:SourceSystemId>?</head:SourceSystemId>
+            <!--Optional:-->
+            <head:SourceSubSystemId>?</head:SourceSubSystemId>
+            <!--Optional:-->
+            <head:BrandReference>?</head:BrandReference>
+            <head:SystemTransactionID>?</head:SystemTransactionID>
+            <head:IPAddress>?</head:IPAddress>
+            <head:SessionID>?</head:SessionID>
+            <head:UserName>?</head:UserName>
+         </onl:Header>
+         <onl:guid>?</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>?</card:currencyCode>
+            <card:amount>?</card:amount>
+            <card:paymentRef>?</card:paymentRef>
+            <card:paymentType>?</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>?</card:pan>
+            <card:maskedPan>?</card:maskedPan>
+            <card:startMonth>?</card:startMonth>
+            <card:startYear>?</card:startYear>
+            <card:endMonth>?</card:endMonth>
+            <card:endYear>?</card:endYear>
+            <card:issueNumber>?</card:issueNumber>
+            <card:token>?</card:token>
+            <card:securityInfo>
+               <card:csc>?</card:csc>
+               <card:houseNumber>?</card:houseNumber>
+               <card:postcode>?</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+      </onl:AuthoriseWithCardRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithCardRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="authoriseWithToken" bindingOperationName="authoriseWithToken" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithTokenRequest>
+         <onl:Header>
+            <head:SourceSystemId>?</head:SourceSystemId>
+            <!--Optional:-->
+            <head:SourceSubSystemId>?</head:SourceSubSystemId>
+            <!--Optional:-->
+            <head:BrandReference>?</head:BrandReference>
+            <head:SystemTransactionID>?</head:SystemTransactionID>
+            <head:IPAddress>?</head:IPAddress>
+            <head:SessionID>?</head:SessionID>
+            <head:UserName>?</head:UserName>
+         </onl:Header>
+         <onl:guid>?</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>?</card:currencyCode>
+            <card:amount>?</card:amount>
+            <card:paymentRef>?</card:paymentRef>
+            <card:paymentType>?</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>?</card:pan>
+            <card:maskedPan>?</card:maskedPan>
+            <card:startMonth>?</card:startMonth>
+            <card:startYear>?</card:startYear>
+            <card:endMonth>?</card:endMonth>
+            <card:endYear>?</card:endYear>
+            <card:issueNumber>?</card:issueNumber>
+            <card:token>?</card:token>
+            <card:securityInfo>
+               <card:csc>?</card:csc>
+               <card:houseNumber>?</card:houseNumber>
+               <card:postcode>?</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+      </onl:AuthoriseWithTokenRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithTokenRequest"/></con:call></con:operation></con:interface><con:testSuite name="OCPTestSuite"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="authoriseWithAuthentication TestCase" searchProperties="true"><con:settings/><con:testStep type="request" name="authoriseWithAuthentication"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithAuthentication</con:operation><con:request name="authoriseWithAuthentication"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithAuthenticationRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress></head:IPAddress>
+            <head:SessionID></head:SessionID>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>8.00</card:amount>
+            <card:paymentRef>Test</card:paymentRef>
+            <card:paymentType>PAYMENT</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>4111111111111111</card:pan>
+            <card:maskedPan></card:maskedPan>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+            <card:token></card:token>
+            <card:securityInfo>
+               <card:csc>123</card:csc>
+               <card:houseNumber>10</card:houseNumber>
+               <card:postcode>14</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+         <onl:authResponseData>
+            <card:Name>version</card:Name>
+            <card:Value>2.0</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>mdStatus</card:Name>
+            <card:Value>1</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>xid</card:Name>
+            <card:Value>CY+tPbmNjpnihsV7daleZxzUS68=</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>vendorCode</card:Name>
+            <card:Value></card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>txstatus</card:Name>
+            <card:Value>Y</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>mdErrorMsg</card:Name>
+            <card:Value>Authenticated</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>eci</card:Name>
+            <card:Value>05</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>merchantID</card:Name>
+            <card:Value>056</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>sID</card:Name>
+            <card:Value>1</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>digest</card:Name>
+            <card:Value>IVHNzOxPQ4ZU1RdtIWMsjKB1jNA=</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>opalErrorCode</card:Name>
+            <card:Value>0</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>md</card:Name>
+            <card:Value></card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>MD</card:Name>
+            <card:Value></card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>cavv</card:Name>
+            <card:Value>AAABB0EJgwAAAAABEAmDAAAAAAA=</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>cavvAlgorithm</card:Name>
+            <card:Value>2</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>PAResSyntaxOK</card:Name>
+            <card:Value>true</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>PAResVerified</card:Name>
+            <card:Value>true</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>iReqCode</card:Name>
+            <card:Value></card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>iReqDetail</card:Name>
+            <card:Value></card:Value>
+         </onl:authResponseData>
+      </onl:AuthoriseWithAuthenticationRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithAuthenticationRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="authoriseWithCard TestCase" searchProperties="true"><con:settings/><con:testStep type="request" name="authoriseWithCard"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithCard</con:operation><con:request name="authoriseWithCard"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithCardRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress></head:IPAddress>
+            <head:SessionID></head:SessionID>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>8.00</card:amount>
+            <card:paymentRef>Test</card:paymentRef>
+            <card:paymentType>EVENT_FEE</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>5453010000063875</card:pan>
+            <card:maskedPan></card:maskedPan>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+	  
+            <card:token></card:token>
+            <card:securityInfo>
+               <card:csc>123</card:csc>
+               <card:houseNumber>10</card:houseNumber>
+               <card:postcode>14</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+      </onl:AuthoriseWithCardRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithCardRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="authoriseWithToken TestCase" searchProperties="true"><con:settings/><con:testStep type="request" name="authoriseWithToken"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithToken</con:operation><con:request name="authoriseWithToken"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithTokenRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress></head:IPAddress>
+            <head:SessionID></head:SessionID>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>8.00</card:amount>
+            <card:paymentRef>Test token</card:paymentRef>
+            <card:paymentType>PAYMENT</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:token>AA9DC527-7DD9-411B-9091-337EC3898BA3</card:token>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+         </onl:cardDetails>
+      </onl:AuthoriseWithTokenRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="Simple Contains"><con:configuration><token>SUCCESS</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:assertion type="Simple NotContains"><con:configuration><token>CONTINUOUS_AUTHORITY</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithTokenRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="authoriseWithToken TestCase bad request" searchProperties="true"><con:settings/><con:testStep type="request" name="authoriseWithToken"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithToken</con:operation><con:request name="authoriseWithToken"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithTokenRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress></head:IPAddress>
+            <head:SessionID></head:SessionID>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>8.00</card:amount>
+            <card:paymentType>REGULAR_PAYMENT</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:token>28BA56F2-9B2A-4843-A74D-602BA2DFA720</card:token>
+         </onl:cardDetails>
+      </onl:AuthoriseWithTokenRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="Simple Contains"><con:configuration><token>ERROR</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:assertion type="Simple Contains"><con:configuration><token>Validation errors found</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithTokenRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="authoriseWithCard TestCase 9" searchProperties="true"><con:settings/><con:testStep type="request" name="authoriseWithCard"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithCard</con:operation><con:request name="authoriseWithCard"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/"
+xmlns:head="http://www.virginmoneygiving.com/type/header/"
+xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithCardRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress/>
+            <head:SessionID/>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>1070.00</card:amount>
+            <card:paymentRef>Test</card:paymentRef>
+            <card:paymentType>PAYMENT</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>6767089966111349</card:pan>
+            <card:maskedPan/>
+            <card:startMonth>12</card:startMonth>
+            <card:startYear>2008</card:startYear>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+            <card:token/>
+            <card:securityInfo>
+               <card:csc>123</card:csc>
+               <card:houseNumber>10</card:houseNumber>
+               <card:postcode>14</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+      </onl:AuthoriseWithCardRequest>
+   </soapenv:Body>
+</soapenv:Envelope>
+]]></con:request><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithCardRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="authoriseWithCard TestCase 15" searchProperties="true"><con:settings/><con:testStep type="request" name="authoriseWithCard"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithCard</con:operation><con:request name="authoriseWithCard"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/"
+xmlns:head="http://www.virginmoneygiving.com/type/header/"
+xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithCardRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress/>
+            <head:SessionID/>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>1076.00</card:amount>
+            <card:paymentRef>Test case 15</card:paymentRef>
+            <card:paymentType>PAYMENT</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>4658450098960614</card:pan>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+            <card:token/>
+            <card:securityInfo>
+               <card:csc>123</card:csc>
+               <card:houseNumber>10</card:houseNumber>
+               <card:postcode>14</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+      </onl:AuthoriseWithCardRequest>
+   </soapenv:Body>
+</soapenv:Envelope>
+]]></con:request><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithCardRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="authoriseWithCard TestCase no address" searchProperties="true"><con:settings/><con:testStep type="request" name="authoriseWithCard"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithCard</con:operation><con:request name="authoriseWithCard"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithCardRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress></head:IPAddress>
+            <head:SessionID></head:SessionID>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>8.00</card:amount>
+            <card:paymentRef>Test</card:paymentRef>
+            <card:paymentType>PAYMENT</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>5453010000063875</card:pan>
+            <card:maskedPan></card:maskedPan>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+            <card:token></card:token>
+            <card:securityInfo>
+               <card:csc>123</card:csc>
+               <card:postcode>14</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+      </onl:AuthoriseWithCardRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="Simple NotContains"><con:configuration><token>ERROR</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithCardRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="authoriseWithCard TestCase Sunil" searchProperties="true"><con:settings/><con:testStep type="request" name="authoriseWithCard"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithCard</con:operation><con:request name="authoriseWithCard"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithCardRequest>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>10.00</card:amount>
+            <card:paymentRef>Test for Sunil</card:paymentRef>
+            <card:paymentType>EVENT_FEE</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>6799998900000000</card:pan>
+            <card:issueNumber>12</card:issueNumber>
+            <card:startMonth>12</card:startMonth>
+            <card:startYear>2006</card:startYear>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+            <card:token></card:token>
+            <card:securityInfo>
+               <card:csc>123</card:csc>
+               <card:houseNumber>123</card:houseNumber>
+               <card:postcode>30</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+      </onl:AuthoriseWithCardRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithCardRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="authoriseWithCard TestCase 1" searchProperties="true" id="b6d49b25-2e22-4996-bb2d-6f8912a1510b"><con:settings/><con:testStep type="request" name="authoriseWithCard"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithCard</con:operation><con:request name="authoriseWithCard"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/"
+xmlns:head="http://www.virginmoneygiving.com/type/header/"
+xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithCardRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress/>
+            <head:SessionID/>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>70.00</card:amount>
+            <card:paymentRef>Test</card:paymentRef>
+            <card:paymentType>PAYMENT</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>4305679500002774</card:pan>
+            <card:maskedPan/>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+            <card:token/>
+            <card:securityInfo>
+               <card:csc>123</card:csc>
+               <card:houseNumber>10</card:houseNumber>
+               <card:postcode>14</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+      </onl:AuthoriseWithCardRequest>
+   </soapenv:Body>
+</soapenv:Envelope>
+]]></con:request><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithCardRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="authoriseWithCard TestCase EventFee" searchProperties="true"><con:settings/><con:testStep type="request" name="authoriseWithCard"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithCard</con:operation><con:request name="authoriseWithCard"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithCardRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress></head:IPAddress>
+            <head:SessionID></head:SessionID>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>8.00</card:amount>
+            <card:paymentRef>Test</card:paymentRef>
+            <card:paymentType>EVENT_FEE</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>5453010000063875</card:pan>
+            <card:maskedPan></card:maskedPan>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>  
+            <card:token></card:token>
+            <card:securityInfo>
+               <card:csc>123</card:csc>
+               <card:houseNumber>10</card:houseNumber>
+               <card:postcode>14</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+      </onl:AuthoriseWithCardRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithCardRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="authoriseWithCard TestCase BadData" searchProperties="true"><con:settings/><con:testStep type="request" name="authoriseWithCard"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithCard</con:operation><con:request name="authoriseWithCard"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithCardRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress></head:IPAddress>
+            <head:SessionID></head:SessionID>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>8</card:amount>
+            <card:paymentRef>Test bad data</card:paymentRef>
+            <card:paymentType>PAYMENT</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>5453010000063875</card:pan>
+            <card:maskedPan></card:maskedPan>
+            <card:endYear>2009</card:endYear>
+            <card:token></card:token>
+            <card:securityInfo>
+               <card:csc>123</card:csc>
+               <card:postcode>14</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+      </onl:AuthoriseWithCardRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="Simple Contains"><con:configuration><token>ERROR</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:assertion type="Simple Contains"><con:configuration><token>Validation errors found</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithCardRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="authoriseWithAuthentication TestCase bad digest" searchProperties="true"><con:settings/><con:testStep type="request" name="authoriseWithAuthentication"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithAuthentication</con:operation><con:request name="authoriseWithAuthentication"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithAuthenticationRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress></head:IPAddress>
+            <head:SessionID></head:SessionID>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>8.00</card:amount>
+            <card:paymentRef>Test</card:paymentRef>
+            <card:paymentType>PAYMENT</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>4111111111111111</card:pan>
+            <card:maskedPan></card:maskedPan>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+            <card:token></card:token>
+            <card:securityInfo>
+               <card:csc>123</card:csc>
+               <card:houseNumber>10</card:houseNumber>
+               <card:postcode>14</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+         <onl:authResponseData>
+            <card:Name>version</card:Name>
+            <card:Value>2.0</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>mdStatus</card:Name>
+            <card:Value>1</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>xid</card:Name>
+            <card:Value>CY+tPbmNjpnihsV7daleZxzUS68=</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>vendorCode</card:Name>
+            <card:Value></card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>txstatus</card:Name>
+            <card:Value>Y</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>mdErrorMsg</card:Name>
+            <card:Value>Authenticated</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>eci</card:Name>
+            <card:Value>05</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>merchantID</card:Name>
+            <card:Value>056</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>sID</card:Name>
+            <card:Value>1</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>digest</card:Name>
+            <card:Value>DeadBeefCafeBabe=</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>opalErrorCode</card:Name>
+            <card:Value>0</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>md</card:Name>
+            <card:Value></card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>MD</card:Name>
+            <card:Value></card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>cavv</card:Name>
+            <card:Value>AAABB0EJgwAAAAABEAmDAAAAAAA=</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>cavvAlgorithm</card:Name>
+            <card:Value>2</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>PAResSyntaxOK</card:Name>
+            <card:Value>true</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>PAResVerified</card:Name>
+            <card:Value>true</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>iReqCode</card:Name>
+            <card:Value></card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>iReqDetail</card:Name>
+            <card:Value></card:Value>
+         </onl:authResponseData>
+      </onl:AuthoriseWithAuthenticationRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithAuthenticationRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="authoriseWithAuthentication Opal Error" searchProperties="true"><con:settings/><con:testStep type="request" name="authoriseWithAuthentication"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithAuthentication</con:operation><con:request name="authoriseWithAuthentication"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithAuthenticationRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress></head:IPAddress>
+            <head:SessionID></head:SessionID>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>8.00</card:amount>
+            <card:paymentRef>Test</card:paymentRef>
+            <card:paymentType>PAYMENT</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>4111111111111111</card:pan>
+            <card:maskedPan></card:maskedPan>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+            <card:token></card:token>
+            <card:securityInfo>
+               <card:csc>123</card:csc>
+               <card:houseNumber>10</card:houseNumber>
+               <card:postcode>14</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+         <onl:authResponseData>
+            <card:Name>version</card:Name>
+            <card:Value>2.0</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>mdStatus</card:Name>
+            <card:Value>1</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>xid</card:Name>
+            <card:Value>CY+tPbmNjpnihsV7daleZxzUS68=</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>vendorCode</card:Name>
+            <card:Value></card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>txstatus</card:Name>
+            <card:Value>Y</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>mdErrorMsg</card:Name>
+            <card:Value>Authenticated</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>eci</card:Name>
+            <card:Value>05</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>merchantID</card:Name>
+            <card:Value>056</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>sID</card:Name>
+            <card:Value>1</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>digest</card:Name>
+            <card:Value>IVHNzOxPQ4ZU1RdtIWMsjKB1jNA=</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>opalErrorCode</card:Name>
+            <card:Value>6112</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>md</card:Name>
+            <card:Value></card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>MD</card:Name>
+            <card:Value></card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>cavv</card:Name>
+            <card:Value>AAABB0EJgwAAAAABEAmDAAAAAAA=</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>cavvAlgorithm</card:Name>
+            <card:Value>2</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>PAResSyntaxOK</card:Name>
+            <card:Value>true</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>PAResVerified</card:Name>
+            <card:Value>true</card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>iReqCode</card:Name>
+            <card:Value></card:Value>
+         </onl:authResponseData>
+         <onl:authResponseData>
+            <card:Name>iReqDetail</card:Name>
+            <card:Value></card:Value>
+         </onl:authResponseData>
+      </onl:AuthoriseWithAuthenticationRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithAuthenticationRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="authoriseWithToken TestCase Regular" searchProperties="true" id="29269402-3ba5-45a0-87aa-1cb47c877259"><con:settings/><con:testStep type="request" name="authoriseWithToken"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithToken</con:operation><con:request name="authoriseWithToken"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithTokenRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress></head:IPAddress>
+            <head:SessionID></head:SessionID>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>8.00</card:amount>
+            <card:paymentRef>Test token regular</card:paymentRef>
+            <card:paymentType>REGULAR</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:token>28BA56F2-9B2A-4843-A74D-602BA2DFA720</card:token>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+         </onl:cardDetails>
+      </onl:AuthoriseWithTokenRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="Simple Contains"><con:configuration><token>CONTINUOUS_AUTHORITY</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:assertion type="Simple Contains"><con:configuration><token>SUCCESS</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithTokenRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="authoriseWithCard TestCase 1 REG_INI" searchProperties="true" id="61e26320-d794-41d7-a101-64097d99541a"><con:settings/><con:testStep type="request" name="authoriseWithCard"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithCard</con:operation><con:request name="authoriseWithCard"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/"
+xmlns:head="http://www.virginmoneygiving.com/type/header/"
+xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithCardRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress/>
+            <head:SessionID/>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>70.00</card:amount>
+            <card:paymentRef>Test</card:paymentRef>
+            <card:paymentType>REGULAR_INITIAL</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>4305679500002774</card:pan>
+            <card:maskedPan/>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+            <card:token/>
+            <card:securityInfo>
+               <card:csc>123</card:csc>
+               <card:houseNumber>10</card:houseNumber>
+               <card:postcode>14</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+      </onl:AuthoriseWithCardRequest>
+   </soapenv:Body>
+</soapenv:Envelope>
+]]></con:request><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithCardRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="authoriseWithToken TestCase Expired card" searchProperties="true"><con:settings/><con:testStep type="request" name="authoriseWithToken"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithToken</con:operation><con:request name="authoriseWithToken"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithTokenRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress></head:IPAddress>
+            <head:SessionID></head:SessionID>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>8.00</card:amount>
+            <card:paymentRef>Test token expired card</card:paymentRef>
+            <card:paymentType>PAYMENT</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:token>28BA56F2-9B2A-4843-A74D-602BA2DFA720</card:token>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2008</card:endYear>
+         </onl:cardDetails>
+      </onl:AuthoriseWithTokenRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="Simple Contains"><con:configuration><token>ERROR</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:assertion type="Simple Contains"><con:configuration><token>Validation errors</token><ignoreCase>false</ignoreCase><useRegEx>false</useRegEx></con:configuration></con:assertion><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithTokenRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:testSuite name="AmexTestSuite"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="amex TestCase 1" searchProperties="true" id="01b2d315-4398-4dd3-a682-2ad1e86ab307"><con:settings/><con:testStep type="request" name="authoriseWithCard"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithCard</con:operation><con:request name="authoriseWithCard"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithCardRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress></head:IPAddress>
+            <head:SessionID></head:SessionID>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>8.00</card:amount>
+            <card:paymentRef>Amex Test 1</card:paymentRef>
+            <card:paymentType>PAYMENT</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>374245455400001</card:pan>
+            <card:maskedPan></card:maskedPan>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+            <card:token></card:token>
+            <card:securityInfo>
+               <card:csc>5252</card:csc>
+               <card:houseNumber>11</card:houseNumber>
+               <card:postcode>144</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+      </onl:AuthoriseWithCardRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Fault Assertion"/><con:assertion type="XPath Match"><con:configuration><path>declare namespace SOAP='http://schemas.xmlsoap.org/soap/envelope/';
+declare namespace ns3='http://www.virginmoneygiving.com/type/online-card-payment/card-payment';
+declare namespace ns4='http://www.virginmoneygiving.com/type/online-card-payment/';
+/SOAP:Envelope/SOAP:Body/ns4:AuthoriseWithCardResponse/ns4:result/ns3:extra[ns3:Name='CV2 response']</path><content><![CDATA[<ns3:extra xmlns="http://www.virginmoneygiving.com/faults/" xmlns:ns2="http://www.virginmoneygiving.com/type/header/" xmlns:ns3="http://www.virginmoneygiving.com/type/online-card-payment/card-payment" xmlns:ns4="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+  <ns3:Name>CV2 response</ns3:Name>
+  <ns3:Value>matched</ns3:Value>
+</ns3:extra>]]></content><allowWildcards>true</allowWildcards><ignoreNamspaceDifferences>false</ignoreNamspaceDifferences></con:configuration></con:assertion><con:assertion type="XQuery Match"><con:configuration><path>declare namespace SOAP='http://schemas.xmlsoap.org/soap/envelope/';
+declare namespace ns3='http://www.virginmoneygiving.com/type/online-card-payment/card-payment';
+declare namespace ns4='http://www.virginmoneygiving.com/type/online-card-payment/';
+/SOAP:Envelope/SOAP:Body/ns4:AuthoriseWithCardResponse/ns4:result/ns3:extra[ns3:Name='CV2 response']</path><content><![CDATA[<ns3:extra xmlns:ns3="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+  <ns3:Name>CV2 response</ns3:Name>
+  <ns3:Value>matched</ns3:Value>
+</ns3:extra>]]></content><allowWildcards>false</allowWildcards></con:configuration></con:assertion><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithCardRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="amex TestCase 2" searchProperties="true" id="bbad3837-c845-47a0-a9fc-f1329549283d"><con:settings/><con:testStep type="request" name="authoriseWithCard"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithCard</con:operation><con:request name="authoriseWithCard"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithCardRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress></head:IPAddress>
+            <head:SessionID></head:SessionID>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>8.00</card:amount>
+            <card:paymentRef>Amex Test 2</card:paymentRef>
+            <card:paymentType>PAYMENT</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>374245455400001</card:pan>
+            <card:maskedPan></card:maskedPan>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+            <card:token></card:token>
+            <card:securityInfo>
+               <card:csc>5252</card:csc>
+               <card:houseNumber>10</card:houseNumber>
+               <card:postcode>14</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+      </onl:AuthoriseWithCardRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithCardRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="amex TestCase 3" searchProperties="true"><con:settings/><con:testStep type="request" name="authoriseWithCard"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithCard</con:operation><con:request name="authoriseWithCard"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithCardRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress></head:IPAddress>
+            <head:SessionID></head:SessionID>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>8.00</card:amount>
+            <card:paymentRef>Amex Test 3</card:paymentRef>
+            <card:paymentType>PAYMENT</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>374245455400001</card:pan>
+            <card:maskedPan></card:maskedPan>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+            <card:token></card:token>
+            <card:securityInfo>
+               <card:csc>5252</card:csc>
+               <card:houseNumber>10</card:houseNumber>
+               <card:postcode>144</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+      </onl:AuthoriseWithCardRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithCardRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="amex TestCase 4" searchProperties="true"><con:settings/><con:testStep type="request" name="authoriseWithCard"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithCard</con:operation><con:request name="authoriseWithCard"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithCardRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress></head:IPAddress>
+            <head:SessionID></head:SessionID>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>8.00</card:amount>
+            <card:paymentRef>Amex Test 4</card:paymentRef>
+            <card:paymentType>PAYMENT</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>374245455400001</card:pan>
+            <card:maskedPan></card:maskedPan>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+            <card:token></card:token>
+            <card:securityInfo>
+               <card:csc>5252</card:csc>
+               <card:houseNumber>11</card:houseNumber>
+               <card:postcode>14</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+      </onl:AuthoriseWithCardRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithCardRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="amex TestCase 5" searchProperties="true"><con:settings/><con:testStep type="request" name="authoriseWithCard"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithCard</con:operation><con:request name="authoriseWithCard"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithCardRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress></head:IPAddress>
+            <head:SessionID></head:SessionID>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>10.00</card:amount>
+            <card:paymentRef>Amex Test 5</card:paymentRef>
+            <card:paymentType>PAYMENT</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>374245455400001</card:pan>
+            <card:maskedPan></card:maskedPan>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+            <card:token></card:token>
+            <card:securityInfo>
+               <card:csc>5432</card:csc>
+               <card:houseNumber>21</card:houseNumber>
+               <card:postcode>15</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+      </onl:AuthoriseWithCardRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithCardRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="amex TestCase 6" searchProperties="true"><con:settings/><con:testStep type="request" name="authoriseWithCard"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithCard</con:operation><con:request name="authoriseWithCard"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithCardRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress></head:IPAddress>
+            <head:SessionID></head:SessionID>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>11.00</card:amount>
+            <card:paymentRef>Amex Test 6</card:paymentRef>
+            <card:paymentType>PAYMENT</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>374245455400001</card:pan>
+            <card:maskedPan></card:maskedPan>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+            <card:token></card:token>
+            <card:securityInfo>
+               <card:csc>5432</card:csc>
+               <card:houseNumber>21</card:houseNumber>
+               <card:postcode>15</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+      </onl:AuthoriseWithCardRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithCardRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="amex TestCase 7" searchProperties="true"><con:settings/><con:testStep type="request" name="authoriseWithCard"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithCard</con:operation><con:request name="authoriseWithCard"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithCardRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress></head:IPAddress>
+            <head:SessionID></head:SessionID>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>11.00</card:amount>
+            <card:paymentRef>Amex Test 7</card:paymentRef>
+            <card:paymentType>PAYMENT</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>374245455400001</card:pan>
+            <card:maskedPan></card:maskedPan>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+            <card:token></card:token>
+            <card:securityInfo>
+               <card:csc>5253</card:csc>
+               <card:houseNumber>11</card:houseNumber>
+               <card:postcode>144</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+      </onl:AuthoriseWithCardRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithCardRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="amex TestCase 8" searchProperties="true"><con:settings/><con:testStep type="request" name="authoriseWithCard"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithCard</con:operation><con:request name="authoriseWithCard"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithCardRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress></head:IPAddress>
+            <head:SessionID></head:SessionID>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>11.00</card:amount>
+            <card:paymentRef>Amex Test 8</card:paymentRef>
+            <card:paymentType>PAYMENT</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>374245455400001</card:pan>
+            <card:maskedPan></card:maskedPan>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+            <card:token></card:token>
+            <card:securityInfo>
+               <card:csc>5253</card:csc>
+               <card:houseNumber>10</card:houseNumber>
+               <card:postcode>144</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+      </onl:AuthoriseWithCardRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithCardRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="amex TestCase 9" searchProperties="true"><con:settings/><con:testStep type="request" name="authoriseWithCard"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>online-card-payment-ws-port</con:interface><con:operation>authoriseWithCard</con:operation><con:request name="authoriseWithCard"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/online-card-payment-ws/onlineCardPayment</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:onl="http://www.virginmoneygiving.com/type/online-card-payment/" xmlns:head="http://www.virginmoneygiving.com/type/header/" xmlns:card="http://www.virginmoneygiving.com/type/online-card-payment/card-payment">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <onl:AuthoriseWithCardRequest>
+         <onl:Header>
+            <head:SourceSystemId>12</head:SourceSystemId>
+            <head:SystemTransactionID>1234</head:SystemTransactionID>
+            <head:IPAddress></head:IPAddress>
+            <head:SessionID></head:SessionID>
+            <head:UserName>1234</head:UserName>
+         </onl:Header>
+         <onl:guid>0xCAFEBABE</onl:guid>
+         <onl:paymentDetails>
+            <card:currencyCode>GBP</card:currencyCode>
+            <card:amount>11.00</card:amount>
+            <card:paymentRef>Amex Test 9</card:paymentRef>
+            <card:paymentType>PAYMENT</card:paymentType>
+         </onl:paymentDetails>
+         <onl:cardDetails>
+            <card:pan>374245455400001</card:pan>
+            <card:maskedPan></card:maskedPan>
+            <card:endMonth>12</card:endMonth>
+            <card:endYear>2009</card:endYear>
+            <card:token></card:token>
+            <card:securityInfo>
+               <card:csc>5253</card:csc>
+               <card:houseNumber>11</card:houseNumber>
+               <card:postcode>14</card:postcode>
+            </card:securityInfo>
+         </onl:cardDetails>
+      </onl:AuthoriseWithCardRequest>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig action="http://www.virginmoneygiving.com/online-card-payment/online-card-payment-ws/authoriseWithCardRequest" mustUnderstand="NONE" version="200508"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/></con:soapui-project>

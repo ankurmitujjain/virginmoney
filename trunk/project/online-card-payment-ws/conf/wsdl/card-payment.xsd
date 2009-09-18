@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.w3.org/2001/XMLSchema" 
+	xmlns:cardpayment="http://www.virginmoneygiving.com/type/online-card-payment/card-payment"
+	targetNamespace="http://www.virginmoneygiving.com/type/online-card-payment/card-payment"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+	elementFormDefault="qualified">
+
+	<xsd:complexType name="ServiceAuthorisationResult">
+		<xsd:sequence>
+			<xsd:element name="outcome" type="cardpayment:ServiceAuthorisationOutcomeTypeEnum" />
+			<xsd:element name="message" type="xsd:string" nillable="true" />
+			<xsd:element name="code" type="xsd:int" nillable="false" />
+			<xsd:element name="processorTransactionId" type="xsd:string" nillable="true" >
+				<xsd:annotation>
+					<xsd:documentation>Provided by the external card payment processer</xsd:documentation>
+				</xsd:annotation></xsd:element>
+			<xsd:element name="cardToken" type="xsd:string" nillable="true" />
+			<xsd:sequence>
+				<xsd:element name="authRequestData" minOccurs="0" maxOccurs="unbounded" type="cardpayment:ServiceNameValuePair" />
+			</xsd:sequence>						
+			<xsd:element name="authTargetUrl" type="xsd:string" nillable="true" />
+			<xsd:sequence>
+				<xsd:element name="extra" minOccurs="0" maxOccurs="unbounded" type="cardpayment:ServiceNameValuePair" />
+			</xsd:sequence>
+			<xsd:sequence>
+				<xsd:element name="validationMessages" minOccurs="0" maxOccurs="unbounded" type="xsd:string" >
+					<xsd:annotation>
+						<xsd:documentation>
+							For internal validation errors
+						</xsd:documentation>
+					</xsd:annotation></xsd:element>
+			</xsd:sequence>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="ServicePaymentDetails">
+		<xsd:sequence>
+			<xsd:element name="currencyCode" type="xsd:string"
+				nillable="false" />
+			<xsd:element name="amount" type="xsd:decimal" nillable="false" />
+			<xsd:element name="paymentRef" type="xsd:string"
+				nillable="false" />
+			<xsd:element name="paymentType" type="cardpayment:ServicePaymentTypeEnum"
+				nillable="false" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:simpleType name="ServiceAuthorisationOutcomeTypeEnum">
+		<!-- Restricting the values to a set of value using 'enumeration' -->
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="SUCCESS" />
+			<xsd:enumeration value="AUTHENTICATION_REQUIRED" />
+			<xsd:enumeration value="ERROR" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="ServicePaymentTypeEnum">
+		<!-- Restricting the values to a set of value using 'enumeration' -->
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="REGISTRATION_FEE" />
+			<xsd:enumeration value="EVENT_FEE" />
+			<xsd:enumeration value="REGULAR" />
+			<xsd:enumeration value="PAYMENT" />
+			<xsd:enumeration value="REGULAR_INITIAL" />
+			<xsd:enumeration value="REGULAR_UPDATE" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:complexType name="ServiceCardDetails">
+		<xsd:sequence>
+			<xsd:element name="pan" type="xsd:string" nillable="true" />
+			<xsd:element name="maskedPan" type="xsd:string" nillable="true" />
+			<xsd:element name="startMonth" type="xsd:int" nillable="true" />
+			<xsd:element name="startYear" type="xsd:int" nillable="true" />
+			<xsd:element name="endMonth" type="xsd:int" nillable="false" />
+			<xsd:element name="endYear" type="xsd:int" nillable="false" />
+			<xsd:element name="issueNumber" type="xsd:int" nillable="true" />
+			<xsd:element name="token" type="xsd:string" nillable="true" />
+			<xsd:element name="securityInfo" type="cardpayment:ServiceCardSecurityInformation"
+				nillable="true" />
+		</xsd:sequence>
+	</xsd:complexType>
+ 
+	<xsd:complexType name="ServiceCardSecurityInformation">
+		<xsd:sequence>
+			<xsd:element name="csc" type="xsd:string" nillable="false" >
+				<xsd:annotation>
+					<xsd:documentation>
+						Card Security Code 3 or 4 digits
+					</xsd:documentation>
+				</xsd:annotation></xsd:element>
+			<xsd:element name="houseNumber" type="xsd:int" nillable="true" >
+				<xsd:annotation>
+					<xsd:documentation>
+						Apartment/House number or null if not applicable
+					</xsd:documentation>
+				</xsd:annotation></xsd:element>
+			<xsd:element name="postcode" type="xsd:string" nillable="false" >
+				<xsd:annotation>
+					<xsd:documentation>
+						The numeric digits from the postcode e.g. W14
+						4RL becomes 144
+					</xsd:documentation>
+				</xsd:annotation></xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="ServiceNameValuePair">
+		<xsd:sequence>
+			<xsd:element name="Name" type="xsd:string" nillable="false" />
+			<xsd:element name="Value" type="xsd:string" nillable="true" />
+		</xsd:sequence>
+	</xsd:complexType> 
+</xsd:schema>

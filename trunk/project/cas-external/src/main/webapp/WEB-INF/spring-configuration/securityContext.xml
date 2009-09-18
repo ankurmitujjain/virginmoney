@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.1.xsd">
+	<description>
+		Whizible Ticket 14594: By default, this is the configuration file for the Spring Security configuration used with the services management tool.
+        However, to implement HTTPS login (and because we don't use the Service Management tool), this has been dumbed-down
+        to implement all CAS interaction over HTTPS.
+    </description>
+
+      <sec:http auto-config="false">
+         <sec:intercept-url pattern="/**" requires-channel="https"/>
+         <sec:form-login login-page="/vmgLoginJAvascriptDisabled"/>
+      	 <sec:anonymous/>
+      	 <sec:logout/>
+      	 <sec:remember-me/>
+      </sec:http>
+</beans>

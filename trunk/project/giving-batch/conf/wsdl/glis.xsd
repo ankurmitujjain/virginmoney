@@ -1,0 +1,1012 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:glis="http://www.virginmoney.com/type/glis/2009/01"
+        targetNamespace="http://www.virginmoney.com/type/glis/2009/01"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:header="http://www.virginmoney.com/type/glis/header/2008/09"
+        xmlns:fault="http://www.virginmoney.com/type/glis/faults/2008/01"
+        elementFormDefault="qualified">
+
+    <xsd:import namespace="http://www.virginmoney.com/type/glis/header/2008/09" schemaLocation="header.xsd"/>
+    <xsd:import namespace="http://www.virginmoney.com/type/glis/faults/2008/01" schemaLocation="fault.xsd"/>
+
+    <xsd:simpleType name="ContactType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines possible contact types.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:token">
+            <xsd:enumeration value="PRIMARY"/>
+            <xsd:enumeration value="OTHER"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="EventCategoryType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines possible contact types.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:token">
+            <xsd:enumeration value="PROCESS"/>
+            <xsd:enumeration value="REPROCESS"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="CharityStatusType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines possible contact types.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:token">
+            <xsd:enumeration value="Pending"/>
+            <xsd:enumeration value="Live"/>
+            <xsd:enumeration value="Closed"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="BankAccountCategory">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines possible bank account types.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:token">
+            <xsd:enumeration value="DONATION"/>
+            <xsd:enumeration value="TRADING"/>
+            <xsd:enumeration value="OTHER"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="EventProcessingTypes">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines possible event processing types.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:token">
+            <xsd:enumeration value="REGISTER-CHARITY"/>
+            <xsd:enumeration value="MAINTAIN-CHARITY"/>
+            <xsd:enumeration value="CHARITY-REGISTRATION-FEE-PAYMENT-INITIATED"/>
+            <xsd:enumeration value="CHARITY-REGISTRATION-FEE-PAYMENT-WAIVED"/>
+            <xsd:enumeration value="TRANSACTION-CHARGE-PAID"/>
+            <xsd:enumeration value="WEB-DONATIONS-PAYMENT-INITIATED"/>
+            <xsd:enumeration value="WEB-DONATIONS-PAYMENT-FAILED"/>
+            <xsd:enumeration value="GIFT-AID-CLAIMED"/>
+            <xsd:enumeration value="TRANSITIONAL-RELIEF-CLAIMED"/>
+            <xsd:enumeration value="CLOSE-CHARITY"/>
+            <xsd:enumeration value="BAC-PAYMENT-DUE"/>
+            <xsd:enumeration value="WEB-DONATIONS-PAYMENT-COLLECTED"/>
+            <xsd:enumeration value="TRANSACTION-FEE-PAID"/>
+            <xsd:enumeration value="BAC-PAYMENT-COLLECTED"/>
+            <xsd:enumeration value="TRANSITIONAL-RELIEF-RECEIVED"/>
+            <xsd:enumeration value="GIFT-AID-RECEIVED"/>
+            <xsd:enumeration value="CHARITY-REGISTRATION-FEE-PAYMENT-COLLECTED"/>
+            <xsd:enumeration value="PAYMENT-TO-CHARITY-PAYMENT-SETTLED"/>
+            <xsd:enumeration value="WEB-EVENT-REGISTRATION-FEE-PAYMENT-INITIATED"/>
+            <xsd:enumeration value="WEB-EVENT-REGISTRATION-FEE-PAYMENT-FAILED"/>
+            <xsd:enumeration value="WEB-EVENT-REGISTRATION-FEE-PAYMENT-COLLECTED"/>
+            <xsd:enumeration value="WEB-REGULAR-DONATIONS-PAYMENT-INITIATED"/>
+            <xsd:enumeration value="WEB-REGULAR-DONATIONS-PAYMENT-FAILED"/>
+            <xsd:enumeration value="WEB-REGULAR-DONATIONS-PAYMENT-COLLECTED"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="PhoneType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines possible phone types.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:token">
+            <xsd:enumeration value="DAYTIME"/>
+            <xsd:enumeration value="EVENING"/>
+            <xsd:enumeration value="MOBILE"/>
+            <xsd:enumeration value="OTHER"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <complexType name="Phone">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the phone details attributes
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="phoneType"     type="glis:PhoneType" minOccurs="1" maxOccurs="1"/>
+            <element name="areaCode"      type="xsd:token" minOccurs="1" maxOccurs="1"/>
+            <element name="phoneNumber"   type="xsd:token" minOccurs="1" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="Contact">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the contact details attributes
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="title"        type="xsd:token" minOccurs="1" maxOccurs="1"/>
+            <element name="firstName"    type="xsd:token" minOccurs="1" maxOccurs="1"/>
+            <element name="surname"      type="xsd:token" minOccurs="1" maxOccurs="1"/>
+            <element name="designation"  type="xsd:token" minOccurs="0" maxOccurs="1"/>
+            <element name="emailAddress" type="xsd:token" minOccurs="0" maxOccurs="1"/>
+            <element name="contactType"  type="glis:ContactType" minOccurs="0" maxOccurs="1"/>
+            <element name="phones"       type="glis:Phone"       minOccurs="1" maxOccurs="unbounded"></element>
+        </sequence>
+    </complexType>
+
+    <complexType name="PaymentCollected">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the Payment Collected record
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="invoiceNumber"              type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="charityReference"           type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="amountDetails"              type="glis:PaymentType"     minOccurs="1" maxOccurs="1"/>
+            <element name="eventRef"                   type="xsd:int"              minOccurs="0" maxOccurs="1"/>
+            <element name="bankAccountUniqueId"        type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="TransactionChargePaid">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the Transaction Charge Paid record
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="creditNoteNumber"           type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="charityReference"           type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="chargeAmountDetails"        type="glis:PaymentType"     minOccurs="1" maxOccurs="1"/>
+            <element name="vatDetails"                 type="glis:TaxType"         minOccurs="1" maxOccurs="1"/>
+            <element name="eventRef"                   type="xsd:int"              minOccurs="0" maxOccurs="1"/>
+            <element name="invoiceNumber"              type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="bankAccountUniqueId"        type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="TransactionFeePaid">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the Transaction Fee Paid record
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="creditNoteNumber"           type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="charityReference"           type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="feeAmountDetails"           type="glis:PaymentType"     minOccurs="1" maxOccurs="1"/>
+            <element name="vatDetails"                 type="glis:TaxType"         minOccurs="1" maxOccurs="1"/>
+            <element name="eventRef"                   type="xsd:int"              minOccurs="0" maxOccurs="1"/>
+            <element name="invoiceNumber"              type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="bankAccountUniqueId"        type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="TransitionalReliefClaimed">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the Donation payment details. Extends the generic payment structure
+            </xsd:documentation>
+        </xsd:annotation>
+        <complexContent>
+            <extension base="glis:Transaction">
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="BACPaymentDue">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the Donation Payments Collected record
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="invoiceNumber"              type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="customer"                   type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="amountDetails"              type="glis:PaymentType"     minOccurs="1" maxOccurs="1"/>
+            <element name="eventRef"                   type="xsd:int"              minOccurs="0" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="BACPaymentCollected">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the Donation Payments Collected record
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="invoiceNumber"              type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="charityReference"           type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="amountDetails"              type="glis:PaymentType"     minOccurs="1" maxOccurs="1"/>
+            <element name="bankAccountUniqueId"        type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="eventRef"                   type="xsd:int"              minOccurs="0" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="DonationPaymentCollected">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the Donation Payments Collected record
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="invoiceNumber"              type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="charityReference"           type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+              <element name="donationAmount"                  type="xsd:double"/>
+            <element name="amountDetails"              type="glis:DonationPayment" minOccurs="1" maxOccurs="1"/>
+            <element name="eventRef"                   type="xsd:int"              minOccurs="0" maxOccurs="1"/>
+            <element name="bankAccountUniqueId"        type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="GiftAidReceived">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the Gift Aid received record
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="invoiceNumber"              type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="charityReference"           type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="amountDetails"              type="glis:PaymentType"     minOccurs="1" maxOccurs="1"/>
+            <element name="bankAccountUniqueId"        type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="TransitionalReliefReceived">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the Gift Aid received record
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="invoiceNumber"              type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="charityReference"           type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="amountDetails"              type="glis:PaymentType"     minOccurs="1" maxOccurs="1"/>
+            <element name="bankAccountUniqueId"        type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="eventRef"                   type="xsd:int"            minOccurs="1" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="Transaction">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the Gift Aid Claimed record
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="amount"                     type="xsd:double"           minOccurs="1" maxOccurs="1"/>
+            <element name="Date"                       type="xsd:date"             minOccurs="1" maxOccurs="1"/>
+            <element name="customer"                   type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="claimPeriodFrom"            type="xsd:date"             minOccurs="1" maxOccurs="1"/>
+            <element name="claimPeriodTo"              type="xsd:date"             minOccurs="1" maxOccurs="1"/>
+            <element name="transactionType"            type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="transactionStatus"          type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="invoiceNumber"              type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="eventRef"                   type="xsd:int"              minOccurs="0" maxOccurs="1"/>
+            <element name="bankAccountUniqueId"        type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="FailedPayment">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the failed payment record
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="creditNoteNumber"           type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="cardType"                   type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="FailedPaymentDetails"       type="glis:PaymentType"     minOccurs="1" maxOccurs="1"/>
+            <element name="invoiceNumber"              type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="PaymentInitiated">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the Payment Initiated record
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="cardType"                   type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="CardPaymentDetails"         type="glis:PaymentType"     minOccurs="1" maxOccurs="1"/>
+            <element name="invoiceNumber"              type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="eventRef"                   type="xsd:int"              minOccurs="0" maxOccurs="1"/>
+            <element name="bankAccountUniqueId"        type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="CheckSystemStatus">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the Request attributes for System availability check
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="sourceSystem"      type="xsd:token" minOccurs="1" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="SystemStatusResponse">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the Response attributes for System availability check
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="available"      type="xsd:boolean"/>
+            <element name="comments"       type="xsd:token"/>
+        </sequence>
+    </complexType>
+
+    <xsd:complexType name="SubscriptionDetails">
+        <xsd:annotation>
+            <xsd:documentation>
+                Components of a Subscription record.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="subscriptionBankAccount" type="glis:BankAccountType" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="subscriptionAmount"      type="xsd:double"       minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="Frequency"               type="xsd:int"          minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="PaymentMethod"           type="xsd:token"        minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="CollectionDate"          type="xsd:date"         minOccurs="1" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <complexType name="Address">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the address attributes
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="addressLine1"       type="xsd:token" minOccurs="1" maxOccurs="1"/>
+            <element name="addressLine2"       type="xsd:token" minOccurs="0" maxOccurs="1"/>
+            <element name="city"               type="xsd:token" minOccurs="1" maxOccurs="1"/>
+            <element name="county_or_state"    type="xsd:token" minOccurs="0" maxOccurs="1"/>
+            <element name="postcode_or_zip"    type="xsd:token" minOccurs="1" maxOccurs="1"/>
+            <element name="country"            type="xsd:token" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="BankAccountType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the bank account attributes
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="sortCode"         type="xsd:token"                minOccurs="1" maxOccurs="1"/>
+            <element name="accountNumber"    type="xsd:token"                minOccurs="1" maxOccurs="1"/>
+            <element name="accountName"      type="xsd:token"                minOccurs="1" maxOccurs="1"/>
+            <element name="bankName"         type="xsd:token"                minOccurs="1" maxOccurs="1"/>
+            <element name="branchName"       type="xsd:token"                minOccurs="1" maxOccurs="1"/>
+            <element name="accountUniqueId"  type="xsd:token"                minOccurs="1" maxOccurs="1"/>
+            <element name="accountType"      type="glis:BankAccountCategory" minOccurs="1" maxOccurs="1"/>
+            <element name="primaryUseFlag"   type="xsd:token"                minOccurs="1" maxOccurs="1"/>
+            <element name="closeThisAccount" type="xsd:boolean"              minOccurs="0" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="PaymentType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the payment details
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="amount"              type="xsd:double"   minOccurs="1" maxOccurs="1"/>
+            <element name="transactionType"     type="xsd:token"    minOccurs="1" maxOccurs="1"/>
+            <element name="transactionStatus"   type="xsd:token"    minOccurs="1" maxOccurs="1"/>
+            <element name="Date"                type="xsd:date"     minOccurs="1" maxOccurs="1"/>
+            <element name="referenceId"         type="xsd:int"      minOccurs="0" maxOccurs="1"/>
+            <element name="amountIncludesTax"   type="xsd:boolean"  minOccurs="0" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="DonationPayment">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the Donation payment details. Extends the generic payment structure
+            </xsd:documentation>
+        </xsd:annotation>
+        <complexContent>
+            <extension base="glis:PaymentType">
+                <sequence>
+                    <element name="amountCurrency" type="xsd:token" minOccurs="0" maxOccurs="1" />
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="TaxType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the generic Tax details
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="amount"              type="xsd:double"   minOccurs="1" maxOccurs="1"/>
+            <element name="code"                type="xsd:token"    minOccurs="1" maxOccurs="1"/>
+            <element name="rate"                type="xsd:double"   minOccurs="1" maxOccurs="1"/>
+            <element name="status"              type="xsd:token"    minOccurs="1" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="RegistrationFee">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the Charity Registration fee object
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="invoiceNumber"              type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="charityReference"           type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="FeeDetails"                 type="glis:PaymentType"     minOccurs="1" maxOccurs="1"/>
+            <element name="VatDetails"                 type="glis:TaxType"         minOccurs="1" maxOccurs="1"/>
+            <element name="eventRef"                   type="xsd:int"              minOccurs="0" maxOccurs="1"/>
+            <element name="bankAccountUniqueId"        type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="WaiveRegistrationFee">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the Charity Registration fee object
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="creditNoteNumber"           type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="charityReference"           type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="FeeDetails"                 type="glis:PaymentType"     minOccurs="1" maxOccurs="1"/>
+            <element name="VatDetails"                 type="glis:TaxType"         minOccurs="1" maxOccurs="1"/>
+            <element name="eventRef"                   type="xsd:int"              minOccurs="0" maxOccurs="1"/>
+            <element name="invoiceNumber"              type="xsd:token"            minOccurs="0" maxOccurs="1"/>
+            <element name="bankAccountUniqueId"        type="xsd:token"            minOccurs="0" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="Batch">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the Batch attributes
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <xsd:element name="BatchNumber"             type="xsd:token"   minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="BatchDate"               type="xsd:date"    minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="BatchType"               type="xsd:token"   minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="ProcessBatchOnErrors"    type="xsd:boolean" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="BatchChunkId"            minOccurs="1" maxOccurs="1">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:token">
+                        <xsd:minLength value="1"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
+        </sequence>
+    </complexType>
+
+    <xsd:complexType name="Charity">
+        <xsd:annotation>
+            <xsd:documentation>
+                Components of a Charity Organisation
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="charityStatus"          type="glis:CharityStatusType" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="transactionDate"        type="xsd:date"         minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="charityName"            type="xsd:token"        minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="registrationNumber"     type="xsd:token"        minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="vmgCharityRefId"        type="xsd:token"        minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="category"               type="xsd:token"        minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="paymentGroup"           type="xsd:token"        minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="registeredAddress"      type="glis:Address"     minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="administrationAddress"  type="glis:Address"     minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="bankAccounts"           type="glis:BankAccountType" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="eventRef"               type="xsd:int"          minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="CharitiesBatch">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the batch request for charities
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="Header"  type="header:MessageHeader"/>
+            <xsd:element name="Batch"   type="glis:Batch"/>
+            <xsd:element name="Charity" type="glis:Charity" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="RegistrationFeesBatch">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the batch request for Registration fee from charities
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="Header"          type="header:MessageHeader"/>
+            <xsd:element name="Batch"           type="glis:Batch"/>
+            <xsd:element name="RegistrationFee" type="glis:RegistrationFee" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="WaiveRegistrationFeesBatch">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the batch request for Registration fee waiver
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="Header"          type="header:MessageHeader"/>
+            <xsd:element name="Batch"           type="glis:Batch"/>
+            <xsd:element name="RegistrationFee" type="glis:WaiveRegistrationFee" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="DonationPaymentInitiatedBatch">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the batch request for Donation Payments initiated
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="Header"              type="header:MessageHeader"/>
+            <xsd:element name="Batch"               type="glis:Batch"/>
+            <xsd:element name="WebDonationPayments" type="glis:PaymentInitiated" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="DonationPaymentCollectedBatch">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the batch request for Donation Payments collected
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="batchNumber"         type="xsd:token"/>
+            <xsd:element name="processDate"         type="xsd:date"/>
+            <xsd:element name="ok"                  type="boolean"/>
+            <xsd:element name="Header"              type="header:MessageHeader"/>
+            <xsd:element name="Batch"               type="glis:Batch"/>
+            <choice>
+                <xsd:element name="settledPayments"     type="glis:SettledCharityPayments" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="WebDonationPayments" type="glis:DonationPaymentCollected" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="Errors"              type="fault:ErrorList"/>
+            </choice>
+ 
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="FailedDonationPaymentBatch">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the batch request for Donation Payments failed
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="Header"              type="header:MessageHeader"/>
+            <xsd:element name="Batch"               type="glis:Batch"/>
+            <xsd:element name="FailedPayments"      type="glis:FailedPayment" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="GiftAidClaimedBatch">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the batch request for Gift Aid claimed
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="Header"              type="header:MessageHeader"/>
+            <xsd:element name="Batch"               type="glis:Batch"/>
+            <xsd:element name="GiftAidClaimed"      type="glis:Transaction" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="GiftAidReceivedBatch">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the batch request for Gift Aid claimed
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="batchNumber"         type="xsd:token"/>
+            <xsd:element name="processDate"         type="xsd:date"/>
+            <xsd:element name="ok"                  type="boolean"/>
+            <xsd:element name="Header"              type="header:MessageHeader"/>
+            <xsd:element name="Batch"               type="glis:Batch"/>
+             <choice>
+            <xsd:element name="GiftAidReceived"     type="glis:GiftAidReceived" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="Errors"          type="fault:ErrorList"/>
+            </choice>
+        </xsd:sequence>
+    </xsd:complexType>
+
+   <xsd:complexType name="TransactionChargePaidBatch">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the batch request for Transaction Charges paid
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="batchNumber"         type="xsd:token"/>
+            <xsd:element name="processDate"         type="xsd:date"/>
+            <xsd:element name="ok"                  type="boolean"/>
+            <xsd:element name="Header"            type="header:MessageHeader"/>
+            <xsd:element name="Batch"             type="glis:Batch"/>
+             <choice>
+                <xsd:element name="TransactionCharge" type="glis:TransactionChargePaid" minOccurs="1" maxOccurs="unbounded"/>
+                <xsd:element name="Errors"          type="fault:ErrorList"/>
+            </choice>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="TransactionFeePaidBatch">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the batch request for Transaction Fee paid
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="batchNumber"         type="xsd:token"/>
+            <xsd:element name="processDate"         type="xsd:date"/>
+            <xsd:element name="ok"                  type="boolean"/>
+            <xsd:element name="Header"            type="header:MessageHeader"/>
+            <xsd:element name="Batch"             type="glis:Batch"/>
+             <choice>
+                <xsd:element name="TransactionFee"    type="glis:TransactionFeePaid" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="Errors"          type="fault:ErrorList"/>
+            </choice>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="TransitionalReliefClaimedBatch">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the batch request for Gift Aid claimed
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="Header"                     type="header:MessageHeader"/>
+            <xsd:element name="Batch"                      type="glis:Batch"/>
+            <xsd:element name="TransitionalReliefClaimed"  type="glis:TransitionalReliefClaimed" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>    
+
+    <xsd:complexType name="TransitionalReliefReceivedBatch">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the batch request for Gift Aid claimed
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="batchNumber"         type="xsd:token"/>
+            <xsd:element name="processDate"         type="xsd:date"/>
+            <xsd:element name="ok"                 type="boolean"/>       
+            <xsd:element name="Header"                      type="header:MessageHeader"/>
+            <xsd:element name="Batch"                       type="glis:Batch"/>
+            <choice>
+            <xsd:element name="TransitionalReliefReceived"  type="glis:TransitionalReliefReceived" minOccurs="1" maxOccurs="unbounded"/>
+                <xsd:element name="Errors"          type="fault:ErrorList"/>
+            </choice>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="BACPaymentDueBatch">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the batch request for BAC Payment Due
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="Header"              type="header:MessageHeader"/>
+            <xsd:element name="Batch"               type="glis:Batch"/>
+            <xsd:element name="BACPayment"          type="glis:BACPaymentDue" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="BACPaymentCollectedBatch">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the batch request for BAC Payment Collected
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="Header"              type="header:MessageHeader"/>
+            <xsd:element name="Batch"               type="glis:Batch"/>
+            <xsd:element name="BACPayment"          type="glis:BACPaymentCollected" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="FailedRecords">
+        <xsd:annotation>
+            <xsd:documentation>
+                Structure to return details of request objects that fail validation in GLIS. 
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="failedRecordType" type="xsd:token"/>
+            <xsd:element name="recordReference"  type="xsd:token"/>
+            <xsd:element name="failureReason"    type="xsd:token"/>
+            <xsd:element name="failureMessage"   type="xsd:token"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="responseHeader">
+        <xsd:annotation>
+            <xsd:documentation>
+                Response components for a Create/update request.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="requestType"        type="xsd:token" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="requestBatchNumber" type="xsd:token" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="requestBatchDate"   type="xsd:date"  minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="requestBatchType"   type="xsd:token" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="requestChunkId"     type="xsd:token" minOccurs="1" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="maintenanceResponse">
+        <xsd:annotation>
+            <xsd:documentation>
+                Response components for a Create/update request.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="header"             type="glis:responseHeader" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="ok"                 type="boolean"/>
+            <xsd:element name="failedRecords"      type="glis:FailedRecords" minOccurs="0" maxOccurs="unbounded"/>
+            <choice>
+                <element name="responseMessage" type="xsd:token"/>
+                <element name="Errors"          type="fault:ErrorList"/>
+            </choice>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="EventProcessing">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the process event request
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="Header"              type="header:MessageHeader"/>
+            <xsd:element name="EventType"           type="glis:EventProcessingTypes" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="batchNumber"         type="xsd:token"                 minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="eventCategory"       type="glis:EventCategoryType"    minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <complexType name="RegistrationFeePaymentCollected">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the data structure for Charity Registration Fee - Payment Collected records
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="invoiceNumber"              type="xsd:token"/>
+            <element name="charityReference"           type="xsd:token"/>
+            <element name="feeAmount"                  type="xsd:double"/>
+            <element name="vatAmount"                  type="xsd:double"/>
+        </sequence>
+    </complexType>
+    
+    <complexType name="RegularDonationPaymentCollected">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the data structure for Regular Donation - Payment Collected records
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="invoiceNumber"              type="xsd:token"/>
+            <element name="regularDonationAmount"                  type="xsd:double"/>
+        </sequence>
+    </complexType>  
+    
+     <complexType name="EventRegistrationFeePaid">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the data structure for Event Registration Fee Paid records
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="invoiceNumber"              type="xsd:token"/>
+            <element name="eventRegistrationFeeAmount"                  type="xsd:double"/>
+        </sequence>
+    </complexType>    
+    
+    <complexType name="VmgTransactionFeePaid">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the data structure for Charity Registration Fee Paid records
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="creditNoteNumber"              type="xsd:token"/>
+            <element name="vmgTransactionFeeAmount"                  type="xsd:double"/>
+            <element name="vatAmount"                  type="xsd:double"/>
+        </sequence>
+    </complexType>
+    
+    <xsd:complexType name="CollectedRegistrationFeeBatch">
+        <xsd:annotation>
+            <xsd:documentation>
+                Response batch for Charity Registration Fee - Payment Collected
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="batchNumber"         type="xsd:token"/>
+            <xsd:element name="processDate"         type="xsd:date"/>
+            <xsd:element name="ok"                  type="boolean"/>
+            <choice>
+                <xsd:element name="FeePayments"     type="glis:RegistrationFeePaymentCollected" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="Errors"          type="fault:ErrorList"/>
+            </choice>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="RegularDonationPaymentCollectedBatch">
+        <xsd:annotation>
+            <xsd:documentation>
+                Response batch for Regular Donation Payment Collected
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="batchNumber"         type="xsd:token"/>
+            <xsd:element name="processDate"         type="xsd:date"/>
+            <xsd:element name="ok"                  type="boolean"/>
+            <choice>
+                <xsd:element name="FeePayments"     type="glis:RegularDonationPaymentCollected" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="Errors"          type="fault:ErrorList"/>
+            </choice>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+     <xsd:complexType name="EventRegistrationFeePaidBatch">
+        <xsd:annotation>
+            <xsd:documentation>
+                Response batch for Event Registration Fee Paid
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="batchNumber"         type="xsd:token"/>
+            <xsd:element name="processDate"         type="xsd:date"/>
+            <xsd:element name="ok"                  type="boolean"/>
+            <choice>
+                <xsd:element name="FeePayments"     type="glis:EventRegistrationFeePaid" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="Errors"          type="fault:ErrorList"/>
+            </choice>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="VmgTransactionFeePaidBatch">
+        <xsd:annotation>
+            <xsd:documentation>
+                Response batch for Vmg Transaction Fee Paid
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="batchNumber"         type="xsd:token"/>
+            <xsd:element name="processDate"         type="xsd:date"/>
+            <xsd:element name="ok"                  type="boolean"/>
+            <choice>
+                <xsd:element name="FeePayments"     type="glis:VmgTransactionFeePaid" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="Errors"          type="fault:ErrorList"/>
+            </choice>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <complexType name="SettledCharityPayments">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines the data structure for payments to charity-Settled records
+            </xsd:documentation>
+        </xsd:annotation>
+        <sequence>
+            <element name="invoiceOrCrNoteNumber"      type="xsd:token"            minOccurs="1" maxOccurs="1"/>
+            <element name="paymentAmount"              type="xsd:double"           minOccurs="1" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <xsd:complexType name="SettledCharityPaymentsBatch">
+        <xsd:annotation>
+            <xsd:documentation>
+                Response batch for payments to charity-Settled
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="batchNumber"         type="xsd:token"/>
+            <xsd:element name="processDate"         type="xsd:date"/>
+            <xsd:element name="ok"                  type="boolean"/>
+            <choice>
+                <xsd:element name="settledPayments"     type="glis:SettledCharityPayments" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="Errors"              type="fault:ErrorList"/>
+            </choice>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <element name="ChecksSystemRequest"                       type="glis:CheckSystemStatus"/>
+    <element name="ChecksSystemResponse"                      type="glis:SystemStatusResponse"/>
+
+    <element name="RegisterCharitiesRequest"                  type="glis:CharitiesBatch"/>
+    <element name="RegisterCharitiesResponse"                 type="glis:maintenanceResponse"/>
+
+    <element name="MaintainCharitiesRequest"                  type="glis:CharitiesBatch"/>
+    <element name="MaintainCharitiesResponse"                 type="glis:maintenanceResponse"/>
+
+    <element name="CloseCharitiesRequest"                     type="glis:CharitiesBatch"/>
+    <element name="CloseCharitiesResponse"                    type="glis:maintenanceResponse"/>
+
+    <element name="RegistrationFeesInitiatedRequest"          type="glis:RegistrationFeesBatch"/>
+    <element name="RegistrationFeesInitiatedResponse"         type="glis:maintenanceResponse"/>
+
+    <element name="WaiveRegistrationFeesRequest"              type="glis:WaiveRegistrationFeesBatch"/>
+    <element name="WaiveRegistrationFeesResponse"             type="glis:maintenanceResponse"/>
+
+    <element name="DonationPaymentsInitiatedRequest"          type="glis:DonationPaymentInitiatedBatch"/>
+    <element name="DonationPaymentsInitiatedResponse"         type="glis:maintenanceResponse"/>
+
+    <element name="DonationPaymentsCollectedRequest"          type="glis:DonationPaymentCollectedBatch"/>
+    <element name="DonationPaymentsCollectedResponse"         type="glis:maintenanceResponse"/>
+
+    <element name="FailedDonationPaymentsRequest"             type="glis:FailedDonationPaymentBatch"/>
+    <element name="FailedDonationPaymentsResponse"            type="glis:maintenanceResponse"/>
+
+    <element name="GiftAidClaimedRequest"                     type="glis:GiftAidClaimedBatch"/>
+    <element name="GiftAidClaimedResponse"                    type="glis:maintenanceResponse"/>
+
+    <element name="GiftAidReceivedRequest"                    type="glis:GiftAidReceivedBatch"/>
+    <element name="GiftAidReceivedResponse"                   type="glis:maintenanceResponse"/>
+
+    <element name="TransactionChargePaidRequest"              type="glis:TransactionChargePaidBatch"/>
+    <element name="TransactionChargePaidResponse"             type="glis:maintenanceResponse"/>
+
+    <element name="TransactionFeePaidRequest"                 type="glis:TransactionFeePaidBatch"/>
+    <element name="TransactionFeePaidResponse"                type="glis:maintenanceResponse"/>
+
+    <element name="TransitionalReliefClaimedRequest"          type="glis:TransitionalReliefClaimedBatch"/>
+    <element name="TransitionalReliefClaimedResponse"         type="glis:maintenanceResponse"/>
+
+    <element name="TransitionalReliefReceivedRequest"         type="glis:TransitionalReliefReceivedBatch"/>
+    <element name="TransitionalReliefReceivedResponse"        type="glis:maintenanceResponse"/>
+
+    <element name="BACPaymentDueRequest"                      type="glis:BACPaymentDueBatch"/>
+    <element name="BACPaymentDueResponse"                     type="glis:maintenanceResponse"/>
+
+    <element name="BACPaymentCollectedRequest"                type="glis:BACPaymentCollectedBatch"/>
+    <element name="BACPaymentCollectedResponse"               type="glis:maintenanceResponse"/>
+
+    <element name="ProcessEventRequest"                       type="glis:EventProcessing"/>
+    <element name="ProcessEventResponse"                      type="glis:maintenanceResponse"/>
+
+    <element name="RegularDonationPmtInitiatedRequest"        type="glis:DonationPaymentInitiatedBatch"/>
+    <element name="RegularDonationPmtInitiatedResponse"       type="glis:maintenanceResponse"/>
+
+    <element name="RegularDonationPmtCollectedRequest"        type="glis:DonationPaymentCollectedBatch"/>
+    <element name="RegularDonationPmtCollectedResponse"       type="glis:maintenanceResponse"/>
+
+    <element name="RegularDonationPmtFailedRequest"           type="glis:FailedDonationPaymentBatch"/>
+    <element name="RegularDonationPmtFailedResponse"          type="glis:maintenanceResponse"/>
+
+    <element name="EventRegistrationPmtInitiatedRequest"      type="glis:DonationPaymentInitiatedBatch"/>
+    <element name="EventRegistrationPmtInitiatedResponse"     type="glis:maintenanceResponse"/>
+
+    <element name="EventRegistrationPmtCollectedRequest"      type="glis:DonationPaymentCollectedBatch"/>
+    <element name="EventRegistrationPmtCollectedResponse"     type="glis:maintenanceResponse"/>
+
+    <element name="EventRegistrationPmtFailedRequest"         type="glis:FailedDonationPaymentBatch"/>
+    <element name="EventRegistrationPmtFailedResponse"        type="glis:maintenanceResponse"/>
+
+</schema>

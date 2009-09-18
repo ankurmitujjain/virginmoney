@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
+
+	<description>
+		The purpose of this daily batch job is to recognise events with pending status 
+		and to go on live today and to then initiate the publish process to make them active and 
+		finaly send email to charity administrators to notify that their event has been published.
+	</description>
+
+	<import resource="classpath:/property-context.xml" />
+	
+	<!-- Job Configuration - Start-->
+	<bean id="eventPublishJob" parent="simpleJob">
+		<property name="name" value="Event Publish Job" />
+		<property name="steps">
+			<list>
+				<bean id="step1" parent="givingSkipLimitStep">
+					<property name="itemReader" ref="eventPublishItemReader" />
+					<property name="itemProcessor" ref="compositeItemProcessor" />
+					<property name="itemWriter" ref="eventPublishXmlWriter" />
+					<property name="listeners">
+						<list>
+                            <ref bean="eventPublishItemProcessor" />
+                        </list>
+					</property>
+					<property name="commitInterval" value="1000" />
+					<property name="skipLimit" value="3" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<!-- Job Configuration - End-->
+
+
+	<bean class="org.springframework.batch.core.scope.StepScope" />
+
+    <!-- JPAPagingItemReader - Start-->
+    <bean id="eventPublishItemReader" scope="step"
+        class="org.springframework.batch.item.database.JpaPagingItemReader">
+        <property name="entityManagerFactory" ref="givingEntityManagerFactory" />
+        <property name="queryString"
+            value="select e from Event e
+                    where e.eventStatus='PEN'
+                      and (e.openDate is not null and DATE(e.openDate)&lt;= STR_TO_DATE('#{jobParameters[cutOffDate]}', '%d-%m-%Y %H:%i:%s'))
+                      and (DATE(e.eventDatetime)&gt;= STR_TO_DATE('#{jobParameters[cutOffDate]}', '%d-%m-%Y %H:%i:%s'))" />
+        <property name="pageSize" value="1000" />
+    </bean>
+
+	<!-- JPAPagingItemReader - End-->
+
+	<!-- Composite Item Processor Configuration - Start -->
+	<bean id="compositeItemProcessor"
+		class="org.springframework.batch.item.support.CompositeItemProcessor">
+		<property name="itemProcessors">
+			<list>
+				<ref bean="eventPublishItemProcessor" />
+				<ref bean="eventPublishMailSender" />
+				<ref bean="eventTransformer" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="eventPublishItemProcessor"
+		class="com.virginmoneygiving.givingbatch.processor.EventPublishProcessor">
+		<property name="givingService" ref="givingService" />
+		<property name="batchDelegate" ref="batchDelegate" />
+		<property name="indexerEventService" ref="indexerEventService"></property>
+        <property name="givingBatchExtServiceLocator" ref="givingBatchExtServiceLocator"/>
+    </bean>
+	
+	<bean id="eventPublishMailSender"
+		class="com.virginmoneygiving.givingbatch.mail.EventPublishMailSender">
+		<property name="givingService" ref="givingService" />
+		<property name="jmsEmailTemplate" ref="jmsEmailTemplate" />
+	</bean>
+
+	<bean id="eventTransformer"
+		class="com.virginmoneygiving.givingbatch.transformer.EventTransformer"/>
+	
+	<!-- jmsTemplate for Indexer clients -->
+	<bean name="jmsEmailTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="defaultDestination" ref="emailDestination" />
+		<property name="receiveTimeout" value="1" />
+	</bean>
+	
+	<!-- JBoss JNDI Connection Factory -->
+	<bean name="connectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="java:ConnectionFactory" />
+	</bean>
+
+	<!--  JMS Destination for Indexer service -->
+	<bean name="emailDestination" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="queue/emailTemplateQueue" />
+	</bean>
+
+	<!-- Composite Item Processor Configuration - End -->
+
+	<!-- XMLItemWriter Configuration -->
+	<bean id="eventPublishXmlWriter" class="org.springframework.batch.item.xml.StaxEventItemWriter">
+		<property name="resource" value="file:${givingbatch.output.folder}/eventPublish.xml" />
+		<property name="marshaller" ref="eventPublishMarshallingSerializer" />
+		<property name="rootTagName" value="eventPublishBatch" />
+		<property name="overwriteOutput" value="true" />
+	</bean>
+
+	<!-- XStreamMarshaller Configuration - Start -->
+	<bean class="org.springframework.oxm.xstream.XStreamMarshaller"
+		id="eventPublishMarshallingSerializer">
+		<property name="aliases" ref="aliases" />
+	</bean>
+
+	<util:map id="aliases">
+		<entry key="event" value="com.virginmoneygiving.givingbatch.domain.EventSummary" />
+		<entry key="id" value="java.lang.String" />
+		<entry key="name" value="java.lang.String" />
+		<entry key="description" value="java.lang.String"/>
+		<entry key="eventTimeText" value="java.lang.String" />
+		<entry key="eventDatetime" value="java.sql.Timestamp" />
+		<entry key="openDate" value="java.sql.Timestamp" />
+		<entry key="expiryDate" value="java.sql.Timestamp" />
+		<entry key="location" value="java.lang.String"/>
+		<entry key="eventStatus" value="java.lang.String" />
+	</util:map>
+	
+	<!-- XStreamMarshaller Configuration - End -->
+
+</beans>

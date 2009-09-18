@@ -1,0 +1,5134 @@
+/*---[ Details ]---------------------------------------
+Screen Style Sheet
+Client: Virgin Money Giving
+Author: Soup
+-------------------------------------------------------*/
+
+/*-----------------------------------------------------
+Core Elements:
+[01] Yahoo CSS Reset
+[02] HTML / Body
+[03] Anchors
+[04] Images
+[05] Headings
+[06] Lists
+[07] Forms
+[08] Tables
+[09] Phrase Elements
+[10] Misc Inline
+[11] Misc Block
+
+Site Specific:
+[01] Container
+[02] Header
+[03] Branding
+[04] Navigation
+[05] Site Controls
+[06] Search
+[07] Content
+[08] Footer
+[09] Image Replacements
+[10] Clearfixes
+[11] Accessible Hide
+[12] Misc
+[13] Templates
+[14] Components
+
+Page Specific:
+[01] Home
+-------------------------------------------------------*/
+
+
+/*-----------------------------------------------------
+Core Elements
+-------------------------------------------------------*/
+
+/* [01] Yahoo CSS Reset
+   [http://developer.yahoo.com/yui/reset/#code]
+-------------------------------------------------------*/
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, hr,
+pre,form, fieldset, input, textarea, p, blockquote, th, td, address {
+	margin: 0;
+    padding: 0;
+}
+table {
+	border-collapse: collapse;
+    border-spacing: 0;
+}
+fieldset,img {
+	border: 0;
+}
+address, caption, cite, code, dfn, em, strong, th, var {
+	font-style: normal;
+    font-weight: normal;
+}
+ol, ul {
+	list-style: none;
+}
+caption, th {
+	text-align: left;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-size: 100%;
+	font-weight: normal;
+}
+q:before, q:after {
+	content: '';
+}
+abbr,acronym {
+	border: 0;
+}
+
+/* [02] HTML / Body
+-------------------------------------------------------*/
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+html {
+	background: #FFF:
+}
+body {
+	font: normal 0.75em Verdana, Arial, Helvetica, sans-serif; /* 12px */
+	line-height: 1.2;
+	color: #000;
+	text-align: left;
+}
+
+/* [03] Colours
+-------------------------------------------------------*/
+/* Colour Classes */
+.c1 {
+	color: #C00;
+}
+.c2 {
+	color: #666;
+}
+.c3 {
+	color: #000;
+}
+
+/* [03] Anchors
+-------------------------------------------------------*/
+a {
+	color: #3498CB;
+}
+a, a:link, a:visited, a:active, a:hover {
+/* Removes dotted outline from Firefox anchors */
+/*    outline: none;*/ /* commented because for showing tab focus on FF by pravin date 18/11/08 */
+	font-weight: bold;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+
+/* [04] Images
+-------------------------------------------------------*/
+img {
+	border: none;
+}
+
+span.dropshadow,
+span.dropshadow span {
+	background: url('../img/branding/bg-dropshadow-bottom.gif') bottom right no-repeat;
+	display: inline-block;
+	display: -moz-inline-box;
+	/*display: block;
+	float: left;*/
+	font-size: 0;
+}
+span.dropshadow span {
+	background: url('../img/branding/bg-dropshadow-top.gif') top left no-repeat;
+}
+span.dropshadow span span {
+	background: url('../img/branding/bg-dropshadow-topright.gif') top right no-repeat;
+}
+span.dropshadow span span span {
+	background: url('../img/branding/bg-dropshadow-bottomleft.gif') bottom left no-repeat;
+	padding: 2px 5px 8px 5px;33
+}
+span.dropshadow img {
+	border: 5px solid #FFF;
+}
+
+/* [05] Headings
+-------------------------------------------------------*/
+h1, h2, h3, h4, h5, h6 {
+	color: #000;
+	font-weight: normal;
+	font-size: 1em; /* 12px */
+	margin: 10px 0;
+	line-height: 1.3;
+}
+
+h1 {
+	margin: 0 0 0.606em; /* 20px */
+	font-size: 2.75em; /* 33px */
+	line-height: 1.1;
+	color: #C00;
+}
+
+/* Heading Size Classes */
+h5, h6, h1.s1, h2.s1, h3.s1, h4.s1, h5.s1, h6.s1 {
+	font-size: 1.166em; /* 14px */
+	margin: 0.714em 0; /* 10px */
+	line-height: 1.2;
+}
+h4, h1.s2, h2.s2, h3.s2, h4.s2, h5.s2, h6.s2 {
+	font-size: 1.333em; /* 16px */
+	margin: 0.75em 0;
+	line-height: 1.2;
+}
+h3, h1.s3, h2.s3, h3.s3, h4.s3, h5.s3, h6.s3 {
+	font-size: 1.5em; /* 18px */
+	margin: 0.666em 0;
+	line-height: 1.15;
+}
+h2, h1.s4, h2.s4, h3.s4, h4.s4, h5.s4, h6.s4 {
+	font-size: 1.666em; /* 20px */
+	margin: 0.6em 0;
+	line-height: 1.15;
+}
+h1.s5, h2.s5, h3.s5, h4.s5, h5.s5, h6.s5 {
+	font-size: 1.833em; /* 22px */
+	margin: 0.545em 0;
+	line-height: 1.15;
+}
+h1.s6, h2.s6, h3.s6, h4.s6, h5.s6, h6.s6 {
+	font-size: 2em; /* 24px */
+	margin: 0.5em 0;
+	line-height: 1.10;
+}
+
+
+/* [06] Lists
+-------------------------------------------------------*/
+dl, ol, ul {
+	padding: 0;
+	margin: 0.833em 0; /* 10px */
+}
+ol, ul {
+	list-style-position: outside;
+	padding: 0 0 0 2.083em; /* 25px */
+}
+ol {
+	list-style: decimal;
+}
+ul {
+	list-style: disc;
+}
+dt {
+	margin-top: 0.416em; /* 5px */
+	font-weight: bold;
+}
+
+
+ul.s1 {
+	list-style-image: url('../img/branding/bullet-ul.gif');
+}
+
+/* Brad Change */
+dl.dl-alt dt{
+	font-weight:bold;
+	float:left;
+	clear:left;
+	margin:0 15px 5px 0;
+}
+dl.dl-alt dd{
+	font-weight:normal;
+	float:left;
+	margin:0 0 5px 0;
+}
+
+
+
+/* End Brad Change */
+/* [07] Forms
+-------------------------------------------------------*/
+form {
+	padding: 0;
+	margin: 0.833em 0; /* 10px */
+}
+fieldset {
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+legend {
+	font-weight: bold;
+	margin: 0;
+/* Padding is used instead of margin for Safari */
+	padding: 0 0 0.833em; /* 10px */
+/* IE/Win sets color to blue */
+	color: #000;
+}
+label, .label-spacer {
+	margin: 0 0.416em 0 0; /* 5px */
+	display:block;
+	width:150px;
+	text-align:right;
+	float:left;
+	margin-top:0;
+	font-weight:bold;
+}
+
+select {
+	float:left;
+}
+
+input, select {
+	font-size: 1em;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+input[type="checkbox"], input[type="radio"] {
+	margin: 0 0.25em; /* 3px */
+}
+input[type="image"] {
+	/* Removes dotted outline from Firefox anchors */
+	/*outline: none;*/
+}
+optgroup {
+/* Not all browsers can support styling of this element */
+	font-style: normal;
+	font-weight: bold;
+	margin: 0.833em 0 0; /* 10px */
+	color: #CCC;
+}
+option {
+/* Padding for Firefox */
+	padding: 0 0.833em; /* 10px */
+	color: #000;
+}
+textarea {
+	display: block;
+	margin: 0 0 0.833em; /* 10px */
+	padding: 2px;
+	width: 25em; /* 300px */
+	height: 5em; /* 60px */
+}
+textarea, button {
+	font: normal 1em Verdana, Arial, Helvetica, sans-serif; /* 11px */
+}
+
+p.label-above-input label{
+	text-align:left;
+	float:none;
+	margin-top:0;
+	margin-bottom:0.5em; /*added by dayanand*/
+	width:auto; /*added by dayanand*/
+	font-weight:bold; /*added by dayanand*/
+}
+
+p.single-line-inputs label,
+p.single-line-inputs input,
+p.single-line-inputs select {
+	display: inline!important;
+	float: none!important;
+	vertical-align: middle!important;
+}
+
+/* [08] Tables
+-------------------------------------------------------*/
+table {
+	margin: 0.833em 0; /* 10px */
+	padding: 0;
+	border-collapse: collapse;
+	border: 1px solid #666;
+}
+caption {
+	text-align: left;
+	margin: 0.833em 0; /* 10px */
+	padding: 0 0 0 0.833em; /* 10px */
+}
+thead th, thead td {
+	border-bottom: 2px solid #666;
+	border-right: 1px solid #666;
+	background: #999;
+	color: #FFF;
+	font-weight: bold;
+}
+td, th {
+	padding: 0.416em 0.833em; /* 5px 10px */
+	text-align: left;
+	vertical-align: top;
+}
+tbody {
+	background-color: #FFF;
+	border: 1px solid #666;
+}
+tbody td {
+	border-bottom: 1px solid #666;
+}
+td {
+	border-right: 1px dotted #666;
+}
+tfoot {
+	font-style: italic;
+	font-size: 0.75em; /* 9px */
+}
+tfoot td {
+	text-align: right;
+	border: none;
+}
+
+/* Structural Table */
+table.structural {
+	margin: 0;
+	border: none;
+}
+table.structural caption {
+	margin: 0;
+	padding: 0;
+}
+table.structural thead th,
+table.structural thead td {
+	border: none;
+	background: none;
+	color: #000;
+	font-weight: normal;
+}
+table.structural th,
+table.structural td {
+	padding: 0;
+}
+table.structural tbody {
+	background-color: none;
+	border: none;
+}
+table.structural tbody td {
+	border: none;
+}
+table.structural tfoot {
+	font-style: normal;
+	font-size: 1em; /* 12px*/
+}
+table.structural tfoot td {
+	text-align: left;
+}
+
+/* Structural Table With Padding */
+table.structural-padding {
+	margin: 0;
+	border: none;
+}
+table.structural-padding caption {
+	margin: 0;
+	padding: 0;
+}
+table.structural-padding thead th,
+table.structural-padding thead td {
+	border: none;
+	background: none;
+	color: #000;
+	font-weight: normal;
+}
+table.structural-padding th,
+table.structural-padding td {
+	padding: 0.416em; /* 5px */
+}
+table.structural-padding tbody {
+	background-color: none;
+	border: none;
+}
+table.structural-padding tbody td {
+	border: none;
+}
+table.structural-padding tfoot {
+	font-style: normal;
+	font-size: 1em; /* 12px*/
+}
+table.structural-padding tfoot td {
+	text-align: left;
+}
+
+/* [09] Phrase Elements
+-------------------------------------------------------*/
+abbr, acronym {
+	border: none;
+}
+cite {
+	font-style: italic;
+}
+em {
+	font-style: italic;
+}
+strong {
+	font-weight: bold;
+}
+dfn {
+	font-style: normal;
+}
+code, kbd, samp {
+	font-family: monospace;
+	font-size: 1.083em; /* 13px */
+}
+var {
+	font-style: italic;
+}
+
+/* [10] Misc Inline
+-------------------------------------------------------*/
+q {
+	font-style: italic;
+}
+del {
+	text-decoration: line-through;
+}
+ins {
+	text-decoration: none;
+}
+sub {
+	vertical-align: sub;
+}
+sup {
+	vertical-align: super;
+}
+
+/* [11] Misc Block
+-------------------------------------------------------*/
+p {
+	margin: 0.833em 0; /* 10px */
+}
+address {
+	font-style: normal;
+	margin: 0.833em 0; /* 10px */
+}
+blockquote, pre {
+	margin: 0.833em 0; /* 10px */
+	padding: 0;
+}
+pre {
+/* set specific font for IE/Win */
+	font-family: inherit;
+	overflow: auto;
+	margin: 0.833em 0; /* 10px */
+}
+hr {
+	margin: 0;
+	padding: 0;
+/* For IE/Win, as it displays hr as inline */
+	display: block;
+	border: none;
+	outline: none;
+	clear: both;
+	height: 0px;
+	visibility: hidden;
+}
+
+/*-----------------------------------------------------
+Site Specific
+-------------------------------------------------------*/
+
+/* [01] Container
+-------------------------------------------------------*/
+#container {
+	width: 960px;
+	margin: 0 auto;
+	background: #FFF;
+	background: url('../img/branding/bg-body.png') top center repeat-y;
+	height: 100%;
+}
+
+/* [02] Header
+-------------------------------------------------------*/
+#header {
+	background : #CC0000 url('../img/branding/new-header.png') no-repeat top left;
+	min-height: 132px;
+	position: relative;
+	overflow: hidden;
+}
+
+#header .container {
+	padding-left: 375px;
+	margin-top: 21px;
+}
+
+/* [03] Branding
+-------------------------------------------------------*/
+#branding-logo {
+	display:none;
+	opacity: 0;
+	-moz-opacity: 0;
+	width:350px;
+}
+
+/* [04] Navigation
+-------------------------------------------------------*/
+#nav-site {
+	padding: 0;
+	margin: 20px 0 15px 285px;
+	height:40px;
+	width: 290px;
+	float: left;
+	list-style-type: none;
+}
+#nav-site li {
+	float: left;
+}
+#nav-site li a {
+	display: block;
+	text-indent: -9999px;
+	height: 32px;
+	overflow: hidden;/*to fix outline straching bug by dayanand 11/19/2008*/
+}
+
+#nav-site li.about a {
+	width: 57px;
+                 height:36px;
+	 background: url('../img/branding/about-us-2.png');
+
+     
+}
+
+#nav-site li.guides a {
+	width: 56px;
+                height:36px;
+                background: url('../img/branding/help-guides.png');
+               
+}
+
+#nav-site li.raising a {
+	width: 61px;
+	height:36px;
+                background: url('../img/branding/raising-more.png');
+               
+}
+
+#nav-site li.your-news a {
+	width: 94px;
+	height:36px;
+                background: url('../img/branding/your-news.png');
+            
+}
+
+#nav-site li.fundraising a {
+	width: 93px;
+	height:36px;
+                background: url('../img/branding/start-fundraising.png');
+                
+}
+
+#nav-site li.make-donation a {
+	width: 79px;
+	height:36px;
+                background: url('../img/branding/make-donation.png');
+                
+}
+
+/* [05] Site Controls
+-------------------------------------------------------*/
+#site-controls {
+	margin: 0;
+	padding: 0;
+	top: 0;
+	right: 20px;
+	position: absolute;
+	overflow: hidden;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+	font-size: 0.833em; /* 10px */
+	height:23px;
+	/*width:125px; removed by dayanand because it is affecting layout of after login header*/
+}
+#site-controls a,
+#site-controls span {
+	display: block;
+	float: left;
+	min-height: 21px;
+}
+#site-controls a {
+	text-indent: -9999px;
+	background: url('../img/branding/spr-controls.png') 0 0 no-repeat;
+	overflow:hidden;/*added to remove streching outline by dayanand*/
+}
+#site-controls .welcome {
+	padding: 0 40px 0 15px;
+	height: 21px;
+	line-height: 21px;
+	background: url('../img/branding/bg-welcome.png') top left no-repeat;
+	margin-left: 3px;
+}
+#site-controls .home {
+	width: 55px;
+	background-position: 0 0;
+	overflow:hidden; /*added this element to fix issue of tabbing by dayanand 11/19/2008*/
+}
+#site-controls .home:hover {
+	background-position: 0 -21px;
+}
+#site-controls .settings {
+	width: 113px;
+	background-position: -197px 0;
+}
+#site-controls .settings:hover {
+	width: 113px;
+	background-position: -197px -21px;
+}
+#site-controls .signin {
+	width: 61px;
+	background-position: -57px 0;
+	margin-left: 3px;
+	overflow:hidden; /*added this element to fix issue of tabbing by dayanand 11/19/2008*/
+}
+#site-controls .signin:hover {
+	background-position: -57px -21px;
+}
+#site-controls .signout {
+	width: 75px;
+	background-position: -120px 0;
+	margin-left: 3px;
+}
+#site-controls .signout:hover {
+	background-position: -120px -21px;
+}
+
+/* [07] Content
+-------------------------------------------------------*/
+#content {
+	padding: 10px 10px 0px 30px;
+	background: #FFF;
+	min-height:425px;
+}
+
+#content,
+#content-primary,
+#content-secondary,
+#content-callout,
+#content-sidebar {
+	overflow: hidden;
+}
+
+
+/* [08] Footer
+-------------------------------------------------------*/
+#footer {
+	color: #FFF;
+	font-size: 0.916em; /* 11px */
+	padding: 65px 0px 0 0px;
+	overflow: hidden;
+    position:static;
+	background : #CC0000 url('../img/branding/new-footer.png') no-repeat top left;
+	min-height:205px;
+}
+
+#footer-left-panel { 
+width:780px;
+float:left;
+}
+
+#footer-left-panel-padding{ 
+padding-left:55px;
+padding-top:0px;
+}
+
+#footer-right-panel{
+float:left;
+width:180px;
+}
+
+#footer ul.top {
+	padding: 20px 0 5px 0;
+	margin: 0;
+	list-style: none;
+	float:left;
+	width:670px;
+}
+
+#footer ul.bottom {
+	padding: 0 0 5px 0;
+	margin: 0;
+	list-style: none;
+	float:left;
+	width:700px;
+}
+
+#footer ul.version {
+	padding: 0 0 67px 0;
+	margin: 0;
+	list-style: none;
+	float:left;
+	width:700px;
+}
+
+#footer ul li {
+	display: inline;
+	color: #FFF;
+	padding:0 5px 5px 0;
+}
+#footer ul li a {
+	font-weight: normal;
+	color: #FFF;
+	text-decoration:none;
+	
+}
+
+#footer ul li a:hover{
+	font-weight: normal;
+	color: #FFF;
+	text-decoration:underline;
+}
+
+#footer .visit-vm{
+padding-top:20px;
+
+
+
+}
+
+
+
+#verisign {
+   float:right;
+   padding-right:55px;}
+
+#verisign img{
+padding-left:2px;}
+
+
+
+   #bookmark {
+	position:static;
+ 	left:0px;
+	padding-left:12px;
+   }
+
+   #share-popup {
+   	 font-size:80%;
+     width:200px;
+     height:60px;
+     background-image:url('../img/branding/bookmarking/bg.jpg');
+   }
+
+   .share-column {
+      width:100px;
+      height:55px;
+      float:left;
+      text-align:left;
+   }
+
+   .share-column div {
+      margin:5px 0px 0px 5px;
+   }
+
+   .share-column a {
+     text-decoration:none;
+   }
+
+
+/* [09] Image Replacements
+-------------------------------------------------------*/
+.imr {
+	display: block;
+	text-indent: -9999px;
+	overflow: hidden;
+}
+
+/* [10] Clearfixes
+-------------------------------------------------------*/
+/* More info at: http://www.positioniseverything.net/easyclearing.html */
+.clearfix:after,
+#content:after,
+#site-controls:after,
+#header .container:after,
+.pagination:after,
+#vm-sponsortabs:after,
+#vm-createeventtabs:after,
+#vm-mydetails-sponsortabs:after,
+#vm-how-works:after,
+#vm-donation-calculator .vm-donation-calc-mid:after,
+#vm-donation-calculator .vm-donation-calc-white .calc form:after,
+#vm-donation-calculator .vm-donation-calc-white:after,
+#vm-donation-calculator .vm-donation-calc-content:after,
+#vm-search-results li:after,
+form.search-res-filters:after,
+form#vm-sponsor-info:after,
+form#vm-sponsor-info p:after,
+form#vm-sponsor-info div.pw-strength:after,
+#vm-create-page-one-organised:after,
+#vm-create-page-one-other .other-event:after,
+form p:after,
+.template-f #content-primary:after,
+.template-g #content-primary:after,
+.template-h #content-primary:after,
+dl.dl-alt:after,
+#vm-recent-sponsors p.sponsor-info:after,
+#vm-charitiesheader:after,
+#vm-charitytabs:after,
+#vm-content-columns:after,
+#vm-sub-category-listing ul:after,
+#vm-content-donate-raise div:after,
+#vm-fundraisertabs:after,
+#vm-fundraiserNetworkTeamtabs:after,
+#vm-fundraiser-peopletabs:after,
+#vm-fundraiser-changenetworkstab:after,
+#vm-eventpaymenttabs:after,
+#vm-preview-of-page:after,
+#vm-category-list:after,
+#vm-categorynav:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+    font-size: 0;
+}
+.clearfix,
+#content,
+#site-controls,
+#header .container,
+.pagination,
+#vm-sponsortabs,
+#vm-mydetails-sponsortabs,
+#vm-how-works,
+#vm-createeventtabs,
+#vm-donation-calculator .vm-donation-calc-mid,
+#vm-donation-calculator .vm-donation-calc-white .calc form,
+#vm-donation-calculator .vm-donation-calc-white,
+#vm-donation-calculator .vm-donation-calc-content,
+#vm-search-results li,
+form.search-res-filters,
+form#vm-sponsor-info,
+form#vm-sponsor-info p,
+form#vm-sponsor-info div.pw-strength,
+#vm-create-page-one-organised,
+#vm-create-page-one-other .other-event,
+form p,
+.template-f #content-primary,
+.template-g #content-primary,
+.template-h #content-primary,
+dl.dl-alt,
+#vm-recent-sponsors p.sponsor-info,
+#vm-charitiesheader,
+#vm-charitytabs,
+#vm-content-columns,
+#vm-sub-category-listing ul,
+#vm-content-donate-raise div,
+#vm-fundraisertabs,
+#vm-eventpaymenttabs,
+#vm-preview-of-page,
+#vm-category-list,
+#vm-categorynav {
+	display: block;
+}
+
+/* [11] Accessible Hide
+-------------------------------------------------------*/
+.w3c,
+#nav-access,
+#footer .promotion img,
+.pagination div span,
+#vm-totaliser #vm-totaliser-thermometer-overlay h2,
+#vm-countdown .content span,
+#vm-categorynav .content ul li ul {
+	position: absolute;
+	display: block;
+	height: 0;
+	visibility: hidden;
+	left: -9999px;
+	top: -9999px;
+	padding: 0;
+	margin: 0;
+}
+
+/* [12] Misc
+-------------------------------------------------------*/
+.current {
+	cursor: default;
+}
+
+img.next,
+img.previous,
+img.button {
+	vertical-align: middle;
+	margin-bottom: -11px;
+	position: relative;
+	top: -4px;
+}
+
+div.continue-block {
+	text-align: right;
+}
+
+.clear {
+	clear: both;
+}
+
+.charity-search {
+	margin-top:-20px;
+	display:block;
+}
+
+/* [13] Templates
+-------------------------------------------------------*/
+/* Template A */
+.template-a #content-secondary {
+	float: left;
+	width: 590px;
+}
+.template-a #content-callout {
+	float: right;
+	width: 300px;
+}
+
+/* Template B */
+.template-b #content-primary {
+	float: left;
+	width: 675px;
+}
+.template-b #content-sidebar {
+	float: right;
+	width: 215px;
+}
+
+/* Template C */
+.template-c #content-primary {
+	float: right;
+	width: 675px;
+}
+.template-c #content-sidebar {
+	float: left;
+	width: 215px;
+}
+
+/* Template D */
+.template-d #content-primary {
+	float: left;
+	width: 450px;
+}
+.template-d #content-secondary {
+	float: right;
+	width: 450px;
+}
+
+/* Template E */
+.template-e #content-primary {
+	float: left;
+	width: 525px;
+}
+.template-e #content-sidebar {
+	float: right;
+	width: 380px;
+}
+
+/* Template F */
+.template-f #content-primary {
+	float: left;
+	width: 680px;
+}
+.template-f #content-primary .column-1 {
+	width: 455px;
+	float: right;
+}
+.template-f #content-primary .column-2 {
+	width: 205px;
+	float: left;
+}
+.template-f #content-primary .column-1,
+.template-f #content-primary .column-2 {
+	overflow: hidden;
+}
+.template-f #content-sidebar {
+	float: right;
+	width: 215px;
+}
+
+/* Template G */
+.template-g #content-primary {
+	float: right;
+	width: 670px;
+}
+.template-g #content-primary .column-1 {
+	width: 325px;
+	float: left;
+}
+.template-g #content-primary .column-2 {
+	width: 325px;
+	float: right;
+}
+.template-g #content-primary .column-1,
+.template-g #content-primary .column-2 {
+	overflow: hidden;
+}
+.template-g #content-sidebar {
+	float: left;
+	width: 215px;
+}
+
+/* Template H */
+.template-h #content-primary {
+	float: right;
+	width: 670px;
+}
+.template-h #content-primary .column-1 {
+	width: 230px;
+	float: left;
+}
+.template-h #content-primary .column-2 {
+	width: 420px;
+	float: right;
+}
+.template-h #content-primary .column-1,
+.template-h #content-primary .column-2 {
+	overflow: hidden;
+}
+.template-h #content-sidebar {
+	float: left;
+	width: 215px;
+}
+
+
+/* [14] Components
+-------------------------------------------------------*/
+/* Content Block */
+.content-block {
+	padding-bottom: 20px;
+	margin-bottom: 20px;
+	clear: both;
+}
+.content-block.s1 {
+	background: url('../img/branding/bg-horizontalline-light.gif') bottom left repeat-x;
+}
+.content-block.s2 {
+	background: url('../img/branding/bg-horizontalline-dark.gif') bottom left repeat-x;
+}
+.content-block.s3, .content-block.s4 {
+	padding-top: 20px;
+	margin-top: 20px;
+	padding-bottom: 0;
+	margin-bottom: 0;
+}
+.content-block.s3 {
+	background: url('../img/branding/bg-horizontalline-light.gif') top left repeat-x;
+}
+.content-block.s4 {
+	background: url('../img/branding/bg-horizontalline-dark.gif') top left repeat-x;
+}
+
+/* Breadcrumbs */
+ul#breadcrumb {
+	list-style: none;
+	padding: 0 0 10px 30px;
+	margin: 0;
+	font-size: 0.916em; /* 11px */
+	background: #FFF;
+}
+ul#breadcrumb li {
+	display: inline;
+	color: #666;
+}
+ul#breadcrumb li a,
+ul#breadcrumb li a:link,
+ul#breadcrumb li a:visited,
+ul#breadcrumb li a:hover,
+ul#breadcrumb li a:active {
+	color: #C00;
+}
+
+/* Pagination */
+div.pagination {
+	margin: 0.833em 0; /* 10px */
+}
+div.pagination span {
+	float: left;
+}
+div.pagination div {
+	float: right;
+	font-weight: bold;
+}
+div.pagination div a,
+div.pagination div a:link,
+div.pagination div a:visited,
+div.pagination div a:hover,
+div.pagination div a:active {
+	text-decoration: underline;
+	font-weight: normal;
+	color: #000;
+}
+div.pagination div a.previous {
+	margin-right: 15px;
+}
+div.pagination div a.next {
+	margin-left: 15px;
+}
+
+/* Pagination - Style 1 & 2 */
+div.pagination.s1,
+div.pagination.s2 {
+	padding-bottom: 17px;
+	background: url('../img/branding/bg-horizontalline-light.gif') bottom left repeat-x;
+}
+
+/* Pagination - Style 3 & 4 */
+div.pagination.s3,
+div.pagination.s4 {
+	padding-top: 17px;
+	background: url('../img/branding/bg-horizontalline-light.gif') top left repeat-x;
+}
+
+/* Pagination - Style 2 & 4 */
+div.pagination.s2,
+div.pagination.s4 {
+	background-image: url('../img/branding/bg-horizontalline-dark.gif');
+}
+
+/* Input With Submit */
+form.input-submit {
+	margin: 0;
+	padding: 0;
+}
+form.input-submit input {
+	padding: 1px 10px 1px 1px;
+	border: 1px solid #CCC;
+}
+form.input-submit button {
+	width: 38px;
+	height: 35px;
+	border: none;
+	outline: none;
+	overflow: hidden;
+	cursor: pointer;
+	position: relative;
+	left: -18px;
+	top: 13px;
+	background: none;
+}
+form.input-submit button.search {
+	width: 105px;
+	height: 41px;
+	border: none;
+	outline: none;
+	overflow: hidden;
+	cursor: pointer;
+	position: relative;
+	left: -18px;
+	top: 19px;
+	background: none;
+}
+
+/* Portal */
+#vm-portal h1 {
+	margin: 0;
+}
+#vm-portal div.vm-portal-panel {
+	background:url(../img/components/vm-portal/bg-portal-panel.jpg) 0 0 no-repeat;
+	width: 920px;
+	height: 353px;
+	font-size: 1.167em; /* 14px */
+	line-height: 1.2em;
+}
+#vm-portal div.vm-portal-panel div {
+	float: left;
+}
+#vm-portal div.vm-portal-panel .vm-portal-raising {
+	padding: 152px 0 0 45px;
+	width: 250px;
+	margin-right: 146px;
+}
+#vm-portal div.vm-portal-panel .vm-portal-raising p {
+	width: 165px;
+	letter-spacing: -1px;
+	margin: 0 0 3px 0;
+	color: #333;
+}
+#vm-portal div.vm-portal-panel .vm-portal-donating {
+	padding: 89px 0 0 0;
+	width: 220px;
+}
+#vm-portal div.vm-portal-panel .vm-portal-donating label {
+    height: 15px;
+    display: block;
+    margin-bottom: -10px;
+    text-align:left;
+}
+#vm-portal div.vm-portal-panel .vm-portal-donating p {
+	width: 207px;
+	letter-spacing: -1px;
+	margin: 0;
+	color: #333;
+}
+#vm-portal div.vm-portal-panel .vm-portal-donating form {
+	width: 230px;
+}
+#vm-portal div.vm-portal-panel .vm-portal-donating form p {
+	width: auto;
+	margin: 0;
+	letter-spacing: normal;
+}
+#vm-portal div.vm-portal-panel .vm-portal-donating #sponser-input {
+	width: 152px;
+}
+#vm-portal div.vm-portal-panel .vm-portal-donating #charity-input {
+	width: 137px;
+}
+#vm-portal div.vm-portal-panel .vm-portal-donating #sponser-input,
+#vm-portal div.vm-portal-panel .vm-portal-donating #charity-input {
+	border: 1px solid #CCCCCC;
+	padding: 2px 10px 2px 5px;
+	position: relative;
+	top: -24px;
+	font-size: 0.857em; /* 12px */
+	color: #666;
+}
+#vm-portal div.vm-portal-panel .vm-portal-donating #sponser-submit,
+#vm-portal div.vm-portal-panel .vm-portal-donating #charity-submit {
+	background: none;
+	cursor: pointer;
+	overflow: hidden;
+	position: relative;
+	padding: 0;
+	border: none;
+	height: 51px;
+	width: 51px;
+}
+#vm-portal div.vm-portal-panel .vm-portal-donating #sponser-submit {
+	left: -20px;
+}
+#vm-portal div.vm-portal-panel .vm-portal-donating #charity-submit {
+	left: /*-20px;*/-25px; /* updated for charity homepage by pravin on date 19/11/08 */
+	top:20px; /* updated for charity homepage by pravin on date 19/11/08 */
+}
+#vm-portal div.vm-portal-panel .vm-portal-donating .search-charity {
+	position: relative;
+	top: -15px;
+}
+#vm-portal div.vm-portal-panel .vm-portal-donating .search-charity a {
+	font-size: /*0.714em; /* 10px */ 0.8em; /* updated by pravin on date 01/12/08 */
+	font-weight: normal;
+	color: #000;
+	position: relative;
+	top: -20px;
+	padding-left: 8px;
+}
+#vm-portal div.vm-portal-panel .vm-portal-registering {
+	padding: 105px 0 0 26px;
+	width: 218px;
+}
+#vm-portal div.vm-portal-panel .vm-portal-registering p {
+	width: 186px;
+	letter-spacing: -1px;
+	margin: 0 0 10px 0;
+	color: #333;
+}
+
+/* How It Works */
+#vm-how-works {
+	width: 570px;
+	margin-bottom: 30px;
+}
+#vm-how-works .vm-how-works-block.col1 {
+	float: left;
+}
+#vm-how-works .vm-how-works-block.col2 {
+	float: right;
+}
+
+/* How It Works - Block */
+.vm-how-works-block {
+	width: 279px;
+}
+.vm-how-works-block h3 {
+	margin: 0;
+}
+
+/* Supporters */
+#vm-our-supporters {
+	width:598px;
+}
+#vm-our-supporters h2 {
+	margin-bottom: 0;
+}
+
+/* Sponsorship Sub Nav Tabs */
+#vm-sponsortabs {
+	list-style: none;
+	padding: 0 0 2px 8px;
+	background: url('../img/components/vm-sponsortabs/bg-sponsortabs.gif') bottom left no-repeat;
+}
+#vm-sponsortabs li {
+	float: left;
+}
+#vm-sponsortabs li a,
+#vm-sponsortabs li span {
+	display: block;
+	height: 36px;
+	text-indent: -9999px;
+	overflow: hidden;
+	background: url('../img/components/vm-sponsortabs/spr-sponsortabs.gif') 0 0 no-repeat;
+	cursor: default;
+}
+#vm-sponsortabs li a {
+	cursor: pointer;
+}
+#vm-sponsortabs li.sponsordetails a,
+#vm-sponsortabs li.sponsordetails span {
+	width: 157px;
+	background-position: -157px 0;
+}
+#vm-sponsortabs li.sponsordetails a.current,
+#vm-sponsortabs li.sponsordetails a.current:hover {
+	background-position: 0 -36px;
+	cursor:auto;
+}
+#vm-sponsortabs li.sponsordetails a,
+#vm-sponsortabs li.sponsordetails a:hover {
+	background-position: 0 -72px;
+}
+#vm-sponsortabs li.signin a,
+#vm-sponsortabs li.signin span {
+	width: 76px;
+	background-position: -157px 0;
+}
+#vm-sponsortabs li.signin a.current,
+#vm-sponsortabs li.signin a.current:hover {
+	background-position: -157px -36px;
+	cursor:auto;
+}
+#vm-sponsortabs li.signin a,
+#vm-sponsortabs li.signin a:hover {
+	background-position: -157px -72px;
+}
+#vm-sponsortabs li.yourdetails a,
+#vm-sponsortabs li.yourdetails span {
+	width: 116px;
+	background-position: -233px 0;
+}
+#vm-sponsortabs li.yourdetails a.current,
+#vm-sponsortabs li.yourdetails a.current:hover {
+	background-position: -233px -36px;
+	cursor:auto;
+}
+#vm-sponsortabs li.yourdetails a,
+#vm-sponsortabs li.yourdetails a:hover {
+	background-position: -233px -72px;
+
+}
+#vm-sponsortabs li.payment a,
+#vm-sponsortabs li.payment span {
+	width: 88px;
+	background-position: -233px 0;
+}
+#vm-sponsortabs li.payment a.current,
+#vm-sponsortabs li.payment a.current:hover { /*changes done by pravin 14/11/08 */
+	background-position: -233px -36px;
+	cursor:auto;
+}
+#vm-sponsortabs li.payment a,
+#vm-sponsortabs li.payment a:hover { /*changes done by pravin 14/11/08 */
+	width: 88px;
+	background-position: -233px -72px;
+}
+#vm-sponsortabs li.giftaid a,
+#vm-sponsortabs li.giftaid span {
+	width: 88px;
+	background-position: -321px 0;
+}
+#vm-sponsortabs li.giftaid a.current,
+#vm-sponsortabs li.giftaid a.current:hover {/*changes done by pravin 14/11/08 */
+	background-position: -321px -36px;
+	cursor:auto;
+}
+#vm-sponsortabs li.giftaid a,
+#vm-sponsortabs li.giftaid a:hover {/*changes done by pravin 14/11/08 */
+	background-position: -321px -72px;
+}
+#vm-sponsortabs li.confirmation a,
+#vm-sponsortabs li.confirmation span {
+	width: 119px;
+	background-position: -409px 0;
+}
+#vm-sponsortabs li.confirmation a.current,
+#vm-sponsortabs li.confirmation a.current:hover {/*changes done by pravin 14/11/08 */
+	background-position: -409px -36px;
+	cursor:auto;
+}
+#vm-sponsortabs li.confirmation a,
+#vm-sponsortabs li.confirmation a:hover {/*changes done by pravin 14/11/08 */
+	background-position: -409px -72px;
+
+}
+
+
+/*created by pravin */
+
+/* Sponsorship Sub Nav Tabs */
+#vm-mydetails-sponsortabs {
+	list-style: none;
+	padding: 0 0 2px 8px;
+	background: url('../img/components/vm-sponsortabs/bg-sponsortabs.gif') bottom left no-repeat;
+}
+#vm-mydetails-sponsortabs li {
+	float: left;
+}
+#vm-mydetails-sponsortabs li a,
+#vm-mydetails-sponsortabs li span {
+	display: block;
+	height: 36px;
+	text-indent: -9999px;
+	overflow: hidden;
+	background: url('../img/components/vm-sponsortabs/mydetails-sponsortabs.gif') 0 0 no-repeat;
+	cursor: default;
+}
+#vm-mydetails-sponsortabs li a {
+	cursor: pointer;
+}
+#vm-mydetails-sponsortabs li.mydetails a,
+#vm-mydetails-sponsortabs li.mydetails span {
+	width: 115px;
+	background-position: -157px 0;
+}
+#vm-mydetails-sponsortabs li.mydetails a.current,
+#vm-mydetails-sponsortabs li.mydetails a.current:hover {
+	background-position: 0 -36px;
+	cursor:auto;
+}
+#vm-mydetails-sponsortabs li.mydetails a,
+#vm-mydetails-sponsortabs li.mydetails a:hover {
+	background-position: 0 -72px;
+}
+#vm-mydetails-sponsortabs li.password a,
+#vm-mydetails-sponsortabs li.password span {
+	width: 88px;
+	background-position: -115px 0;
+}
+#vm-mydetails-sponsortabs li.password a.current,
+#vm-mydetails-sponsortabs li.password a.current:hover {
+	background-position: -115px -36px;
+	cursor:auto;
+}
+#vm-mydetails-sponsortabs li.password a,
+#vm-mydetails-sponsortabs li.password a:hover {
+	background-position: -115px -72px;
+}
+
+
+/*end here*/
+
+
+
+
+/* Donations Calculator */
+#vm-donationcalc {
+	width: 300px;
+	background: url('../img/components/vm-donation-calculator/bg-outer-top.jpg') top left repeat-x;
+}
+#vm-donationcalc div {
+	background: url('../img/components/vm-donation-calculator/bg-outer-top-left.jpg') top left no-repeat;
+}
+#vm-donationcalc div div {
+	background: url('../img/components/vm-donation-calculator/bg-outer-top-right.jpg') top right no-repeat;
+}
+#vm-donationcalc div div div {
+	padding-top: 15px;
+	background: url('../img/components/vm-donation-calculator/bg-outer-bottom.jpg') bottom left repeat-x;
+}
+#vm-donationcalc div div div div {
+	padding-top: 0;
+	background: url('../img/components/vm-donation-calculator/bg-outer-bottom-left.jpg') bottom left no-repeat;
+}
+#vm-donationcalc div div div div div {
+	padding-bottom: 15px;
+	background: url('../img/components/vm-donation-calculator/bg-outer-bottom-right.jpg') bottom right no-repeat;
+}
+#vm-donationcalc div div div div div div {
+	padding-bottom: 0;
+	background: url('../img/components/vm-donation-calculator/bg-outer-left.jpg') top left repeat-y;
+}
+#vm-donationcalc div div div div div div div {
+	margin-left: 4px;
+	background: url('../img/components/vm-donation-calculator/bg-outer-right.jpg') top right repeat-y;
+}
+#vm-donationcalc .inner {
+	margin: 0 8px 0 0;
+	padding: 6px 17px 12px;
+	background: url('../img/components/vm-donation-calculator/bg-inner.jpg') top left repeat-x #26739A;
+	min-height: 150px;
+	font-size: 1.083em; /* 13px */
+	color: #FFF;
+}
+#vm-donationcalc .inner h2 {
+	margin: 0 0 17px;
+	width: 226px;
+	height: 53px;
+	text-indent: -9999px;
+	overflow: hidden;
+	background: url('../img/components/vm-donation-calculator/imr-title.png') top left no-repeat;
+}
+#vm-donationcalc .inner div {
+	margin: 17px 0 0;
+	background: url('../img/components/vm-donation-calculator/bg-inner-top.jpg') top left repeat-x;
+}
+#vm-donationcalc .inner div div {
+	margin: 0;
+	background: url('../img/components/vm-donation-calculator/bg-inner-top-left.jpg') top left no-repeat;
+}
+#vm-donationcalc .inner div div div {
+	background: url('../img/components/vm-donation-calculator/bg-inner-top-right.jpg') top right no-repeat;
+}
+#vm-donationcalc .inner div div div div {
+	padding-top: 12px;
+	background: url('../img/components/vm-donation-calculator/bg-inner-bottom.jpg') bottom left repeat-x;
+}
+#vm-donationcalc .inner div div div div div {
+	padding-top: 0;
+	background: url('../img/components/vm-donation-calculator/bg-inner-bottom-left.jpg') bottom left no-repeat;
+}
+#vm-donationcalc .inner div div div div div div {
+	background: url('../img/components/vm-donation-calculator/bg-inner-bottom-right.jpg') bottom right no-repeat;
+	padding-bottom: 12px;
+}
+#vm-donationcalc .inner div div div div div div div {
+	background: url('../img/components/vm-donation-calculator/bg-inner-left.jpg') top left repeat-y;
+	padding-bottom: 0;
+}
+#vm-donationcalc .inner div div div div div div div div {
+	background: url('../img/components/vm-donation-calculator/bg-inner-right.jpg') top right repeat-y;
+}
+#vm-donationcalc .inner .calc {
+	margin: 0 3px;
+	background: #FFF;
+	padding: 2px 14px;
+	color: #000;
+}
+#vm-donationcalc .inner .calc div {
+	background: none;
+}
+#vm-donationcalc .calc h3 {
+	width: 203px;
+	height: 14px;
+	text-indent: -9999px;
+	margin-top: 0;
+	background: url('../img/components/vm-donation-calculator/imr-donation-calc.gif') top left no-repeat;
+}
+#vm-donationcalc .calc .donate {
+	margin: 12px 0 0;
+	padding: 0;
+	font-weight: bold;
+}
+#vm-donationcalc .calc .donate img {
+	display: block;
+	margin-bottom: 5px;
+}
+#vm-donationcalc .calc .donate input.amount {
+	width: 6.154em; /* 80px */
+	max-width: 200px;
+	padding: 0 3px;
+	font-weight: bold;
+}
+#vm-donationcalc .calc .donate input.submit {
+	vertical-align: bottom;
+}
+#vm-donationcalc .calc .receive {
+	margin: 12px 0 0;
+	padding: 0;
+}
+#vm-donationcalc .calc .receive .amount {
+	font-size: 3.33em; /* 40px */
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+	font-weight: bold;
+	letter-spacing: -1px;
+	padding-left: 3px;
+}
+#vm-donationcalc .calc .receive a {
+	display: block;
+	height: 1%;
+}
+
+/* Donation Calculator - Narrow Version */
+#vm-donationcalc.narrow {
+	width: 215px;
+}
+#vm-donationcalc.narrow .inner h2 {
+	width: 165px;
+	height: 40px;
+	background: url('../img/components/vm-donation-calculator/imr-title-narrow.png') top left no-repeat;
+}
+#vm-donationcalc.narrow .inner {
+	padding: 6px 14px 12px;
+}
+#vm-donationcalc.narrow .inner .calc {
+	padding: 2px 8px;
+}
+#vm-donationcalc.narrow .calc .donate input.amount {
+	width: 120px;
+	margin-bottom: 7px;
+}
+#vm-donationcalc.narrow .calc .receive .amount {
+	font-size: 1.923em; /* 25px */
+	margin: 2px 0;
+}
+
+/* Search Results List*/
+#vm-search-results {
+	padding:0;
+	list-style-type:none;
+}
+#vm-search-results li{
+	background:url('../img/branding/bg-horizontalline-light.gif') repeat-x left bottom;
+	position:relative;
+	width:675px;
+	padding-bottom:20px;
+	margin-bottom:10px;
+}
+
+#vm-search-results li div.img-float {
+	float:left;
+}
+#vm-search-results li span.dropshadow{
+	margin-right:22px;
+}
+#vm-search-results li .search-res-content {
+	width:410px;
+	float:left;
+}
+#vm-search-results li h2 {
+	margin:0;
+	font-size:1.417em; /*17px/12px*/
+}
+#vm-search-results li h2 a{
+	color:#c11d15;
+	text-decoration:underline;
+}
+#vm-search-results li dl {
+	margin:0;
+}
+#vm-search-results li dt {
+	float:left;
+	clear:left;
+	margin:2px 4px 0 0;
+}
+#vm-search-results li dd {
+	float:left;
+	margin-top:2px;
+}
+#vm-search-results li dd a{
+	text-decoration:underline;
+}
+#vm-search-results li a.sponsor img {
+	position:absolute;
+	bottom:15px;
+	right:0;
+}
+form.search-res-filters {
+	margin:0;
+}
+form.search-res-filters p,
+form.search-res-filters fieldset{
+	float:left;
+	margin:0 4px 0 0;
+}
+
+
+/* Fundraiser Info Panel*/
+#vm-fundraiser-info {
+	width:205px;
+	padding-bottom: 15px;
+	background:url('../img/branding/bg-horizontalline-light.gif') bottom left repeat-x;
+}
+
+#vm-fundraiser-info h2{
+	font-size:1.333em; /*16px/12px*/
+	color:#c11d15;
+	padding-left:5px;
+}
+
+#vm-fundraiser-info dl{
+	padding-left:5px;
+}
+
+/* Sponsor Details Form*/
+form#vm-sponsor-info {
+	padding-bottom:20px;
+	background:url('../img/branding/bg-horizontalline-light.gif') bottom left repeat-x;
+}
+form#vm-sponsor-info label,
+form#vm-sponsor-info div.pw-strength p{
+	width:200px;
+	text-align:right;
+	display:block;
+	float:left;
+	font-weight:bold;
+	margin-top:0;
+}
+form#vm-sponsor-info input{
+	float:left;
+}
+form#vm-sponsor-info input.submit{
+	float:right;
+	margin:0 20px 0 0;
+}
+form#vm-sponsor-info input.dob{
+	/*width:39px; /* commented by pravin to close the whisible defect 9304 */
+	margin-right:5px;
+}
+form#vm-sponsor-info input.email{
+	width:242px;
+}
+form#vm-sponsor-info p.pw-info{
+	padding-left:200px;
+	width:286px;
+	font-size:0.83em; /*10px/12px*/
+}
+form#vm-sponsor-info div.pw-strength img{
+margin:3px 0 0 5px;
+}
+
+/* Fundraiser Home */
+h3.blue-chevrons {
+	background:url('../img/components/vm-create-one-organised/img-h3-bg.gif') 0 0 no-repeat;
+	padding:10px 0 0 52px;
+	height:40px;
+	font-size:1.417em; /*17px/12px*/
+	font-weight:bold;
+	}
+p.blue-chevrons {
+	background:url('../img/components/vm-create-one-organised/img-h3-bg.gif') 0 0 no-repeat;
+	padding:10px 0 0 52px;
+	height:40px;
+	}
+#vm-create-page-one-organised div{
+	float:left;
+	width:315px;
+}
+
+#vm-create-page-one-organised div.imagery{
+	float:right;
+	width:176px;
+}
+
+#vm-create-page-one-other p {
+	width:240px;
+}
+
+#vm-create-page-one-other .other-event {
+	background:url('../img/branding/bg-horizontalline-light.gif') repeat-x left bottom;
+	padding-bottom:15px;
+	margin-bottom:10px;
+}
+#vm-create-page-one-other .other-event.last {
+	background:none;
+}
+#vm-create-page-one-other div.other-event-left{
+	float:left;
+}
+#vm-create-page-one-other div.other-event-left img {
+	float:none;
+}
+#vm-create-page-one-other img{
+	float:right;
+}
+
+/* Fundraiser Step 2 */
+#vm-create-page-two-matching table.event-search-results tbody,
+#vm-create-page-two-matching table.event-search-results tr td{
+	border:0;
+	padding:4px;
+}
+
+#vm-create-page-two-matching table.event-search-results {
+	margin-top:0;
+	border:0;
+	width:100%;
+}
+
+#vm-create-page-two-matching p {
+	margin-bottom:15px;
+}
+
+
+/* #vm-fund-home-details */
+#vm-fund-home-details {
+	font-size:1.08em; /* 13px */
+}
+
+#vm-fund-home-details .intro{
+	font-weight:bold;
+	display:block;
+}
+
+#vm-fund-home-details .page-links p{
+	width:181px;
+	display:block;
+	padding-left:10px;
+	margin:0;
+}
+#vm-fund-home-details .page-links p.underline {
+	background:url('../img/branding/bg-horizontalline-light.gif') repeat-x left bottom;
+	padding-bottom:15px;
+	margin-bottom:10px;
+}
+#vm-fund-home-details .page-links a.right{
+	float:right;
+	display:block;
+}
+
+/* #vm-fund-home-charity */
+#vm-fund-home-charity h2{
+	font-size: 2em; /*24px*/
+	background: url('../img/branding/bg-horizontalline-dark.gif') repeat-x left bottom;
+	padding-bottom: 10px;
+}
+#vm-fund-home-charity p.lead {
+	float:right;
+	width:260px;
+}
+
+/* Totaliser */
+#vm-totaliser {
+	width: 215px;
+	background: url('../img/components/vm-totaliser/bg-background-repeat.png') top left repeat-y;
+}
+#vm-totaliser div {
+	background: url('../img/components/vm-totaliser/bg-top.png') top left no-repeat;
+}
+#vm-totaliser div div {
+	background: url('../img/components/vm-totaliser/bg-bottom.png') bottom left no-repeat;
+}
+#vm-totaliser div div div.content {
+	background: none;
+	min-height: 325px;
+	padding: 55px 25px 45px;
+}
+#vm-totaliser #vm-totaliser-thermometer,
+#vm-totaliser #vm-totaliser-thermometer-overlay {
+	width: 35px;
+	height: 274px;
+	overflow: hidden;
+}
+#vm-totaliser #vm-totaliser-thermometer {
+	position: relative;
+	float: left;
+	background: url('../img/components/vm-totaliser/bg-thermometer.png') top left no-repeat;
+	margin-bottom: 15px;
+}
+#vm-totaliser #vm-totaliser-thermometer-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: url('../img/components/vm-totaliser/overlay-thermometer.png') top left no-repeat;
+	z-index: 100;
+}
+#vm-totaliser #vm-totaliser-thermometer-wrapper {
+	width: 35px;
+	height: 240px;
+	position: absolute;
+	bottom: 26px;
+	z-index: 90;
+	background: none;
+}
+#vm-totaliser #vm-totaliser-thermometer-total {
+	position: absolute;
+	bottom: 0;
+	left: 5px;
+	height: 50%;
+	width: 35px;
+	background: url('../img/components/vm-totaliser/bg-thermometer-total.png') top left no-repeat;
+}
+#vm-totaliser .total,
+#vm-totaliser dl {
+	float: right;
+	width: 120px;
+}
+#vm-totaliser .total {
+	background: none;
+	font-size: 2.167em; /* 26px */
+	font-weight: bold;
+	margin-bottom: 10px;
+	color: #C00;
+}
+#vm-totaliser .total h3 {
+	margin: 0;
+	font-size: 0.5em; /* 13px */
+}
+#vm-totaliser dl dd {
+	font-weight: bold;
+	color: #C00;
+	margin-bottom: 0.833em; /* 10px */
+}
+#vm-totaliser .sponsor {
+	display: block;
+	width: 167px;
+	height: 52px;
+	clear: both;
+}
+#vm-totaliser .donate {
+	display: block;
+	width: 189px;
+	height: 46px;
+	clear: both;
+	position: relative;
+	left: -11px;
+}
+
+/* Countdown */
+#vm-countdown {
+	background: url('../img/components/vm-countdown/bg-repeat.png') top left repeat-x;
+	float: left;
+	margin:10px 0 20px;
+}
+#vm-countdown div {
+	background: url('../img/components/vm-countdown/bg-left.png') top left no-repeat;
+}
+#vm-countdown div div {
+	background: url('../img/components/vm-countdown/bg-right.png') top right no-repeat;
+}
+#vm-countdown .content {
+	height: 82px;
+	min-width: 80px;
+	text-align: center;
+	line-height: 90px;
+	padding: 0 53px;
+}
+#vm-countdown .content strong {
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+	font-size: 3.33em; /* 40px */
+	font-weight: bold;
+	padding-right: 24px;
+	padding-left: 7px;
+	letter-spacing: -1px;
+}
+
+/* Tooltips / Help */
+a.tooltip img {
+	vertical-align: middle;
+}
+div.tooltip {
+	margin-top: 1em;
+}
+div.tooltip.js {
+	position: absolute;
+	z-index: 9999;
+	margin: 0;
+}
+div.tooltip.js div.header {
+	height: 32px;
+	width: 280px;
+	background: url('../img/components/vm-tooltip/bg-top.png') top left no-repeat;
+}
+div.tooltip.js div.content {
+	padding: 0 20px;
+	width: 240px;
+	color: #000;
+	background: url('../img/components/vm-tooltip/bg-repeat.png') top left;
+}
+div.tooltip.js div.footer {
+	height: 20px;
+	width: 280px;
+	background: url('../img/components/vm-tooltip/bg-bottom.png') bottom left no-repeat;
+}
+div.tooltip.js div.content strong {
+	color: #3498CB;
+}
+
+/* #vm-fund-home-charity */
+#vm-fund-home-charity h2,
+#vm-recent-sponsors h2{
+	font-size:2em; /*24px*/
+	background:url('../img/branding/bg-horizontalline-dark.gif') repeat-x left bottom;
+	padding-bottom:10px;
+}
+#vm-fund-home-charity p.lead {
+	float:right;
+	width:245px;
+}
+#vm-fund-home-charity .charity-reg-num {
+	float:right;
+	width:245px;
+	margin-top:5px;
+}
+
+#vm-fund-home-charity p.more-about-link {
+	margin-left:6px;
+}
+
+/* #vm-recent-sponsors*/
+#vm-recent-sponsors div.pagination {
+	margin-bottom:-37px;
+}
+#vm-recent-sponsors div.pagination div a.previous {
+	margin-right:5px;
+}#vm-recent-sponsors div.pagination div a.next {
+	margin-left:5px;
+}
+
+#vm-recent-sponsors ul {
+	padding:0;
+	list-style-type:none;
+}
+#vm-recent-sponsors ul li{
+	background:url('../img/branding/bg-horizontalline-light.gif') repeat-x left bottom;
+	padding-bottom:10px;
+}
+#vm-recent-sponsors p.sponsor-info {
+
+}
+#vm-recent-sponsors p.sponsor-info span{
+	float:right;
+	font-weight:bold;
+	color:#C11D15;
+}
+#vm-recent-sponsors p.sponsor-info span.sponsor-name{
+	float:left;
+	color:#000;
+}
+#vm-recent-sponsors p {
+	padding:0 5px;
+	color:#666;
+}
+#vm-recent-sponsors p span{
+	font-weight:bold;
+	color:#000;
+}
+
+/*brad changes*/
+.vm-widget .blog-post{
+	padding-bottom:10px;
+	margin-bottom:5px;
+	background:url('../img/branding/bg-horizontalline-light.gif') repeat-x left bottom;
+}
+
+.vm-widget h2{
+	font-size:2em; /*24px*/
+	background:url('../img/branding/bg-horizontalline-dark.gif') repeat-x left bottom;
+	padding-bottom:10px;
+	margin:0;
+}
+.vm-widget h3{
+	padding:0;
+	font-size:1.1em;
+	margin:0;
+}
+.vm-widget p.blog-post-details{
+	font-size:0.75em;/*9px*/
+	color:#666;
+	font-weight:bold;
+	margin:4px 0;
+}
+.vm-widget p.blog-post-details span{
+	color:#C11D15;
+}
+.vm-widget p {
+	font-size:0.916em;/*11px*/
+}
+.vm-widget p.blog-links {
+	font-size:0.909em;/*10px/11px = 0.909em*/
+	color:#333;
+}
+.vm-widget p.link-to-blog {
+	font-size:1em;
+}
+.vm-widget p a{
+	color:#333;
+}
+
+/* #vm-shout */
+#vm-shout{
+	background:url('../img/components/vm-shout/bg.gif') no-repeat left top;
+	width:261px;
+	height:181px;
+}
+
+/* gallery widget */
+.vm-widget.gallery p {
+	margin-left:10px;
+}
+
+#vm-share-links p{
+	font-weight:bold;
+	margin-left:10px;
+}
+
+#vm-share-links ul{
+	padding:0;
+	margin-left:10px;
+	list-style-type:none;
+	width:150px;
+}
+
+#vm-share-links ul li{
+	display:inline-block;
+	margin:0 10px 10px 0;
+}
+/*end brad changes*/
+
+/* Charity Total Donations */
+#vm-totaldonations {
+	font-size: 1.5em; /* 18px */
+}
+#vm-totaldonations span {
+	font-weight: bold;
+	color: #C00;
+	margin: 0 1px;
+	padding: 0 1px;
+	background: #E7E5E5;
+}
+
+/* Charities Header */
+#vm-charitiesheader {
+	padding-bottom: 12px;
+	background: url('../img/branding/bg-horizontalline-dark.gif') repeat-x left bottom;
+}
+#vm-charitiesheader img {
+	float: left;
+}
+#vm-charitiesheader #vm-totaldonations {
+	margin: 10px 20px 0 0;
+	float: right;
+}
+
+/* Category Sub Nav */
+#vm-categorynav {
+	width: 205px;
+	overflow: hidden;
+	background: url('../img/components/vm-categorynav/bg-repeat.png') top left repeat-y;
+}
+#vm-categorynav div {
+	background: url('../img/components/vm-categorynav/bg-top.png') top left no-repeat;
+}
+#vm-categorynav div div {
+	background: url('../img/components/vm-categorynav/bg-bottom.png') bottom left no-repeat;
+}
+#vm-categorynav .content {
+	background: none;
+}
+#vm-categorynav .content h2 {
+	margin-top: 0;
+	padding: 12px 20px 0;
+	font-size: 1.25em; /* 15px */
+	color: #FFF;
+}
+#vm-categorynav .content ul {
+	padding: 10px 20px 33px;
+	margin: 0;
+	list-style: none;
+}
+#vm-categorynav .content ul li,
+#vm-categorynav .content ul li a {
+	font-weight: bold;
+	color: #C00;
+}
+#vm-categorynav .content ul li {
+	margin-bottom: 0.25em; /* 3px */
+}
+#vm-categorynav .content ul li.current a {
+	color: #000;
+}
+#vm-categorynav .content ul li.current ul {
+	padding: 13px 0 18px 22px;
+	position: static;
+	height: auto;
+	visibility: visible;
+	left: 0;
+	top: 0;
+	margin: 0;
+	list-style: outside;
+	list-style-image: url('../img/components/vm-categorynav/img-bullet.gif');
+	font-size: 0.917em; /* 11px */
+}
+#vm-categorynav .content ul li.current ul a {
+	color: #3498CB;
+}
+#vm-categorynav .content ul li.current ul li.current,
+#vm-categorynav .content ul li.current ul li.current a {
+	color: #666;
+	list-style: none;
+}
+
+/* Charity Sub Nav Tabs */
+#vm-charitytabs {
+	list-style: none;
+	padding: 0 0 3px 15px;
+	background: url('../img/components/vm-charitytabs/bg-charitytabs.gif') bottom left no-repeat;
+}
+#vm-charitytabs li {
+	float: left;
+	margin: 0 1px 0 0;
+}
+#vm-charitytabs li a,
+#vm-charitytabs li span {
+	display: block;
+	height: 35px;
+	text-indent: -9999px;
+	overflow:hidden;
+	background: url('../img/components/vm-charitytabs/spr-charitytabs.gif') 0 0 no-repeat;
+}
+#vm-charitytabs li.find a,
+#vm-charitytabs li.find span {
+	width: 119px;
+	background-position: 0 0;
+}
+#vm-charitytabs li.find a,
+#vm-charitytabs li.find a:hover {
+	background-position: 0 -36px;
+}
+#vm-charitytabs li.find a.current,
+#vm-charitytabs li.find a.current:hover {
+	background-position: 0 -72px;
+}
+#vm-charitytabs li.registered a,
+#vm-charitytabs li.registered span {
+	width: 150px;
+	background-position: -120px 0;
+}
+#vm-charitytabs li.registered a,
+#vm-charitytabs li.registered a:hover {
+	background-position: -120px -36px;
+}
+#vm-charitytabs li.registered a.current,
+#vm-charitytabs li.registered a.current:hover {
+	background-position: -120px -72px;
+}
+#vm-charitytabs li.admin a,
+#vm-charitytabs li.admin span {
+	width: 171px;
+	background-position: -271px 0;
+}
+#vm-charitytabs li.admin a,
+#vm-charitytabs li.admin a:hover {
+	background-position: -271px -36px;
+}
+#vm-charitytabs li.admin a.current,
+#vm-charitytabs li.admin a.current:hover {
+	background-position: -271px -72px;
+}
+#vm-charitytabs li.details a,
+#vm-charitytabs li.details span {
+	width: 177px;
+	background-position: -443px 0;
+}
+#vm-charitytabs li.details a,
+#vm-charitytabs li.details a:hover {
+	background-position: -443px -36px;
+}
+#vm-charitytabs li.details a.current,
+#vm-charitytabs li.details a.current:hover {
+	background-position: -443px -72px;
+}
+#vm-charitytabs li.security a,
+#vm-charitytabs li.security span {
+	width: 79px;
+	background-position: -621px 0;
+}
+#vm-charitytabs li.security a,
+#vm-charitytabs li.security a:hover {
+	background-position: -621px -36px;
+}
+#vm-charitytabs li.security a.current,
+#vm-charitytabs li.security a.current:hover {
+	background-position: -621px -72px;
+}
+#vm-charitytabs li.finish a,
+#vm-charitytabs li.finish span {
+	width: 60px;
+	background-position: -701px 0;
+}
+#vm-charitytabs li.finish a,
+#vm-charitytabs li.finish a:hover {
+	background-position: -701px -36px;
+}
+#vm-charitytabs li.finish a.current,
+#vm-charitytabs li.finish a.current:hover {
+	background-position: -701px -72px;
+}
+
+/*vm-category-list*/
+#vm-category-list ul {
+	padding:0;
+	list-style-type:none;
+	width:450px;
+}
+
+#vm-category-list ul li{
+	background:url('../img/branding/btn-next.gif') 0 0 no-repeat;
+	padding:5px 0 0 30px;
+	height:25px;
+	font-weight:bold;
+	display:block;
+	float:left;
+	width:120px;
+}
+#vm-category-list ul li a {
+	color:#000000;
+}
+
+/*vm-content-columns*/
+#vm-content-columns {
+	width:450px;
+}
+#vm-content-columns p {
+	float:right;
+}
+#vm-content-columns div {
+	width:215px;
+}
+#vm-content-columns div p{
+	width:215px;
+	float:none;
+}
+#vm-content-columns div.col-1 {
+	float:left;
+	margin-right:20px;
+}
+#vm-content-columns div.col-2 {
+	float:right;
+}
+
+/*vm-sub-category-listing*/
+#vm-sub-category-listing {
+	width:455px;/*need to be replace 600px if required by dayanad*/
+}
+#vm-sub-category-listing h2{
+	background: url('../img/branding/bg-horizontalline-dark.gif') bottom left repeat-x;
+	padding-bottom:10px;
+}
+#vm-sub-category-listing h4{
+	background:url('../img/branding/btn-next.gif') 0 0 no-repeat;
+	font-size:1em;  /*added by pravin on date 12/11/08 for DON0080-browse-subcategory.html */
+	font-weight:bold;  /*added by pravin on date 12/11/08 for DON0080-browse-subcategory.html */
+	padding:5px 0 0 30px;
+	height:25px;
+	margin:0;
+}
+#vm-sub-category-listing ul{
+	padding:0;
+	list-style-type:none;
+}
+#vm-sub-category-listing ul li{
+	width:210px;/*need to be change as 250px if required*/
+	margin-right:15px;
+	float:left;
+	display:block;
+}
+#vm-sub-category-listing ul li p{
+	padding-left:5px;
+	margin-top:0;
+}
+
+/*vm-charity-info-panel*/
+#vm-charity-info-panel {
+	width:205px;
+}
+
+/*vm-content-donate-raise*/
+#vm-content-donate-raise {
+	width:455px;
+}
+#vm-content-donate-raise div {
+	padding:5px 0 0 0;
+}
+#vm-content-donate-raise div p{
+	float:left;
+	width:230px;
+	margin:0;
+}
+#vm-content-donate-raise div a{
+	float:right;
+}
+#vm-content-donate-raise div.donation{
+	background: url('../img/branding/bg-horizontalline-light.gif') bottom left repeat-x;
+	padding-bottom:20px;
+	margin-bottom:5px;
+}
+
+/* #vm-recent-sponsors / #vm-messages-of-support*/
+#vm-donating-fundraisers,
+#vm-messages-of-support {
+	width:455px;
+}
+#vm-donating-fundraisers div.pagination,
+#vm-messages-of-support div.pagination{
+	margin-bottom:-37px;
+}
+#vm-donating-fundraisers div.pagination div a.previous,
+#vm-messages-of-support div.pagination div a.previous {
+	margin-right:2px;
+}
+#vm-donating-fundraisers div.pagination div a.next,
+#vm-messages-of-support div.pagination div a.next {
+	margin-left:2px;
+}
+#vm-donating-fundraisers ul,
+#vm-messages-of-support ul {
+	padding:0;
+	list-style-type:none;
+}
+#vm-donating-fundraisers ul li,
+#vm-messages-of-support ul li{
+	background:url('../img/branding/bg-horizontalline-light.gif') repeat-x left bottom;
+	padding-bottom:10px;
+}
+
+#vm-donating-fundraisers h2,
+#vm-messages-of-support h2{
+	font-size:2em; /*24px*/
+	background:url('../img/branding/bg-horizontalline-dark.gif') repeat-x left bottom;
+	padding-bottom:14px;
+}
+#vm-donating-fundraisers p.sponsor-info,
+#vm-messages-of-support p.sponsor-info {
+	font-weight:bold;
+	color:#333;
+}
+#vm-donating-fundraisers p,
+#vm-messages-of-support p {
+	padding:0 5px;
+	color:#666;
+}
+#vm-donating-fundraisers p span,
+#vm-messages-of-support p span{
+	font-weight:bold;
+	color:#000;
+}
+
+#vm-messages-of-support a.post {
+	float:right;
+}
+
+/* Fundraiser Sub Nac Tabs */
+#vm-fundraisertabs {
+	list-style: none;
+	padding: 0 0 3px 7px;
+	background: url('../img/components/vm-fundraisertabs/bg-fundraisertabs.gif') bottom left no-repeat;
+}
+#vm-fundraisertabs li {
+	float: left;
+}
+#vm-fundraisertabs li a,
+#vm-fundraisertabs li span {
+	display: block;
+	height: 35px;
+	text-indent: -9999px;
+	background: url('../img/components/vm-fundraisertabs/spr-fundraisertabs.gif') 0 0 no-repeat;
+	margin-right: 1px;
+	overflow:hidden; /*added this element to fix tab bug by Dayanand Rahate 11/19/2008*/
+}
+#vm-fundraisertabs li.category a,
+#vm-fundraisertabs li.category span {
+	width: 89px;/*chage 86px to 89px by dayanand because image width is change - 11/11/2008*/
+}
+#vm-fundraisertabs li.category a,
+#vm-fundraisertabs li.category a:hover {
+	background-position: 0 -36px;
+}
+#vm-fundraisertabs li.category a.current,
+#vm-fundraisertabs li.category a.current:hover {
+	background-position: 0 -72px;
+}
+
+#vm-fundraisertabs li.event a,
+#vm-fundraisertabs li.event span {
+	width: 71px;/*change width from 66px to 71px;*/
+	background-position: -90px 0;/*change -87px to -90px 0;*/
+}
+#vm-fundraisertabs li.event a,
+#vm-fundraisertabs li.event a:hover {
+	background-position: -90px -36px;/*change -87px to -90px*/
+}
+#vm-fundraisertabs li.event a.current,
+#vm-fundraisertabs li.event a.current:hover {
+	background-position: -90px -72px;/*change by dayanand from -87px -72px to -90px -72px*/
+}
+
+#vm-fundraisertabs li.charity a,
+#vm-fundraisertabs li.charity span {
+	width: 84px;/*width change 73px to 84px;*/
+	background-position: -161px 0; /*change -154px to -161px*/
+}
+#vm-fundraisertabs li.charity a,
+#vm-fundraisertabs li.charity a:hover {
+	background-position: -161px -36px; /*change from -154px to -161px*/
+}
+#vm-fundraisertabs li.charity a.current,
+#vm-fundraisertabs li.charity a.current:hover {
+	background-position: -161px -72px;/*change from -154px to -161px*/
+}
+
+#vm-fundraisertabs li.owner a,
+#vm-fundraisertabs li.owner span {
+	width: 74px;/*change width 65px to 74px;*/
+	background-position: -245px 0;/*change position from -228px to -245px 0;*/
+}
+#vm-fundraisertabs li.owner a,
+#vm-fundraisertabs li.owner a:hover {
+	background-position: -245px -36px;/*-228px to -245px*/
+}
+#vm-fundraisertabs li.owner a.current,
+#vm-fundraisertabs li.owner a.current:hover {
+	background-position: -245px -72px; /*change -228px to -245px*/
+}
+
+#vm-fundraisertabs li.yourpage a,
+#vm-fundraisertabs li.yourpage span {
+	width: 99px;/*change width 87px to 99px;*/
+	background-position: -319px 0;/*change width -294px to -319px 0;*/
+}
+#vm-fundraisertabs li.yourpage a,
+#vm-fundraisertabs li.yourpage a:hover {
+	background-position: -319px -36px;/*change -294px to -319px;*/
+}
+#vm-fundraisertabs li.yourpage a.current,
+#vm-fundraisertabs li.yourpage a.current:hover {
+	background-position: -319px -72px;/*change -294px to -319px*/
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*#vm-add-widgets */
+#vm-add-widgets h3.blue-chevrons span,
+#vm-preview-of-page h3.blue-chevrons span{
+	font-size:0.70em; /*12px / 17px*/
+}
+#vm-add-widgets form {
+	background: url('../img/branding/bg-horizontalline-light.gif') bottom left repeat-x;
+	padding-bottom:10px;
+}
+
+/*#vm-preview-of-page*/
+#vm-preview-of-page {
+	background: url('../img/branding/bg-horizontalline-light.gif') bottom left repeat-x;
+	margin-bottom:1em;
+}
+#vm-preview-of-page h3 {
+	float:left;
+	margin-top:0;
+}
+#vm-preview-of-page a {
+	float:right;
+}
+
+/* Category Chosen */
+#vm-categorychosen h2 {
+	font-size: 1.167em; /* 14px */
+	color: #C00;
+}
+#vm-categorychosen p {
+	font-weight: bold;
+	color: #333;
+}
+
+/* Category Select */
+/*#vm-categoryselect {need to be remove if it not used
+	width: 280px;
+}*/
+
+#vm-categoryselect.cha0150 {/*added to fixed bug of cha0150 by pravin 11/11/2008*/
+	width: 660px;
+}
+
+
+#vm-categoryselect legend {
+	font-weight: normal;
+	padding: 0;
+}
+#vm-categoryselect.js legend {
+	display: block;
+	padding: 3px 0 10px 27px;
+	cursor: pointer;
+	background: url('../img/components/vm-categoryselect/bg-closed.gif') 0 0 no-repeat;
+}
+#vm-categoryselect.js legend.open {
+	background-image: url('../img/components/vm-categoryselect/bg-open.gif');
+}
+#vm-categoryselect ul {
+	padding: 0 0 0 10px;
+	list-style: none;
+}
+#vm-categoryselect ul li {
+	padding-bottom: 0.333em; /* 4px */
+	color: #333;
+}
+#vm-categoryselect.js ul {
+	padding-left: 25px;
+	list-style: none;
+	margin-top: 0;
+}
+#vm-categoryselect ul li label {
+	display: inline;
+	float: none;
+	text-align: left;
+	font-weight:normal;/*added by pravin*/
+}
+#vm-categoryselect .submit {
+	margin-top: 20px;
+}
+
+#vm-categoryselect form{
+	margin: 0px;
+}
+
+/*-----------------------------------------------------
+Page Specific
+-------------------------------------------------------*/
+
+/* [01] Home
+-------------------------------------------------------*/
+#home #vm-how-works,
+#home #vm-our-supporters {
+	padding-left: 20px;
+}
+
+
+/*Created by dayanand 03/11/2008 -------------------------------------------------*/
+
+.clearer{ /*common class*/
+clear:both;
+}
+
+#vm-register-cha0010{
+background:transparent url(../img/branding/bg-horizontalline-light.gif) repeat-x scroll left bottom;
+padding-bottom:20px;
+}
+
+
+#vm-register-cha0010 .event-search-results tbody,
+table.event-search-results tr td{
+	border:0;
+	padding:4px;
+}
+
+#vm-register-cha0010 table.event-search-results {
+	margin-top:0;
+	border:0;
+	width:100%;
+}
+
+#vm-register-cha0010 table.event-search-results td.floatRight{
+text-align:right;
+}
+
+#vm-register-cha0010 table.event-search-results td.checkbox{
+width:2px;
+}
+
+#vm-register-cha0010 table.event-search-results td label{ /* created on date 13/11/08 for CHA0020 By Pravin */
+font-weight:normal;
+text-align:left;
+}
+
+#contentWithBullate{
+background:transparent url(../img/components/vm-create-one-organised/img-h3-bg.gif) no-repeat scroll 0 0;
+padding:10px 0 0 52px;
+height:40px;
+}
+
+#cha0080 label{
+width:230px;
+}
+
+p.doubleline {/*08/11/2008 edited by dayanand*/
+margin-bottom:1.5em;
+}
+
+.removeFloat{
+float:none;
+}
+
+/*#cha0080 p span.note{
+font-size:0.85em;
+padding-left:12em;
+}*/
+
+#ch0030 label{
+width:200px;
+}
+
+#cha0040 label{
+width:250px;
+}
+
+#cha0050 label{
+width:165px;
+}
+
+#cha0050 .doubleline{
+height:25px;
+}
+
+#cha0040 dl.dl-alt dt{
+margin:0 5px 5px 0;
+}
+
+#cha0070 label{
+width:250px;
+}
+
+#cha0090 form#vm-sponsor-info p label{
+width:300px;
+}
+
+#cha0090 form#vm-sponsor-info p input{/*added by dayanand on 14/11/2008 */
+float:none;
+}
+
+#cha0090 form#vm-sponsor-info p.pw-info {
+font-size:0.83em;
+padding-left:305px;
+width:286px;
+}
+
+#cha0090 form#vm-sponsor-info label, #cha0090 form#vm-sponsor-info div.pw-strength p {/* edited by pravin */
+display:block;
+float:left;
+font-weight:bold;
+margin-top:0;
+text-align:right;
+width:300px;
+}
+
+form.input-submit button.findcharity {
+background:transparent none repeat scroll 0 0;
+border:medium none;
+cursor:pointer;
+height:41px;
+left:-18px;
+outline-color:-moz-use-text-color;
+outline-style:none;
+outline-width:medium;
+overflow:hidden;
+position:relative;
+top:19px;
+width:150px;
+}
+
+
+.fur0010-marginbtm{ /* created by pravin 08/11/08 */
+margin-bottom:0px;
+}
+
+.fur0030 table label{ /* created by pravin 08/11/08 */
+width:auto !important;
+font-weight:normal !important;
+}
+
+#fur0020 #content-primary #vm-create-page-two-matching input {
+width:auto;
+}
+
+#fur0020 #content-primary label{
+width:100px;
+font-weight:bold;
+}
+#fur0020 #content-primary label, #fur0020 #content-primary input, #fur0020 #content-primary select{
+float:left;
+}
+
+#fur0020 #content-primary input.date{
+width:auto;
+margin-right:0.2em;
+}
+
+#fur0020 #content-primary input{
+width:170px;
+}
+#fur0020 #content-primary select{
+width:172px;
+}
+
+#fur0020 #content-primary p span{
+padding-left:20px;
+}
+
+
+#fur0020 #furbanner1{
+width:167px;
+height:80px;
+margin-top:150px;
+background:url('../img/misc/furbanner1.gif') no-repeat;
+padding:70px 20px 0 20px;
+}
+
+#fur0020 #furbanner1 input{
+float:left;
+}
+
+#fur0020 #furbanner1 label {
+display:block;
+float:left;
+margin:0 0.416em 0 0;
+text-align:left;
+width:140px;
+}
+
+#fur0101 #content #content-primary{
+padding-right:20px;
+width:430px;
+background:url('../img/misc/verticalDivider.gif') no-repeat right;
+}
+
+#fur0040 .template-d #content-primary{
+width:440px;
+padding-right:10px;
+}
+
+#fur0040 .template-d #content-sidebar{
+width:440px;
+padding-left:10px;
+}
+
+.addFloat{
+float:left!important;/*10/11/2008 added !important by dayanand */
+}
+
+legend{
+margin-left:0.5em;
+}
+
+#error{
+background:#EFD3D2;
+border:2px solid #D89392;
+padding:5px;
+}
+
+form#vm-sponsor-info label.radioLabel{/*08/11/2008 created by dayanand*/
+float:none;
+width:auto;
+display:inline;
+font-weight:normal;
+}
+
+.radioLabel{/*08/11/2008 created by dayanand*/
+float:none;
+width:auto;
+display:inline;
+font-weight:normal;
+}
+
+/*form#vm-sponsor-info label, commented to fix donate pages label alignment 10/11/2008 by daya*/form#vm-sponsor-info label.radioLabelHorizontal{/*08/11/2008 created by dayanand*/
+width:650px;
+display:inline;
+font-weight:normal;
+text-align:left;
+}
+
+form#vm-sponsor-info label.radioLabelgiftaid{ /*form#vm-sponsor-info label, commented to fix donate pages label alignment 14/11/2008 by Pravin*/
+width:auto;
+font-weight:normal;
+display:inline
+}
+
+
+p.label-above-input .radioLabel{/*08/11/2008 created by dayanand*/
+font-weight:normal;
+}
+
+#fur210 label{/*08/11/2008 created by dayanand*/
+width:230px;
+}
+
+div.iconPlaceholder{
+padding:5px 0;
+}
+
+img.icon {
+margin-bottom:-11px;
+position:relative;
+top:-4px;
+vertical-align:middle;
+padding-bottom:5px;
+}
+
+#cha0050 .charity-search {/*edited for popup by dayanand 11/11/2008*/
+margin-top:-50px;
+}
+
+#floatBottom{ /*created css for popup by dayanand 11/11/2008*/
+bottom:-40px; /*changed by pravin 13/11/08 */
+display:block;
+left:-10px;
+position:relative;
+width:103%;
+}
+
+#floatBottom p{ /*created css for popup by dayanand 11/11/2008*/
+width:10em;
+float:left;
+
+}
+
+
+/*css created to make equal with of both pannel on the page of FUR0010 as per customer comments - created by Dayanand 10/11/2008 [start]*/
+#content-primary.fur0010 #vm-create-page-one-organised div {
+float:left;
+width:270px;
+}
+#content-primary.fur0010 #vm-create-page-one-organised div.imagery {
+float:right;
+width:176px;
+}
+#content-secondary.fur0010 #vm-create-page-one-other p{
+width:315px;
+}
+/*css created to make equal with of both pannel on the page of FUR0010 as per customer comments - created by Dayanand 10/11/2008 [End]*/
+
+/*css for fua0010 created by dayanand on 13/11/2008 [Start]*/
+#content-primary.fua0010 #vm-registration-summary h5{
+background:transparent url(../img/branding/bg-horizontalline-light.gif) repeat-x scroll left bottom;
+padding-bottom:14px;
+}
+
+#content-primary.fua0010 #vm-registration-summary label{
+width:174px;
+}
+
+#content-primary.fua0010 #vm-registration-summary #eventDetails span.columnTwo{
+width:220px;
+display:block;
+float:left;
+}
+
+#content-primary.fua0010 #vm-registration-summary #notificationPreferences span{
+width:400px;
+display:block;
+float:left;
+}
+
+#content-primary.fua0010 #vm-registration-summary #notificationPreferences textarea{
+width:90%;
+}
+
+/*css for fua0010 created by dayanand on 13/11/2008 [End]*/
+
+/*css for fua0020 created by dayanand on 13/11/2008 [Start]*/
+#content-primary.fua0020 #vm-registration-summary p span.columnOne{
+width:450px;
+display:block;
+float:left;
+margin-right:5em;
+}
+
+#content-primary.fua0020 #vm-registration-summary p span.columnOne input{
+width:100%;
+text-align:left;
+}
+
+#content-primary.fua0020 #vm-registration-summary p.totalColumnalignment{
+text-align:right;
+}
+
+#content-primary.fua0020 #vm-registration-summary p.totalColumnalignment span{
+width:5em;
+padding:0 8.3em 0 2.5em;
+}
+
+#content-primary.fua0020 #vm-registration-summary p span input{
+text-align:right;
+width:5em;
+}
+
+/*css for fua0020 created by dayanand on 13/11/2008 [End]*/
+
+/*css for por0010 created by dayanand on 13/11/2008 [Start]*/
+
+#content-primary.por0010 #vm-registration-summary .column-1 h3{
+text-align:left;
+}
+
+#content-primary.por0010 #vm-registration-summary .column-1{
+text-align:center;
+}
+
+#content-primary.por0010 #vm-registration-summary .column-2 h3{
+text-align:left;
+}
+
+#content-primary.por0010 #vm-registration-summary .column-2{
+text-align:center;
+}
+
+#content-primary.por0010 #vm-registration-summary .pannel{
+display:block;
+width:323px;
+background:url('../img/components/vm-pannel/bg.gif') repeat-y;
+float:left;
+}
+
+#content-primary.por0010 #vm-registration-summary .pannel .top{
+display:inline;
+width:323px;
+height:13px;
+float:left;
+background:url('../img/components/vm-pannel/top.gif') repeat-y;
+}
+
+#content-primary.por0010 #vm-registration-summary .pannel .middle{
+display:inline;
+width:299px;
+float:left;
+margin:0 6px;
+padding:0 5px;
+border-left:1px solid #fff;
+border-right:1px solid #fff;
+border-bottom:0;
+border-top:0;
+background:url('../img/components/vm-pannel/innerbg.jpg') repeat-x top;
+text-align:left;
+}
+
+#content-primary.por0010 #vm-registration-summary .pannel .middle div.imageDataPlaceholder{
+display:block;
+width:24.5em;
+}
+
+#content-primary.por0010 #vm-registration-summary .pannel .middle div.imageDataPlaceholder img{
+float:left;
+margin-right:1em;
+}
+
+
+#content-primary.por0010 #vm-registration-summary .pannel .middle div.imageDataPlaceholder p.label-above-input label{
+margin-bottom:0;
+}
+
+#content-primary.por0010 #vm-registration-summary .pannel .middle div.nav{
+display:block;
+width:24.5em;
+}
+
+#content-primary.por0010 #vm-registration-summary .pannel .middle div.nav img{
+margin-bottom:0.5em;
+}
+
+#content-primary.por0010 #vm-registration-summary .pannel .middle div.nav img.marginRight{
+margin-right:2.3em;
+}
+
+#content-primary.por0010 #vm-registration-summary .pannel .middle p span.date, #content-primary.por0010 #vm-registration-summary .pannel .middle p span{
+float:left;
+display:inline;
+margin-bottom:0.5em;
+}
+
+#content-primary.por0010 #vm-registration-summary .pannel .middle p span.date{
+margin-right:1em;
+width:5em;
+}
+
+#vm-registration-summary .pannel .middle p span{
+width:18em;
+}
+
+#content-primary.por0010 #vm-registration-summary .pannel .footer{
+display:inline;
+width:323px;
+height:10px;
+float:left;
+background:url('../img/components/vm-pannel/footer.gif') repeat-y;
+}
+
+.divider{
+background:url('../img/misc/verticalDivider.gif') no-repeat right;
+}
+
+/*css for por0010 created by dayanand on 13/11/2008 [End]*/
+
+
+/*----------------------Created by Pravin-------------------*/
+
+#vm-registration-summary h2,
+#vm-messages-of-support h2{
+	font-size:2em; /*24px*/
+	background:url('../img/branding/bg-horizontalline-dark.gif') repeat-x left bottom;
+	padding-bottom:14px;
+}
+
+#vm-registration-summary .column-1{
+width:350px;
+margin-right:0.5em;
+float:left;
+}
+
+#vm-registration-summary .column-2{
+width:300px;
+float:left;
+}
+
+#vm-registration-summary .column-2 ul{
+list-style-type:none;
+float:left;
+margin-top:0.5em;
+padding:0;
+}
+
+#vm-registration-summary .column-2 ul li{
+
+float:left;
+
+}
+
+#vm-registration-summary .column-2 ul li li{
+clear:both;
+}
+
+.rightalign{ /* class created by pravin for cha0110-regsummary.html second column alignment 12/11/08 */
+margin-right:2.3em;
+}
+.rightalign-othrs{ /* class created by pravin for cha0110-regsummary.html second column alignment 12/11/08 */
+width:150px;
+margin-right:3em;
+}
+
+.paytype ul{
+list-style-type:none;
+margin:0;
+padding:0;
+}
+
+.paytype ul li{
+line-height:1.5em;
+}
+
+.addlabel{
+height:45px;
+}
+.cha130 label{
+width:250px;
+}
+
+
+.cha130 .secpart{
+width:265px;
+float:left;
+
+}
+
+
+#vm-registration-forms h2,
+#vm-messages-of-support h2
+{
+	font-size:2em; /*24px*/
+	background:url('../img/branding/bg-horizontalline-dark.gif') repeat-x left bottom;
+	padding-bottom:14px;
+}
+
+#vm-registration-forms .column-1{
+width:300px;
+margin-right:0.5em;
+float:left;
+}
+
+#vm-registration-forms .column-2{
+width:350px;
+float:left;
+}
+
+#vm-registration-forms .column-2 ul{
+list-style-type:none;
+float:left;
+margin-top:0.5em;
+padding:0;
+}
+
+#vm-registration-forms .column-2 ul li{
+
+float:left;
+
+}
+
+#vm-registration-forms .column-2 ul li li{
+clear:both;
+}
+
+#vm-choose-category h2,
+#vm-messages-of-support h2{
+	font-size:2em; /*24px*/
+	background:url('../img/branding/bg-horizontalline-dark.gif') repeat-x left bottom;
+	padding-bottom:14px;
+}
+
+#vm-choose-category .column-1{
+width:430px;
+margin-right:2em;
+float:left;
+}
+
+#vm-choose-category .column-2{
+width:200px;
+float:left;
+}
+
+
+
+#vm-categoryselect .col1{
+float:left;
+margin-right:10px;
+width:170px; /*added by pravin on date 17/11/08 */
+}
+
+
+#vm-categoryselect.cha0150 ul li input.towLineText{/*created for CHA0150.html for category by pravin 11/11/2008*/
+float: left;
+}
+
+#vm-categoryselect.cha0150 ul li label.towLineText{/*created for CHA0150.html for category by pravin 11/11/2008*/
+display: block;
+width: 10em;
+float: left;
+margin-bottom:0.3em;
+}
+
+#vm-categoryselect .col2{
+float:left;
+margin-right:10px;
+width:170px; /*added by pravin on date 17/11/08 */
+}
+
+#vm-categoryselect .col3{
+float:left;
+width:170px; /*added by pravin on date 17/11/08 */
+}
+
+#vm-categoryselect .btnpos{
+float:right;
+}
+
+
+
+.uploadbtn{
+margin-left:22.5em;
+margin-top:0.5em;
+}
+
+.cha180 label{
+width:320px;
+padding-right:0.5em;
+}
+
+.cha180 .paraheight{
+height:27px;
+}
+
+form#vm-signin-info {
+	padding-bottom:5px;
+	background:url('../img/branding/bg-horizontalline-light.gif') bottom left repeat-x;
+}
+
+
+form#vm-signin-info.don0140 span{
+width:21em;
+display:block;
+float:left;
+}
+
+form#vm-signin-info .column-1 {
+    float:left;
+    width:315px !important;
+	padding-right:10px;
+	background:url('../img/misc/verticalDivider.gif') top right no-repeat;
+}
+
+form#vm-signin-info .column-2 {
+    float:right;
+	width:325px;
+}
+
+.search-res-content .charity-res-cont{ /*08/11/2008 created by pravin */
+width:335px;
+}
+
+#charitycategory{
+width:570px;
+text-align:center;
+}
+
+#charitycategory ul{
+float:left;
+list-style-type:none;
+
+}
+#charitycategory ul li{
+
+text-align:center;
+padding:0 0 0.5em 0;
+}
+
+.browsecatbanner{ /* new class created for DON0080-browse-subcategory.html on date 12/11/08 */
+
+background:transparent url(../img/misc/ban-charitypaperimg.gif) no-repeat scroll 0 0;
+height:161px;
+padding:55px 25px 0;
+width:216px;
+}
+
+.bluelinkonban{
+padding-left:35px;
+}
+
+.save-details{ /* new class created by pravin for DONO210-donationconfirmation.html by pravin on date 19/11/08 */
+background:url(../img/misc/wanttosavebanner.png) no-repeat scroll 0 0;
+height:160px;
+widows:615px;
+padding:60px 115px 10px 35px;
+}
+
+.save-details .buttonreg{ /* new class created by pravin for DONO210-donationconfirmation.html by pravin on date 19/11/08 */
+position:absolute;
+margin-left:350px;
+margin-top:-20px;
+
+}
+
+.needhelpban{ /* new class created by pravin for DONO210-donationconfirmation.html by pravin on date 19/11/08 */
+background:url(../img/misc/needhelp.png) no-repeat scroll 0 0;
+font-size:1em;
+width:219px;
+height:168px;
+padding:40px 10px 10px 25px;
+}
+
+.needhelpban a{ /* new class created by pravin for DONO210-donationconfirmation.html by pravin on date 19/11/08 */
+
+font-size:1em;
+}
+
+/* css for FUR0010 Created by Pravin on date 21/11/08 */
+
+.template-d #fundraiser-column1{
+width:900px;
+}
+
+.template-d #fundraiser-column2{
+float:right;
+width:450px;
+}
+
+.organisedevent{
+background:url(../img/misc/organised_event.jpg) no-repeat scroll 0 0;
+float:left;
+width:237px;
+height:392px;
+
+}
+.organisedevent p{
+padding:150px 10px 10px 35px;
+width:195px;
+}
+
+.organisedevent span{
+margin-left:20px;
+position:absolute;
+}
+
+.personalchallenge{
+background:url(../img/misc/personal_challenge.jpg) no-repeat scroll 0 0;
+float:left;
+width:222px;
+height:383px;
+}
+
+.personalchallenge p{
+padding:150px 10px 10px 20px;
+width:195px;
+}
+
+.personalchallenge span{
+position:absolute;
+margin-left:12px;
+}
+
+
+.celebration{
+background:url(../img/misc/celebration.jpg) no-repeat scroll 0 0;
+float:left;
+width:226px;
+height:383px;
+}
+
+.celebration p{
+padding:150px 10px 10px 20px;
+width:185px;
+
+}
+
+.celebration span{
+position:absolute;
+margin-left:12px;
+}
+
+
+.inmemoryof{
+background:url(../img/misc/in_memory_of.jpg) no-repeat scroll 0 0;
+margin-left:684px;
+width:230px;
+height:376px;
+}
+
+
+.inmemoryof p{
+padding:160px 10px 10px 20px;
+width:185px;
+}
+
+.inmemoryof span{
+position:absolute;
+margin-left:10px;
+}
+
+/* css created by pravin on date 26/11/08 */
+
+.template-h #content-primary-paymentcards {
+	float: right;
+	width: 672px;
+}
+
+.template-h #content-primary-paymentcards .paymentcardscolumn-1 {
+
+	width: 511px;
+	float: left;
+}
+
+
+.template-h #content-primary-paymentcards h2{
+background:transparent url(../img/branding/bg-horizontalline-dark.gif) repeat-x scroll left bottom;
+font-size:2em;
+padding-bottom:14px;
+}
+
+.template-h  #content-primary-paymentcards .paymentcardscolumn-2 {
+
+	width: 160px;
+	float: right;
+}
+
+.template-h #content-primary-paymentcards .paymentcardscolumn-1,
+.template-h #content-primary-paymentcards .paymentcardscolumn-2 {
+	overflow: hidden;
+}
+
+.template-h #content-primary-paymentcards .paymentcardscolumn-1 label{
+width:250px;
+}
+
+
+.template-h #content-primary-paymentcards .paymentcardscolumn-1 .labelHeight{
+height:10px;
+}
+
+/* css for DON150 - By pravin 26/11/08 */
+
+.template-h #content-primary .donpaymentcardscol-1 {
+
+	width: 475px;
+	float: left;
+}
+
+.template-h #content-primary .donpaymentcardscol-2 {
+
+	width: 170px;
+	float: right;
+}
+
+.template-h #content-primary .donpaymentcardscol-1,
+.template-h #content-primary .donpaymentcardscol-2{
+overflow:hidden;
+}
+
+.backbuttonp{
+ margin-left:21em;
+ }
+/* css ends here */
+
+#creditcardpanel{
+background:url(../img/misc/img_main_cards.gif) no-repeat scroll 0 0;
+width:159px;
+height:256px;
+float:left;
+list-style-image:none;
+list-style-position:outside;
+list-style-type:none;
+overflow:hidden;
+padding:0;
+}
+#creditcardpanel ul{
+float:left;
+list-style-image:none;
+list-style-position:outside;
+list-style-type:none;
+overflow:hidden;
+padding:0;
+}
+
+#creditcardpanel ul li.verifiedbyvisa{
+float:left;
+margin-left:10px;
+margin-top:5px;
+
+}
+
+#creditcardpanel ul li.mastercardsecure{
+margin-left:10px;
+margin-top:5px;
+
+}
+
+#creditcardpanel ul li{
+float:left;
+display:inline-block;
+}
+
+#creditcardpanel ul li.visa{
+margin-left:20px;
+margin-top:27px;
+}
+
+#creditcardpanel ul li.mastercard{
+margin-left:17px;
+margin-top:27px;
+}
+
+#creditcardpanel ul li.visaelectorn{
+margin-left:20px;
+margin-top:5px;
+}
+
+#creditcardpanel ul li.maestro{
+margin-left:15px;
+margin-top:5px;
+}
+
+#creditcardpanel ul li.americanexpress{
+margin-left:15px;
+margin-top:5px;
+}
+#creditcardpanel ul li.solo{
+margin-left:26px;
+margin-top:8px;
+}
+
+/*################################################ CSS FOR ITERATION - 2 STARTS HERE #############################################################*/
+
+.floatLeft{
+float:left;
+}
+
+.floatRight{
+float:right;
+}
+
+
+.vm-charity-registration h2 {
+background:transparent url(../img/branding/bg-horizontalline-dark.gif) repeat-x scroll left bottom;
+font-size:2em;
+padding-bottom:14px;
+}
+
+.vm-charity-registration label{
+    margin: 0 1.3em 0 0;
+	display:block;
+	width:200px;
+	text-align:right;
+	float:left;
+	margin-top:0;
+	font-weight:bold;
+}
+
+.vm-charity-registration .radioLabel {
+display:inline;
+vertical-align:3px;
+float:none;
+font-weight:normal;
+width:auto;
+}
+
+.vm-charity-registration .contblock-btmhorline {
+background:transparent url(../img/branding/bg-horizontalline-light.gif) repeat-x scroll left bottom;
+margin-bottom:10px;
+padding-bottom:20px;
+position:relative;
+}
+
+.vm-charity-registration-details h2 {
+background:transparent url(../img/branding/bg-horizontalline-dark.gif) repeat-x scroll left bottom;
+font-size:2em;
+padding-bottom:14px;
+}
+
+.vm-charity-registration-details label{
+    margin: 0 1.3em 0 0;
+	display:block;
+	width:325px;/*240px;*/
+	text-align:right;
+	float:left;
+	margin-top:0;
+	font-weight:bold;
+}
+
+.vm-charity-registration-details .webpageaddlabel{
+width:125px;
+}
+
+.vm-charity-registration-details .radioLabel {
+display:inline;
+vertical-align:3px;
+float:none;
+font-weight:normal;
+width:auto;
+}
+
+.contblock-btmhorline {
+background:transparent url(../img/branding/bg-horizontalline-light.gif) repeat-x scroll left bottom;
+margin-top:10px;
+margin-bottom:20px;
+padding-bottom:30px;
+position:relative;
+}
+
+#vm-createeventtabs {
+	list-style: none;
+	padding: 0 0 4px 8px;
+	background: url('../img/components/vm-charityeventtabs/bg-charityeventtabs.gif') bottom left no-repeat;
+}
+#vm-createeventtabs li {
+	float: left;
+}
+#vm-createeventtabs li a,
+#vm-createeventtabs li span {
+	display: block;
+	height: 33px;
+	text-indent: -9999px;
+	overflow: hidden;
+	background: url('../img/components/vm-charityeventtabs/charty-event-tabs.gif') 0 0 no-repeat;
+	cursor: default;
+}
+#vm-createeventtabs li a {
+	cursor: pointer;
+}
+#vm-createeventtabs li.intro a,
+#vm-createeventtabs li.intro span {
+	width: 77px;
+	background-position: -157px 0;
+}
+#vm-createeventtabs li.intro a.current,
+#vm-createeventtabs li.intro a.current:hover {
+	background-position: 0 -36px;
+	cursor:auto;
+}
+#vm-createeventtabs li.intro a,
+#vm-createeventtabs li.intro a:hover {
+	background-position: 0 -72px;
+}
+#vm-createeventtabs li.basics a,
+#vm-createeventtabs li.basics span {
+	width: 78px;
+	background-position: -77px 0;
+}
+#vm-createeventtabs li.basics a.current,
+#vm-createeventtabs li.basics a.current:hover {
+	background-position: -78px -36px;
+	cursor:auto;
+}
+#vm-createeventtabs li.basics a,
+#vm-createeventtabs li.basics a:hover {
+	background-position: -77px -72px;
+}
+#vm-createeventtabs li.eventdetails a,
+#vm-createeventtabs li.eventdetails span {
+	width: 127px;
+	background-position: -155px 0;
+}
+#vm-createeventtabs li.eventdetails a.current,
+#vm-createeventtabs li.eventdetails a.current:hover {
+	background-position: -156px -36px;
+	cursor:auto;
+}
+#vm-createeventtabs li.eventdetails a,
+#vm-createeventtabs li.eventdetails a:hover {
+	background-position: -154px -72px;
+
+}
+#vm-createeventtabs li.feecollection a,
+#vm-createeventtabs li.feecollection span {
+	width: 164px;
+	background-position: -283px 0;
+}
+#vm-createeventtabs li.feecollection a.current,
+#vm-createeventtabs li.feecollection a.current:hover {
+	background-position: -282px -36px;
+	cursor:auto;
+}
+#vm-createeventtabs li.feecollection a,
+#vm-createeventtabs li.feecollection a:hover {
+	width: 165px;
+	background-position: -282px -72px;
+}
+
+#vm-createeventtabs li.users a,
+#vm-createeventtabs li.users span {
+	width: 78px;
+	background-position: -447px 0;
+}
+#vm-createeventtabs li.users a.current,
+#vm-createeventtabs li.users a.current:hover {
+	background-position: -447px -36px;
+	cursor:auto;
+}
+#vm-createeventtabs li.users a,
+#vm-createeventtabs li.users a:hover {
+	width: 78px;
+	background-position: -361px -72px;
+}
+
+.createevent{
+float:left;
+width:655px;
+}
+
+.createevent label{
+display:block;
+float:left;
+font-weight:bold;
+margin:0 1em 0 0;
+text-align:right;
+width:150px;
+}
+
+.createevent label.createeventLabelwidth{
+width:190px;
+
+}
+
+.createevent selectbox{
+width:270px;
+margin:0 0.3em 0 0;
+}
+
+
+.createevent .radioLabel {
+display:inline;
+vertical-align:3px;
+float:none;
+font-weight:normal;
+width:auto;
+}
+
+.smalltxt{
+font-weight:normal;
+}
+
+
+ul.eventtype {
+	list-style: none;
+	margin: 0;
+	padding:0;
+
+}
+ul.eventtype li {
+	display: block;
+}
+
+.createevent .eventtypecol1{
+width:275px;
+margin-bottom:15px;
+float:left;
+}
+
+.createevent .eventtypecol2{
+float:left;
+width:150px;
+}
+
+.setupevent{
+    padding: 0 0 4px 8px;
+	background: url('../img/components/vm-charityeventtabs/bg-charityeventtabs.gif') bottom left no-repeat;
+	}
+
+.linktext{
+padding-left:38em;/*change to 45px to 38px */
+}
+.setupevent label{
+float:left;
+font-weight:bold;
+width:100px;
+}
+
+.setupevent select {
+float:left;
+width:170px;
+}
+
+.setupevent input {
+float:left;
+width:166px;
+}
+
+#vm-create-page-two-matching table.setupevent-search-results {
+border:0 none;
+margin-top:0;
+width:100%;/*changed 68% to 100%*/
+}
+
+#vm-create-page-two-matching table.setupevent-search-results tbody, #vm-create-page-two-matching table.regulardon-search-results tbody, #vm-create-page-two-matching table.setupevent-search-results tr td, #vm-create-page-two-matching table.regulardon-search-results tr td {
+border:0 none;
+padding:4px;
+}
+
+.findeventbanner {
+background:transparent url(../img/misc/furbanner1.gif) no-repeat scroll 0 0;
+height:80px;
+float:right;
+margin-top:-350px;
+padding:70px 20px 0;
+width:175px;
+}
+
+.eventsearch-btmline {
+background:transparent url(../img/branding/bg-horizontalline-light.gif) repeat-x scroll left bottom;
+margin-bottom:15px;
+margin-top:20px;
+}
+
+.eventdetails label{
+display:block;
+float:left;
+font-weight:bold;
+margin:0 1em 0 0;
+text-align:right;
+width:165px;
+}
+
+.uploadbtnforevent{
+margin-left:28em;
+margin-top:0.5em;
+}
+
+.centerbtmlink{
+float:left;
+margin-left:25em;
+position:absolute;
+}
+
+.exitbtmlink{
+position:absolute;
+margin-left:67em;
+float:right;
+}
+
+.rightbtmlink{
+float:right;
+margin-left:55em;
+position:absolute;
+}
+
+/*created by dayanand 12/11/2008 [Start]*/
+.removeImgAlign{
+vertical-align:middle;
+}
+
+.multipleElementContainer{
+display:block;
+float:left;
+margin-bottom:8px;
+}
+
+.totalContainer{
+display:block;
+float:left;
+padding-left:539px;
+}
+
+.marginTop{
+margin-top:20px;
+}
+
+.feedetailscol1{
+float:left;
+width:150px;
+}
+
+.feedetailscol2{
+float:left;
+width:295px;
+}
+
+.feedetailscol3{
+float:left;
+width:125px;
+
+}
+
+.feedetailscol4{
+margin-top:53px;
+float:left;
+width:70px;
+}
+
+.rightaligntext{
+text-align:right;
+padding-right:5px;
+}
+
+p.Columntotal {
+float:right;
+padding-right:95px;
+}
+
+p.Columntotal span {
+padding:0 9em 0 2.5em;
+width:5em;
+}
+
+.donatenowban{
+background:transparent url(../img/misc/donatenowban.jpg) no-repeat scroll 0 0;
+width:213px;
+height:292px;
+}
+
+.donatenowban .firstpara{
+padding:55px 15px 10px 22px;
+}
+
+.donatenowban .buttonlinks{
+
+padding:10px 0px 0px 15px;
+}
+
+.donatenowban .buttonseclinks{
+
+padding:0px 0px 0px 15px;
+}
+/*created by dayanand 12/11/2008 [End]*/
+
+#content-primary .headtext{
+background:transparent url(../img/branding/bg-horizontalline-dark.gif) repeat-x scroll left bottom;
+font-size:2em;
+padding-bottom:14px;
+}
+
+
+
+.selectboxwidth{
+width:200px;
+margin-right:10px;
+}
+
+
+#vm-create-event-homepage table.setupevent-search-results {
+border:0 none;
+margin-top:0;
+width:100%;
+}
+
+#vm-create-event-homepage table.setupevent-search-results tbody, #vm-create-event-homepage table.setupevent-search-results tr td {
+border:0 none;
+padding:4px;
+}
+
+.vm-create-event-homepagepanel .pannel {
+background:transparent url(../img/components/vm-pannel/bg.gif) repeat-y scroll 0 0;
+display:block;
+float:left;
+width:323px;
+}
+
+.vm-create-event-homepagepanel .pannel .top {
+background:transparent url(../img/components/vm-pannel/top.gif) repeat-y scroll 0 0;
+display:inline;
+float:left;
+height:13px;
+width:323px;
+}
+
+.vm-create-event-homepagepanel .pannel .middle {
+background:transparent url(../img/components/vm-pannel/innerbg.jpg) repeat-x scroll center top;
+border-color:-moz-use-text-color #FFFFFF;
+border-color:#FFFFFF;/*added by dayanand on 23/12/08*/
+border-style:none solid;
+border-width:0 1px;
+display:inline;
+float:left;
+margin:0 6px;
+padding:0 5px;
+text-align:left;
+width:299px;
+}
+
+.vm-create-event-homepagepanel .pannel .middle div.imageDataPlaceholder {
+display:block;
+width:24.5em;
+}
+
+.vm-create-event-homepagepanel .pannel .footer {
+background:transparent url(../img/components/vm-pannel/footer.gif) repeat-y scroll 0 0;
+display:inline;
+float:left;
+height:10px;
+width:323px;
+}
+
+.vm-create-event-homepagepanel .pannel .middle div.imageDataPlaceholder img {
+float:left;
+margin-right:1em;
+}
+
+#vm-create-event-homepage60-col1{
+width:450px;
+margin-left:25px;
+float:left;
+}
+
+#vm-create-event-homepage60-col1 label{
+text-align:left;
+width:80px;
+}
+#vm-create-event-homepage60-col1 .galleryimg{
+float:left;
+margin-bottom:15px;
+margin-right:15px;
+}
+
+#vm-create-event-homepage60-col1 .headtext{
+background:transparent url(../img/branding/bg-horizontalline-dark.gif) repeat-x scroll left bottom;
+font-size:2em;
+padding-bottom:14px;
+}
+
+#vm-create-event-homepage60-col2{
+width:200px;
+float:right;
+}
+
+#vm-create-event-homepage60-col2 .headtext{
+background:transparent url(../img/branding/bg-horizontalline-dark.gif) repeat-x scroll left bottom;
+font-size:2em;
+padding-bottom:14px;
+}
+
+.homepagerightimg{
+background:transparent url(../img/misc/img606.gif) repeat-x scroll left bottom;
+width:208px;
+height:215px;
+}
+
+.homepagerightimg p{
+padding:173px 0 0 48px;
+}
+
+.confirmfeepayment label{
+display:block;
+float:left;
+font-weight:bold;
+margin:0 0.416em 0 0;
+text-align:left;
+width:150px;
+}
+
+
+.confirmfeenormlable label{
+display:block;
+float:left;
+font-weight:normal;
+margin:0 0.3em 0 0;
+text-align:left;
+width:130px;
+}
+
+.marginRight{
+margin-right:15px;
+}
+h3.subhead-btmhorline{
+background:transparent url(../img/branding/bg-horizontalline-light.gif) repeat-x scroll left bottom;
+margin-top:45px;
+padding-bottom:10px;
+position:relative;
+}
+
+.mon0010 label{
+font-weight:normal;
+text-align:left;
+width:auto;
+}
+
+.mon0010 table{
+width:100%;
+}
+
+table.regulardon-search-results {
+border:0 none;
+margin-top:0;
+width:100%;
+}
+
+table.regulardon-search-results th{
+padding:0.416em 0em 0.416em 0.416em;
+}
+
+table.regulardon-search-results input[type="radio"]{
+margin-left:0.1em;
+}
+
+
+form#mon0020-paymentdetails .radioLabel{
+display:inline;
+float:none;
+font-weight:normal;
+vertical-align:3px;
+width:auto;
+}
+
+form#mon0020-paymentdetails label
+{
+	width:175px;
+	text-align:right;
+	display:block;
+	float:left;
+	font-weight:bold;
+	margin-top:0;
+}
+
+
+.rednotetxt{
+color:#FF0000;
+}
+
+.spanreadonlytxt{
+display:block;
+padding-top:6px;
+float:left;
+width:325px;
+}
+
+.labelnowidth {
+	margin: 0 0.416em 0 0; /* 5px */
+	display:block;
+	width:auto;
+	text-align:right;
+	float:left;
+	margin-top:0;
+	font-weight:bold;
+}
+
+/*css created for operation screen on 3/01/09*/
+.highlightText{
+color:#3498CB;
+font-weight:bold;
+}
+
+.checkboxText{
+display:block;
+float:left;
+width:650px;
+}
+
+.spacer{
+height:20px;
+display:block;
+}
+
+
+#nav-site-operation {
+	margin: 0 0 15px 0;
+	padding: 0;
+	height: 45px;
+	width: auto;
+	float: right;
+	list-style: none;
+	overflow: hidden;
+}
+
+#nav-site-operation li {
+	float: left;
+	margin-top:1px;
+
+}
+
+#nav-site-operation li.userInfo{
+	width: 250px;
+	color:#fff;
+	font-size:15px;
+	text-align:right;
+	font-weight:bold;
+	padding-right:10px;
+	margin-right:10px;
+	background: url('../img/branding/operation-userinfo-bg.gif') bottom right no-repeat;
+}
+
+#nav-site-operation li.exitAccount{
+	margin-right:15px;
+	margin-top:12px;
+}
+
+.vm-create-event-homepage table.setupevent-search-results {
+border:0 none;
+margin-top:0;
+width:100%;
+}
+.setupevent-search-results td input[type="radio"]{
+margin-top:0.20em;
+}
+.vm-create-event-homepage table.setupevent-search-results tbody, .vm-create-event-homepage table.setupevent-search-results tr td {
+border:0 none;
+padding:4px;
+}
+
+#site-controls.operations a {/* added for top navigation */
+	text-indent: -9999px;
+	background: url('../img/branding/spr-controls-operations.png') 0 0 no-repeat;
+	overflow:hidden;/*added to remove streching outline by dayanand*/
+}
+
+#site-controls.operations .signout {/* added for top navigation */
+	width: 75px;
+	background-position: -120px 0;
+	margin-left: 0;
+}
+
+.errorMessage{
+color:#CD0404;
+}
+
+.vm-charity-registration-details h3 {
+background:transparent url(../img/branding/bg-horizontalline-light.gif) repeat-x scroll left bottom;
+font-size:1.5em;
+padding-bottom:14px;
+}
+
+.txtfieldaddlable{
+height:75px;
+}
+
+.addresstxtfield input{
+margin:3px 0px;
+}
+
+/* css for operations screens ends here by dayanand */
+
+.labelheight{
+height:25px;
+}
+
+.datefieldstyle{
+display:inline;
+margin-top:-20px;
+position:absolute;
+}
+
+.ops0010 label{
+vertical-align:3px;
+width:200px;
+}
+
+div.continue-button{
+margin-top:215px;
+text-align:right;
+}
+
+.last-minheight{
+min-height:300px;
+}
+
+.vm-charity-registration-details label.removeBold{
+font-weight:normal;
+}
+
+label.removeBold{
+font-weight:normal;
+}
+
+.widgetsBox{
+width: 400px;
+float: left;
+}
+
+.widgetsBox p.single-line-inputs{
+margin-left:50px;
+}
+
+.widgetsBox h3, .widgetsBox p{
+margin:0;
+}
+
+.widgetsBox p{
+position:relative;
+top:-9px;
+}
+
+.pageOption{
+width: 500px;
+float: left;
+}
+
+.pageOption p.single-line-inputs{
+margin-left:50px;
+}
+
+.pageOption h3, .pageOption p{
+margin:0;
+}
+
+.pageOption p{
+position:relative;
+top:-3px;
+}
+
+.pageOption p a{
+margin-right:10px;
+}
+
+.addNewPage .pannel {
+background:transparent url(../img/components/vm-pannel/bgSmall.gif) repeat-y scroll 0 0;
+display:block;
+float:left;
+width:183px;
+height:255px;
+padding:15px;
+font-size:0.9em;
+margin-bottom:10px;
+}
+
+.addNewPage .pannel h1{
+color:#990000;
+font-size:1.6em;
+}
+
+.addNewPage .pannel h2{
+margin:5px 0;
+}
+
+.addNewPage .pannel p{
+margin:1em 0;/*1.5em changed to 1em */
+}
+
+#addNewPage.donatenowban p{
+margin:0.5em 0;
+}
+
+#addNewPage.donatenowban .firstpara{
+padding:50px 12px 0 18px;
+}
+
+#addNewPage.donatenowban .secondpara{
+padding:0 8px 0 18px;
+}
+
+#addNewPage.donatenowban a, #addNewPage.donatenowban a:link, #addNewPage.donatenowban a:visited,#addNewPage.donatenowban a:active,#addNewPage.donatenowban a:hover{
+font-weight:normal;
+color:black;
+}
+
+/*css for charity screen [end]*/
+
+
+/*Event payment tab */
+#vm-eventpaymenttabs {
+	list-style: none;
+	padding: 0 0 3px 7px;
+	background: url('../img/components/vm-eventpaymenttabs/bg-eventpaymenttabs.gif') bottom left no-repeat;
+}
+#vm-eventpaymenttabs li {
+	float: left;
+}
+#vm-eventpaymenttabs li a,
+#vm-eventpaymenttabs li span {
+	display: block;
+	height: 35px;
+	text-indent: -9999px;
+	background: url('../img/components/vm-eventpaymenttabs/payment-tab.gif') 0 0 no-repeat;
+	margin-right: 1px;
+	overflow:hidden; /*added this element to fix tab bug by Dayanand Rahate 11/19/2008*/
+}
+#vm-eventpaymenttabs li.event a,
+#vm-eventpaymenttabs li.event span {
+	width: 77px;/*chage 86px to 89px by dayanand because image width is change - 11/11/2008*/
+}
+#vm-eventpaymenttabs li.event a,
+#vm-eventpaymenttabs li.event a:hover {
+	background-position: 0 -69px;
+}
+#vm-eventpaymenttabs li.event a.current,
+#vm-eventpaymenttabs li.event a.current:hover {
+	background-position: 0 -72px;
+}
+
+#vm-eventpaymenttabs li.charity a,
+#vm-eventpaymenttabs li.charity span {
+	width: 91px;/*change width from 66px to 71px;*/
+	background-position: -90px 0;/*change -87px to -90px 0;*/
+}
+#vm-eventpaymenttabs li.charity a,
+#vm-eventpaymenttabs li.charity a:hover {
+	background-position: -78px -70px;/*change -87px to -90px*/
+}
+#vm-eventpaymenttabs li.charity a.current,
+#vm-eventpaymenttabs li.charity a.current:hover {
+	background-position: -90px -72px;/*change by dayanand from -87px -72px to -90px -72px*/
+}
+
+#vm-eventpaymenttabs li.register a,
+#vm-eventpaymenttabs li.register span {
+	width: 95px;/*width change 73px to 84px;*/
+	background-position: -78px -69px; /*change -154px to -161px*/
+}
+#vm-eventpaymenttabs li.register a,
+#vm-eventpaymenttabs li.register a:hover {
+	background-position: -169px -70px; /*change from -154px to -161px*/
+}
+#vm-eventpaymenttabs li.register a.current,
+#vm-eventpaymenttabs li.register a.current:hover {
+	background-position: -161px -72px;/*change from -154px to -161px*/
+}
+
+#vm-eventpaymenttabs li.payment a,
+#vm-eventpaymenttabs li.payment span {
+	width: 90px;/*change width 65px to 74px;*/
+	background-position: -245px 0;/*change position from -228px to -245px 0;*/
+}
+#vm-eventpaymenttabs li.payment a,
+#vm-eventpaymenttabs li.payment a:hover {
+	background-position: -264px -70px;/*-228px to -245px*/
+}
+#vm-eventpaymenttabs li.payment a.current,
+#vm-eventpaymenttabs li.payment a.current:hover {
+	background-position: -264px -34px; /*change -228px to -245px*/
+}
+
+#vm-eventpaymenttabs li.yourpage a,
+#vm-eventpaymenttabs li.yourpage span {
+	width: 99px;/*change width 87px to 99px;*/
+	background-position: -319px 0;/*change width -294px to -319px 0;*/
+}
+#vm-eventpaymenttabs li.yourpage a,
+#vm-eventpaymenttabs li.yourpage a:hover {
+	background-position: -353px 1px;/*change -294px to -319px;*/
+}
+#vm-eventpaymenttabs li.yourpage a.current,
+#vm-eventpaymenttabs li.yourpage a.current:hover {
+	background-position: -354px -34px;/*change -294px to -319px*/
+}
+
+.nofeelabel label{
+width:150px;
+margin-right:45px;
+text-align:left;
+font-weight:bold;
+}
+
+.exitbtmlink-sec{
+position:absolute;
+margin-left:46.5em;
+float:right;
+}
+
+.tdline-height{
+line-height:25px;
+}
+
+/*css created for security section [Start] */
+
+.vm-security-details {
+	padding-bottom:20px;
+	background:url('../img/branding/bg-horizontalline-light.gif') bottom left repeat-x;
+}
+
+.vm-security-details h2 {
+background:transparent url(../img/branding/bg-horizontalline-dark.gif) repeat-x scroll left bottom;
+font-size:2em;
+padding-bottom:14px;
+}
+
+.vm-security-details label{
+   	display:block;
+	width:185px;/*240px;*/
+	text-align:right;
+	margin-top:3px;
+	font-weight:bold;
+}
+
+.vm-security-details .nofloatlabel{
+	display:inline;
+	float:none;
+	font-weight:normal;
+	width:auto;
+}
+
+.vm-security-details .sec0070 span {
+display:block;
+float:left;
+width:21em;
+}
+
+.vm-security-details p.pw-info{
+	padding-left:190px;
+	width:286px;
+	font-size:0.83em; /*10px/12px*/
+}
+.vm-security-details div.pw-strength img{
+margin:5px 0 0 5px;
+}
+.vm-security-details div.pw-strength p{
+display:block;
+float:left;
+font-weight:bold;
+margin-top:0;
+text-align:right;
+width:186px;
+}
+
+.vm-passwordsecurity-details label{
+   	display:block;
+	width:185px;/*240px;*/
+	text-align:right;
+	margin-top:3px;
+	font-weight:bold;
+}
+
+.vm-passwordsecurity-details .nofloatlabel{
+	display:inline;
+	float:none;
+	font-weight:normal;
+	width:auto;
+}
+
+.vm-passwordsecurity-details .sec0070 span {
+display:block;
+float:left;
+width:21em;
+}
+.vm-passwordsecurity-details h2 {
+background:transparent url(../img/branding/bg-horizontalline-dark.gif) repeat-x scroll left bottom;
+font-size:2em;
+padding-bottom:14px;
+}
+.securitylabel label{
+display:block;
+float:left;
+font-weight:bold;
+margin:0 0.416em 0 0;
+text-align:right;
+width:140px;
+}
+
+form#vm-signin-info.sec0020 span{
+display:block;
+float:left;
+}
+
+form#password-security.sec0070 span{
+display:block;
+float:left;
+}
+
+.rightsecbtmlink {
+float:right;
+margin-left:34em;
+position:absolute;
+}
+/* css ends here for security screens [ENDS] */
+
+/* review comment for event screens */
+.ddmmyylabel{
+padding-left:22px;
+}
+
+.createevent input[type="checkbox"], .createevent input[type="radio"] {
+margin:0 0.25em 0 0;
+}
+
+.userdivblockforall{
+float: left;
+display: block;
+width: 105px;
+}
+
+.userdivblock{
+float: left;
+display: block;
+width: 155px;
+}
+
+.rightlinktwowrds {
+float:right;
+margin-left:61em;
+position:absolute;
+}
+/*review comment for event ends here */
+
+/* Fundraiser-Itration 2 Sub Nac Tabs [Start] */
+img.add {
+	margin-bottom:-11px;
+	position:relative;
+	top:-8px;
+	vertical-align:middle;
+}
+#vm-fundraiserNetworkTeamtabs{
+	list-style: none;
+	padding: 0 0 4px 7px;
+	background: url('../img/components/vm-fundraiserNetworkAndTeamtabs/bg-fundraiserNetworkAndTeamtabs.gif') bottom left no-repeat;
+}
+#vm-fundraiserNetworkTeamtabs li{
+	float: left;
+}
+#vm-fundraiserNetworkTeamtabs li a,
+#vm-fundraiserNetworkTeamtabs li span{
+	display: block;
+	height: 34px;
+	text-indent: -9999px;
+	background: url('../img/components/vm-fundraiserNetworkAndTeamtabs/spr-fundraiserNetworkAndTeamtabs.gif') 0 0 no-repeat;
+	margin-right: 1px;
+	overflow:hidden; /*added this element to fix tab bug by Dayanand Rahate 11/19/2008*/
+}
+#vm-fundraiserNetworkTeamtabs li.event a,
+#vm-fundraiserNetworkTeamtabs li.event span {
+	width: 73px;/*chage 86px to 89px by dayanand because image width is change - 11/11/2008*/
+}
+#vm-fundraiserNetworkTeamtabs li.event a,
+#vm-fundraiserNetworkTeamtabs li.event a:hover {
+	background-position: 0 -36px;
+}
+#vm-fundraiserNetworkTeamtabs li.event a.current,
+#vm-fundraiserNetworkTeamtabs li.event a.current:hover {
+	background-position: 0 -72px;
+}
+
+#vm-fundraiserNetworkTeamtabs li.charity a,
+#vm-fundraiserNetworkTeamtabs li.charity span {
+	width: 85px;/*change width from 66px to 71px;*/
+	background-position: -73px 0;/*change -87px to -90px 0;*/
+}
+#vm-fundraiserNetworkTeamtabs li.charity a,
+#vm-fundraiserNetworkTeamtabs li.charity a:hover {
+	background-position: -73px -36px;/*change -87px to -90px*/
+}
+#vm-fundraiserNetworkTeamtabs li.charity a.current,
+#vm-fundraiserNetworkTeamtabs li.charity a.current:hover {
+	background-position: -73px -72px;/*change by dayanand from -87px -72px to -90px -72px*/
+}
+
+#vm-fundraiserNetworkTeamtabs li.register a,
+#vm-fundraiserNetworkTeamtabs li.register span {
+	width: 87px;/*width change 73px to 84px;*/
+	background-position: -158px 0; /*change -154px to -161px*/
+}
+#vm-fundraiserNetworkTeamtabs li.register a,
+#vm-fundraiserNetworkTeamtabs li.register a:hover {
+	background-position: -158px -36px; /*change from -154px to -161px*/
+}
+#vm-fundraiserNetworkTeamtabs li.register a.current,
+#vm-fundraiserNetworkTeamtabs li.register a.current:hover {
+	background-position: -158px -72px;/*change from -154px to -161px*/
+}
+
+#vm-fundraiserNetworkTeamtabs li.networkandteam a,
+#vm-fundraiserNetworkTeamtabs li.networkandteam span {
+	width: 161px;/*change width 65px to 74px;*/
+	background-position: -245px 0;/*change position from -228px to -245px 0;*/
+}
+#vm-fundraiserNetworkTeamtabs li.networkandteam a,
+#vm-fundraiserNetworkTeamtabs li.networkandteam a:hover {
+	background-position: -245px -36px;/*-228px to -245px*/
+}
+#vm-fundraiserNetworkTeamtabs li.networkandteam a.current,
+#vm-fundraiserNetworkTeamtabs li.networkandteam a.current:hover {
+	background-position: -245px -72px; /*change -228px to -245px*/
+}
+
+#vm-fundraiserNetworkTeamtabs li.yourpage a,
+#vm-fundraiserNetworkTeamtabs li.yourpage span {
+	width: 99px;/*change width 87px to 99px;*/
+	background-position: -406px 0;/*change width -294px to -319px 0;*/
+}
+#vm-fundraiserNetworkTeamtabs li.yourpage a,
+#vm-fundraiserNetworkTeamtabs li.yourpage a:hover {
+	background-position: -406px -36px;/*change -294px to -319px;*/
+}
+#vm-fundraiserNetworkTeamtabs li.yourpage a.current,
+#vm-fundraiserNetworkTeamtabs li.yourpage a.current:hover {
+	background-position: -406px -72px;/*change -294px to -319px*/
+}
+
+/* Fundraiser-Itration 2 Sub Nac Tabs [End] */
+
+label.leftAlign {
+text-align:left;
+}
+
+label.addressLabel{
+padding-top:3px;
+}
+
+.addPeopleTeamDivider{
+background: url('../img/branding/fundraiserBg.gif') top right no-repeat;
+padding-right:10px;
+}
+
+.vm-create-event-homepage table.setupevent-search-results {
+border:0 none;
+margin-top:0;
+width:100%;
+}
+
+.vm-create-event-homepage table.setupevent-search-results tbody, .vm-create-event-homepage table.setupevent-search-results tr td {
+border:0 none;
+padding:4px;
+}
+
+#vm-network {
+background:transparent url(../img/components/vm-network-pannel/network-pannel.gif) repeat-y scroll left top;
+width:180px;
+height:482px;
+padding:3px 20px 0 20px;
+float:left;
+}
+
+#vm-network .imgHolder{
+width:80px;
+display:block;
+float:left;
+font-size:0.75em;
+text-align:center;
+margin-bottom:20px;
+}
+
+#vm-network .imgHolder img{
+padding-bottom:5px;
+}
+
+#vm-network .marginLeft{
+margin-left:8px;
+}
+
+#vm-network .marginRight{
+margin-right:8px;
+}
+
+.template-f #content-primary.itration2 .column-2 {
+float:left;
+width:216px;
+}
+
+#vm-fundraiser-personaldtails h2{
+    font-size:2em; /*24px*/
+	background:url('../img/branding/bg-horizontalline-dark.gif') repeat-x left bottom;
+	padding-bottom:14px;
+}
+
+#vm-fundraiser-personaldtails label{
+width:175px;
+}
+
+.leftmargin210{
+margin-left:210px;
+display:inline;
+}
+
+img.verticlealign-add-btn{
+margin-bottom:-11px;
+position:relative;
+top:-8px;
+vertical-align:middle;
+}
+
+#vm-fundraiser-peopletabs {
+	list-style: none;
+	padding: 0 0 3px 15px;
+	background: url('../img/components/vm-fundraiser-peopletab/bg-fundraiser-people.gif') bottom left no-repeat;
+}
+#vm-fundraiser-peopletabs li {
+	float: left;
+	margin: 0 1px 0 0;
+}
+#vm-fundraiser-peopletabs li a,
+#vm-fundraiser-peopletabs li span {
+	display: block;
+	height: 35px;
+	text-indent: -9999px;
+	overflow:hidden;
+	background: url('../img/components/vm-fundraiser-peopletab/spr-fundraiser-people.gif') 0 0 no-repeat;
+}
+#vm-fundraiser-peopletabs li.managenetwork a,
+#vm-fundraiser-peopletabs li.managenetwork span {
+	width: 159px;
+	background-position: 0 0;
+}
+#vm-fundraiser-peopletabs li.managenetwork a,
+#vm-fundraiser-peopletabs li.managenetwork a:hover {
+	background-position: 0 -72px;
+}
+#vm-fundraiser-peopletabs li.managenetwork a.current,
+#vm-fundraiser-peopletabs li.managenetwork a.current:hover {
+	background-position: 0 -72px;
+}
+#vm-fundraiser-peopletabs li.pagesetting a,
+#vm-fundraiser-peopletabs li.pagesetting span {
+	width: 124px;
+	background-position: -159px 0;
+}
+#vm-fundraiser-peopletabs li.pagesetting a,
+#vm-fundraiser-peopletabs li.pagesetting a:hover {
+	background-position: -159px -72px;
+}
+#vm-fundraiser-peopletabs li.pagesetting a.current,
+#vm-fundraiser-peopletabs li.pagesetting a.current:hover {
+	background-position: -159px -72px;
+}
+#vm-fundraiser-peopletabs li.people a,
+#vm-fundraiser-peopletabs li.people span {
+	width: 77px;
+	background-position: -283px 0;
+}
+#vm-fundraiser-peopletabs li.people a,
+#vm-fundraiser-peopletabs li.people a:hover {
+	background-position: -283px -71px;
+}
+#vm-fundraiser-peopletabs li.people a.current,
+#vm-fundraiser-peopletabs li.people a.current:hover {
+	background-position: -283px -35px;
+}
+
+#vm-fundraiser-changenetworkstab {
+	list-style: none;
+	padding: 0 0 3px 15px;
+	background: url('../img/components/vm-fundraiser-changenetworks/bg-fundraiser-changenetworks.gif') bottom left no-repeat;
+}
+#vm-fundraiser-changenetworkstab li {
+	float: left;
+	margin: 0 1px 0 0;
+}
+#vm-fundraiser-changenetworkstab li a,
+#vm-fundraiser-changenetworkstab li span {
+	display: block;
+	height: 35px;
+	text-indent: -9999px;
+	overflow:hidden;
+	background: url('../img/components/vm-fundraiser-changenetworks/spr-fundraiser-changenetworks.gif') 0 0 no-repeat;
+}
+#vm-fundraiser-changenetworkstab li.managemynetwork a,
+#vm-fundraiser-changenetworkstab li.managemynetwork span {
+	width: 159px;
+	background-position: 0 0;
+}
+#vm-fundraiser-changenetworkstab li.managemynetwork a,
+#vm-fundraiser-changenetworkstab li.managemynetwork a:hover {
+	background-position: 0 -72px;
+}
+#vm-fundraiser-changenetworkstab li.managemynetwork a.current,
+#vm-fundraiser-changenetworkstab li.managemynetwork a.current:hover {
+	background-position: 0 -72px;
+}
+#vm-fundraiser-changenetworkstab li.changenetworks a,
+#vm-fundraiser-changenetworkstab li.changenetworks span {
+	width: 144px;
+	background-position: -159px 0;
+}
+#vm-fundraiser-changenetworkstab li.changenetworks a,
+#vm-fundraiser-changenetworkstab li.changenetworks a:hover {
+	background-position: -159px -72px;
+}
+#vm-fundraiser-changenetworkstab li.changenetworks a.current,
+#vm-fundraiser-changenetworkstab li.changenetworks a.current:hover {
+	background-position: -159px -35px;
+}
+#vm-fundraiser-changenetworkstab li.people a,
+#vm-fundraiser-changenetworkstab li.people span {
+	width: 77px;
+	background-position: -303px 0;
+}
+#vm-fundraiser-changenetworkstab li.people a,
+#vm-fundraiser-changenetworkstab li.people a:hover {
+	background-position: -303px -71px;
+}
+#vm-fundraiser-changenetworkstab li.people a.current,
+#vm-fundraiser-changenetworkstab li.people a.current:hover {
+	background-position: -303px -35px;
+}
+
+/*css ends here for fundraiser */
+
+/*css starts for Alert screen */
+.vm-charity-registration-details h3.alerts{
+background:none;
+padding-bottom:0;
+}
+
+span.column1{
+text-align:left;
+width:275px;
+display:block;
+float:left;
+padding-top:1px;
+}
+
+span.column2{
+text-align:left;
+width:70px;
+display:block;
+float:left;
+}
+
+span.column3{
+text-align:left;
+width:160px;
+display:block;
+float:left;
+}
+
+span.column4{
+text-align:left;
+width:110px;
+display:block;
+float:left;
+}
+
+input[type="checkbox"].alert{
+margin-top:3px;
+}
+/*css ends for Alert screen */
+.marginRight{
+margin-right:3px;
+}
+
+/*css for Sign-in page [Starts] */
+
+#vm-signin iframe{
+border:none;
+overflow:hidden;
+float:left;
+width:100%;
+height:320px;
+}
+
+#vm-signin .minheight{
+height:360px;
+}
+
+#vm-signin .sec0020 span {
+display:block;
+float:left;
+}
+
+.btntopmargin{
+margin-top:110px;
+}
+
+#vm-signin .pw-strength {
+display:block;
+margin-bottom:15px;
+}
+
+#vm-signin div.pw-strength p {
+display:block;
+float:left;
+font-weight:bold;
+margin-top:0;
+text-align:right;
+width:150px;
+}
+
+#vm-signin div.pw-strength img {
+margin:3px 0 0 5px;
+}
+
+.forgotpassrgtbtmlink{
+position:absolute;
+margin-left:34.5em;
+}
+
+.passbtmlnkwthoutleftcol{
+position:absolute;
+margin-left:55em;
+margin-top -4px;
+}
+
+
+.fm1{
+background:transparent url(../img/branding/bg-horizontalline-light.gif) repeat-x scroll left bottom;
+padding-bottom: 20px;
+margin-bottom: 20px;
+clear: both;
+}
+
+.passwordComplexity {
+border:1px solid #C0C0C0;
+float:left;
+height:8px;
+margin-left:0.3em;
+margin-top:0.3em;
+width:200px;
+}
+
+/* css for Sign-in page [Ends] */
+
+/*For vmg TOP*/
+
+.oneColFixCtrHdr #container {
+	    	width: 961px;
+	    	background: #FFFFFF;
+	    	margin: 0 auto;
+	    	text-align: left;
+	    }
+	    .oneColFixCtrHdr #header {
+	    	padding: 0;
+	    }
+	    .oneColFixCtrHdr #header h1 {
+	    	margin: 0;
+	    	padding: 0;
+	    }
+	    .oneColFixCtrHdr #mainContent {
+	    	padding:0;
+	    	background: #FFFFFF;
+	    }
+	    .oneColFixCtrHdr #footer {
+	    	padding: 0;
+	    }
+	    .oneColFixCtrHdr #footer p {
+	    	margin: 0;
+	    	padding: 10px 0;
+	    }
+        .vm-next
+        {
+            background: url(../img/branding/btn-sec-signin.gif) no-repeat;
+            height: 50px;
+            width: 150px;
+            border: none;
+            padding-top:3px;
+			cursor:pointer;
+			cursor:hand;
+	    }
+        .vm-next-submit
+        {
+            background: url(../img/branding/btn-save-changes.gif) no-repeat;
+            height: 50px;
+            width: 150px;
+            border: none;
+            padding-top:3px;
+			cursor:pointer;
+			cursor:hand;
+        }
+        .vm-login
+        {
+            background: url(../img/branding/btn-process-next.gif) no-repeat;
+            display:inline;
+            float:right;
+            height: 50px;
+            width: 128px;
+            border: none;
+            padding-top:3px;
+			cursor:pointer;
+			cursor:hand;
+        }
+        #login{
+	    	background-image:url(../images/login-background.gif);
+	    	background-position:left top;
+	    	background-repeat:no-repeat;
+	    	width:602px;
+	    	height:365px;
+	    	margin:0;
+	    	padding-left:80px;
+	    	padding-top:80px;
+	    	margin-left:150px;
+	    }
+
+		.passwordDetailsContainer{
+			display:block; 
+			width:300px; 
+			float:left;
+		}

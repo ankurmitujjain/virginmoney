@@ -1,0 +1,39 @@
+#lightboxAjax{	position: absolute;	left: 0; width: 100%; z-index: 100; text-align: center; line-height: 0;}
+#lightboxAjax img{ width: auto; height: auto;}
+#lightboxAjax a img{ border: none; }
+
+#outerContentContainer{ background: url(file:///D|/Work/Virgin/Giving/Images/lightbox-bg_tcm21-25468.png); background-color: #c00; width: 250px; height: 250px; margin: 0 auto; }
+#contentContainer{ padding: 10px; }
+#contentContainer{ padding:10px}
+#contentPanel{ clear:left;height:350px;overflow:auto;padding:10px;background-color:#FFFFFF;text-align:left;font-size:12px;line-height:12px;}
+#contentPanelmin{ clear:left;height:100%;overflow:auto;padding:10px;background-color:#FFFFFF;text-align:left;font-size:12px;line-height:12px;}
+#loadingContent{ position: absolute; top: 40%; left: 0%; height: 25%; width: 100%; text-align: center; line-height: 0; }
+#contentDataContainer{ background: url(file:///D|/Work/Virgin/Giving/Images/lightbox-bg.png); font: 10px Verdana, Helvetica, sans-serif; background-color: #c00; margin: 0 auto; line-height: 1.4em; overflow: auto; width: 100%	; }
+#bottomNavContentClose{ display:block;float: right;  padding:5px; outline: none;}
+#contentOverlay{ position: absolute; top: 0; left: 0; z-index: 90; width: 100%; height: 500px; background-color: #000; }
+
+
+
+/* CSS is created for Opration lightbox [Start] */
+#outerContentContainerOperation{background-color: #333; width: 250px; height: 250px; margin: 0 auto; }
+#contentOverlayOperation{ position: absolute; top: 0; left: 0; z-index: 90; width: 100%; height: 500px; background-color: #fff; }
+
+
+#outerContentContainerOperation table{
+margin:0.833em auto;
+border:0;
+}
+
+#outerContentContainerOperation table tbody {
+border:0 none;
+}
+
+#outerContentContainerOperation table tbody td {
+border-bottom:0 none;
+}
+
+#outerContentContainerOperation table td {
+border-right:0;
+}
+
+/* CSS is created for Opration lightbox [End] */

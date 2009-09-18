@@ -1,0 +1,54 @@
+Deployment Instructions - 
+
+1. Untar the tar file.
+
+2. Application deployment components within /JBoss/Main - 
+
+2.1 deploy-virgin - contains all the files to be placed in the deploy folder of jboss. 
+2.1.1. Update giving-ds.xml configurations to point to VMG Database settings - IP Address, user name and password.
+2.1.2. Update payment-ds.xml configurations to point to VMG Database settings - IP Address, user name and password.
+** Please note that the database user ID and Password (root/*******) are dummy values.
+
+2.2 lib-virgin - external library files to be copied to jboss_server_home folder.
+
+** Set classpath for lib-virgin .  
+
+2.3 external-configuration - stores application configuration files. Copy this folder as-is on the file system**.
+
+2.3.1 Create the system property GIVING_CONF_HOME to point to the location of this folder. 
+           eg: -DGIVING_CONF_HOME=/user/home/VMG/external-configuration
+
+** Please note that JBoss user should have access permission to this folder location.
+
+3. Delete following jars from jboss -> production -> lib folder since they conflict with other jars used in the application. 
+If not deleted the application server will give some error while deployiong the war file.
+--asm.jar
+--asm-attrs.jar
+--cglib.jar
+--jboss-jaxws.jar
+--hibernate3.jar 17:09 
+--hibernate-annotations.jar 
+--hibernate-commons-annotations.jar 
+--hibernate-entitymanager.jar
+--hibernate-validator.jar 
+
+4. Database SQL Scripts - contained within /database - 
+
+4.1 Scripts for giving database within /database - following 5 scripts - 
+
+00_base_script.sql  - creates the schema if does not exist already.
+01_create_schema.sql - creates the base tables.
+20_giving_create_audit_tables.sql - creates audit tables.
+99_giving_modify_script.sql - modifies tables for recent changes in schema.
+02_giving_master_data_setup_script.sql - sets up master data.
+
+4.2 Scripts for payment database within /database - following 5 scripts - 
+
+00_base_script.sql  - creates the schema if does not exist already.
+01_create_schema.sql - creates the base tables.
+20_payment_create_audit_tables.sql - creates audit tables.
+99_payment_modify_script.sql - modifies tables for recent changes in schema.
+02_payment_master_data_setup_script.sql - sets up the master data.
+
+Note:
+Please increase the permgen size in run.conf as appropriate (256 m)

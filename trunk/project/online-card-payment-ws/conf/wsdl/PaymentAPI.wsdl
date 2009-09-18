@@ -1,0 +1,1566 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://secure-payment-processing.com/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://secure-payment-processing.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://secure-payment-processing.com/">
+      <s:element name="Authorise">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoginToken" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardStartDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardExpiryDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardIssueNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Amount" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SourceID" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="AuthOnly" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransactionNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerReference" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Cv2AvsCV2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Cv2AvsAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Cv2AvsPostCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Note" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsRecurring" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="Retry" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AuthoriseResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AuthoriseResult" type="tns:AuthResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="AuthResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="SolveResponse" type="tns:AuthorisationResponse" />
+          <s:element minOccurs="0" maxOccurs="1" name="Result" type="tns:Result" />
+          <s:element minOccurs="0" maxOccurs="1" name="AuthorisationDetails" type="tns:AuthorisationDetails" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="AuthorisationResponse">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:Response">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="MerchantNumber" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Cv2Avs" type="tns:Cv2Avs" />
+              <s:element minOccurs="0" maxOccurs="1" name="AuthorisationCode" type="tns:AuthorisationCodeResponse" />
+              <s:element minOccurs="0" maxOccurs="1" name="Card" type="tns:Card" />
+              <s:element minOccurs="0" maxOccurs="1" name="Transaction" type="tns:Transaction" />
+              <s:element minOccurs="0" maxOccurs="1" name="AuthorisedAmount" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Acquirer" type="tns:Acquirer" />
+              <s:element minOccurs="0" maxOccurs="1" name="Bank" type="tns:Bank" />
+              <s:element minOccurs="0" maxOccurs="1" name="Apacs" type="tns:Apacs" />
+              <s:element minOccurs="0" maxOccurs="1" name="Telephone" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="Response">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:IResponse">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Requester" type="tns:Requester" />
+              <s:element minOccurs="0" maxOccurs="1" name="Error" type="tns:SolveError" />
+              <s:element minOccurs="1" maxOccurs="1" name="ResponseResult" type="tns:ResponseLabelEnum" />
+              <s:element minOccurs="0" maxOccurs="1" name="ResponseCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Reference" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="ReplyFormat" type="tns:ReplyFormatEnum" />
+              <s:element minOccurs="0" maxOccurs="1" name="Metrics" type="tns:Metrics" />
+              <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="IResponse" />
+      <s:complexType name="Requester">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="SourceId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionNumber" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SolveError">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:Error" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="Error">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorCode" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="ResponseLabelEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Unknown" />
+          <s:enumeration value="Validated" />
+          <s:enumeration value="Terminal" />
+          <s:enumeration value="Online" />
+          <s:enumeration value="Manual" />
+          <s:enumeration value="Declined" />
+          <s:enumeration value="Cancelled" />
+          <s:enumeration value="UnableToCancel" />
+          <s:enumeration value="GetManualAuthorisation" />
+          <s:enumeration value="GetSignatureAuthorisation" />
+          <s:enumeration value="Telephone" />
+          <s:enumeration value="GetManualAuthorisationAndResubmit" />
+          <s:enumeration value="HotCardDeclined" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="ReplyFormatEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Standard" />
+          <s:enumeration value="Extended" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="Metrics" />
+      <s:complexType name="Cv2Avs">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="CV2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PostCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Address" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="By" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="AuthorisationCodeResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Code" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Card">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Start" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="End" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Issue" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Transaction">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Amount" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Source" type="tns:TransactionSourceEnum" />
+          <s:element minOccurs="1" maxOccurs="1" name="Security" type="tns:TransactionSecurityEnum" />
+          <s:element minOccurs="1" maxOccurs="1" name="Customer" type="tns:TransactionCustomerEnum" />
+          <s:element minOccurs="1" maxOccurs="1" name="Type" type="tns:TransactionTypeEnum" />
+          <s:element minOccurs="0" maxOccurs="1" name="AuthorisationDateTime" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionStartTime" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Verify" type="tns:VerifyEnum" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="TransactionSourceEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Keyed" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="TransactionSecurityEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="None" />
+          <s:enumeration value="WithSet" />
+          <s:enumeration value="WithOutSet" />
+          <s:enumeration value="ByMerchantCertificate" />
+          <s:enumeration value="BySecureSession" />
+          <s:enumeration value="ByCardholderCertificate" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="TransactionCustomerEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="NotPresent" />
+          <s:enumeration value="Present" />
+          <s:enumeration value="Internet" />
+          <s:enumeration value="ContinuousAuthority" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="TransactionTypeEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="Purchase" />
+          <s:enumeration value="Refund" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="VerifyEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="No" />
+          <s:enumeration value="Yes" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="Acquirer">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="AcquirerId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AcquirerName" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Bank">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="BankId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BankName" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Apacs">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ResponseCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HeadersCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TerminalDial" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TerminalId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TerminalType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MessageType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MessageSeqNumber" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Result">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Code" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ErrorType" type="tns:ErrorTypeEnum" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="ErrorTypeEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="None" />
+          <s:enumeration value="CryptoLib" />
+          <s:enumeration value="DefermentWebService" />
+          <s:enumeration value="SolveSE" />
+          <s:enumeration value="Unknown" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="AuthorisationDetails">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="CardToken" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="AuthorisationID" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="AuthoriseExistingCard">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoginToken" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardToken" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Amount" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SourceID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransactionNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerReference" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="AuthOnly" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="Note" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardStartDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardExpiryDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardIssueNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Cv2AvsCV2" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Cv2AvsAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Cv2AvsPostCode" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsRecurring" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="Retry" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AuthoriseExistingCardResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AuthoriseExistingCardResult" type="tns:AuthResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Login">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="MachineName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LoginResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoginResult" type="tns:LoginReturn" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="LoginReturn">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Result" type="tns:Result" />
+          <s:element minOccurs="0" maxOccurs="1" name="LoginDetails" type="tns:LoginDetails" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="LoginDetails">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="LoginToken" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FullName" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SettlementExistingCard">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoginToken" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardToken" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="AuthorisationID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Amount" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransactionNumber" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="DateToPerformSettlement" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="AuthCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerReference" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Note" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardStartDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardExpiryDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardIssueNumber" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsRecurring" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="Retry" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SettlementExistingCardResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SettlementExistingCardResult" type="tns:SettlementReturn" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SettlementReturn">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Result" type="tns:Result" />
+          <s:element minOccurs="0" maxOccurs="1" name="SettlementDetails" type="tns:SettlementDetails" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SettlementDetails">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="SettlementID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="CardToken" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="Settlement">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoginToken" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardStartDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardExpiryDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardIssueNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Amount" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransactionNumber" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="DateToPerformSettlement" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="AuthCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerReference" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Note" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="IsRecurring" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="Retry" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SettlementResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SettlementResult" type="tns:SettlementReturn" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RefundExistingCard">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoginToken" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardToken" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="SettlementID" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="Amount" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransactionNumber" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="DateToPerformRefund" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="AuthCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerReference" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Note" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardStartDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardExpiryDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardIssueNumber" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Retry" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RefundExistingCardResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RefundExistingCardResult" type="tns:RefundReturn" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="RefundReturn">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Result" type="tns:Result" />
+          <s:element minOccurs="0" maxOccurs="1" name="RefundDetails" type="tns:RefundDetails" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RefundDetails">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="RefundID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="CardToken" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="Refund">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoginToken" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardStartDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardExpiryDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardIssueNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Amount" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransactionNumber" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="DateToPerformRefund" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="AuthCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerReference" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Note" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Retry" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RefundResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RefundResult" type="tns:RefundReturn" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ValidateCard">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoginToken" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardStartDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardExpiryDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardIssueNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TransactionNumber" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="ValidateMethodFlag" type="tns:ValidateMethodFlag" />
+            <s:element minOccurs="1" maxOccurs="1" name="CardTokenRequired" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="CustomerReference" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Note" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:simpleType name="ValidateMethodFlag">
+        <s:restriction base="s:string">
+          <s:enumeration value="None" />
+          <s:enumeration value="SolveSE" />
+          <s:enumeration value="Internal" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="ValidateCardResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ValidateCardResult" type="tns:ValidationExtendedResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ValidationExtendedResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Result" type="tns:Result" />
+          <s:element minOccurs="1" maxOccurs="1" name="InternalValidationPassed" type="tns:ValidationPassedEnum" />
+          <s:element minOccurs="0" maxOccurs="1" name="CardToken" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SolveResponse" type="tns:ValidationResponse" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="ValidationPassedEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="No" />
+          <s:enumeration value="Yes" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="ValidationResponse">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:Response">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="MerchantNumber" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="ValidationPassed" type="tns:ValidationPassedEnum" />
+              <s:element minOccurs="0" maxOccurs="1" name="AuthorisedAmount" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Acquirer" type="tns:Acquirer" />
+              <s:element minOccurs="0" maxOccurs="1" name="Bank" type="tns:Bank" />
+              <s:element minOccurs="0" maxOccurs="1" name="TransactionStartTime" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="ChangePassword">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoginToken" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UserID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="OldPassword" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NewPassword" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ChangePasswordResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ChangePasswordResult" type="tns:ChangePasswordReturn" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ChangePasswordReturn">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:Result" />
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="ChangeCardAssociatedWithToken">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoginToken" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardToken" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NewCardNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NewExpiryDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NewStartDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="NewIssueNumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ChangeCardAssociatedWithTokenResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ChangeCardAssociatedWithTokenResult" type="tns:ChangeCardReturn" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ChangeCardReturn">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:Result">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="ConflictCardToken" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="GetTokenisedInformation">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoginToken" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CardNumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTokenisedInformationResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTokenisedInformationResult" type="tns:GetTokenisedInformationReturn" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="GetTokenisedInformationReturn">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Result" type="tns:Result" />
+          <s:element minOccurs="0" maxOccurs="1" name="GetTokenisedInformationDetails" type="tns:GetTokenisedInformationDetails" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="GetTokenisedInformationDetails">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="CardToken" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CardStart" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CardEnd" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CardIssue" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="TokenExpired" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="AuthResponse" nillable="true" type="tns:AuthResponse" />
+      <s:element name="LoginReturn" nillable="true" type="tns:LoginReturn" />
+      <s:element name="SettlementReturn" nillable="true" type="tns:SettlementReturn" />
+      <s:element name="RefundReturn" nillable="true" type="tns:RefundReturn" />
+      <s:element name="ValidationExtendedResponse" nillable="true" type="tns:ValidationExtendedResponse" />
+      <s:element name="ChangePasswordReturn" nillable="true" type="tns:ChangePasswordReturn" />
+      <s:element name="ChangeCardReturn" nillable="true" type="tns:ChangeCardReturn" />
+      <s:element name="GetTokenisedInformationReturn" nillable="true" type="tns:GetTokenisedInformationReturn" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="AuthoriseSoapIn">
+    <wsdl:part name="parameters" element="tns:Authorise" />
+  </wsdl:message>
+  <wsdl:message name="AuthoriseSoapOut">
+    <wsdl:part name="parameters" element="tns:AuthoriseResponse" />
+  </wsdl:message>
+  <wsdl:message name="AuthoriseExistingCardSoapIn">
+    <wsdl:part name="parameters" element="tns:AuthoriseExistingCard" />
+  </wsdl:message>
+  <wsdl:message name="AuthoriseExistingCardSoapOut">
+    <wsdl:part name="parameters" element="tns:AuthoriseExistingCardResponse" />
+  </wsdl:message>
+  <wsdl:message name="LoginSoapIn">
+    <wsdl:part name="parameters" element="tns:Login" />
+  </wsdl:message>
+  <wsdl:message name="LoginSoapOut">
+    <wsdl:part name="parameters" element="tns:LoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="SettlementExistingCardSoapIn">
+    <wsdl:part name="parameters" element="tns:SettlementExistingCard" />
+  </wsdl:message>
+  <wsdl:message name="SettlementExistingCardSoapOut">
+    <wsdl:part name="parameters" element="tns:SettlementExistingCardResponse" />
+  </wsdl:message>
+  <wsdl:message name="SettlementSoapIn">
+    <wsdl:part name="parameters" element="tns:Settlement" />
+  </wsdl:message>
+  <wsdl:message name="SettlementSoapOut">
+    <wsdl:part name="parameters" element="tns:SettlementResponse" />
+  </wsdl:message>
+  <wsdl:message name="RefundExistingCardSoapIn">
+    <wsdl:part name="parameters" element="tns:RefundExistingCard" />
+  </wsdl:message>
+  <wsdl:message name="RefundExistingCardSoapOut">
+    <wsdl:part name="parameters" element="tns:RefundExistingCardResponse" />
+  </wsdl:message>
+  <wsdl:message name="RefundSoapIn">
+    <wsdl:part name="parameters" element="tns:Refund" />
+  </wsdl:message>
+  <wsdl:message name="RefundSoapOut">
+    <wsdl:part name="parameters" element="tns:RefundResponse" />
+  </wsdl:message>
+  <wsdl:message name="ValidateCardSoapIn">
+    <wsdl:part name="parameters" element="tns:ValidateCard" />
+  </wsdl:message>
+  <wsdl:message name="ValidateCardSoapOut">
+    <wsdl:part name="parameters" element="tns:ValidateCardResponse" />
+  </wsdl:message>
+  <wsdl:message name="ChangePasswordSoapIn">
+    <wsdl:part name="parameters" element="tns:ChangePassword" />
+  </wsdl:message>
+  <wsdl:message name="ChangePasswordSoapOut">
+    <wsdl:part name="parameters" element="tns:ChangePasswordResponse" />
+  </wsdl:message>
+  <wsdl:message name="ChangeCardAssociatedWithTokenSoapIn">
+    <wsdl:part name="parameters" element="tns:ChangeCardAssociatedWithToken" />
+  </wsdl:message>
+  <wsdl:message name="ChangeCardAssociatedWithTokenSoapOut">
+    <wsdl:part name="parameters" element="tns:ChangeCardAssociatedWithTokenResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTokenisedInformationSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTokenisedInformation" />
+  </wsdl:message>
+  <wsdl:message name="GetTokenisedInformationSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTokenisedInformationResponse" />
+  </wsdl:message>
+  <wsdl:message name="AuthoriseHttpGetIn">
+    <wsdl:part name="LoginToken" type="s:string" />
+    <wsdl:part name="CardNumber" type="s:string" />
+    <wsdl:part name="CardStartDate" type="s:string" />
+    <wsdl:part name="CardExpiryDate" type="s:string" />
+    <wsdl:part name="CardIssueNumber" type="s:string" />
+    <wsdl:part name="Amount" type="s:string" />
+    <wsdl:part name="SourceID" type="s:string" />
+    <wsdl:part name="AuthOnly" type="s:string" />
+    <wsdl:part name="TransactionNumber" type="s:string" />
+    <wsdl:part name="CustomerReference" type="s:string" />
+    <wsdl:part name="Cv2AvsCV2" type="s:string" />
+    <wsdl:part name="Cv2AvsAddress" type="s:string" />
+    <wsdl:part name="Cv2AvsPostCode" type="s:string" />
+    <wsdl:part name="Note" type="s:string" />
+    <wsdl:part name="IsRecurring" type="s:string" />
+    <wsdl:part name="Retry" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AuthoriseHttpGetOut">
+    <wsdl:part name="Body" element="tns:AuthResponse" />
+  </wsdl:message>
+  <wsdl:message name="AuthoriseExistingCardHttpGetIn">
+    <wsdl:part name="LoginToken" type="s:string" />
+    <wsdl:part name="CardToken" type="s:string" />
+    <wsdl:part name="Amount" type="s:string" />
+    <wsdl:part name="SourceID" type="s:string" />
+    <wsdl:part name="TransactionNumber" type="s:string" />
+    <wsdl:part name="CustomerReference" type="s:string" />
+    <wsdl:part name="AuthOnly" type="s:string" />
+    <wsdl:part name="Note" type="s:string" />
+    <wsdl:part name="CardStartDate" type="s:string" />
+    <wsdl:part name="CardExpiryDate" type="s:string" />
+    <wsdl:part name="CardIssueNumber" type="s:string" />
+    <wsdl:part name="Cv2AvsCV2" type="s:string" />
+    <wsdl:part name="Cv2AvsAddress" type="s:string" />
+    <wsdl:part name="Cv2AvsPostCode" type="s:string" />
+    <wsdl:part name="IsRecurring" type="s:string" />
+    <wsdl:part name="Retry" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AuthoriseExistingCardHttpGetOut">
+    <wsdl:part name="Body" element="tns:AuthResponse" />
+  </wsdl:message>
+  <wsdl:message name="LoginHttpGetIn">
+    <wsdl:part name="UserID" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="MachineName" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="LoginHttpGetOut">
+    <wsdl:part name="Body" element="tns:LoginReturn" />
+  </wsdl:message>
+  <wsdl:message name="SettlementExistingCardHttpGetIn">
+    <wsdl:part name="LoginToken" type="s:string" />
+    <wsdl:part name="CardToken" type="s:string" />
+    <wsdl:part name="AuthorisationID" type="s:string" />
+    <wsdl:part name="Amount" type="s:string" />
+    <wsdl:part name="TransactionNumber" type="s:string" />
+    <wsdl:part name="DateToPerformSettlement" type="s:string" />
+    <wsdl:part name="AuthCode" type="s:string" />
+    <wsdl:part name="SID" type="s:string" />
+    <wsdl:part name="CustomerReference" type="s:string" />
+    <wsdl:part name="Note" type="s:string" />
+    <wsdl:part name="CardStartDate" type="s:string" />
+    <wsdl:part name="CardExpiryDate" type="s:string" />
+    <wsdl:part name="CardIssueNumber" type="s:string" />
+    <wsdl:part name="IsRecurring" type="s:string" />
+    <wsdl:part name="Retry" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SettlementExistingCardHttpGetOut">
+    <wsdl:part name="Body" element="tns:SettlementReturn" />
+  </wsdl:message>
+  <wsdl:message name="SettlementHttpGetIn">
+    <wsdl:part name="LoginToken" type="s:string" />
+    <wsdl:part name="CardNumber" type="s:string" />
+    <wsdl:part name="CardStartDate" type="s:string" />
+    <wsdl:part name="CardExpiryDate" type="s:string" />
+    <wsdl:part name="CardIssueNumber" type="s:string" />
+    <wsdl:part name="Amount" type="s:string" />
+    <wsdl:part name="TransactionNumber" type="s:string" />
+    <wsdl:part name="DateToPerformSettlement" type="s:string" />
+    <wsdl:part name="AuthCode" type="s:string" />
+    <wsdl:part name="SID" type="s:string" />
+    <wsdl:part name="CustomerReference" type="s:string" />
+    <wsdl:part name="Note" type="s:string" />
+    <wsdl:part name="IsRecurring" type="s:string" />
+    <wsdl:part name="Retry" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SettlementHttpGetOut">
+    <wsdl:part name="Body" element="tns:SettlementReturn" />
+  </wsdl:message>
+  <wsdl:message name="RefundExistingCardHttpGetIn">
+    <wsdl:part name="LoginToken" type="s:string" />
+    <wsdl:part name="CardToken" type="s:string" />
+    <wsdl:part name="SettlementID" type="s:string" />
+    <wsdl:part name="Amount" type="s:string" />
+    <wsdl:part name="TransactionNumber" type="s:string" />
+    <wsdl:part name="DateToPerformRefund" type="s:string" />
+    <wsdl:part name="AuthCode" type="s:string" />
+    <wsdl:part name="SID" type="s:string" />
+    <wsdl:part name="CustomerReference" type="s:string" />
+    <wsdl:part name="Note" type="s:string" />
+    <wsdl:part name="CardStartDate" type="s:string" />
+    <wsdl:part name="CardExpiryDate" type="s:string" />
+    <wsdl:part name="CardIssueNumber" type="s:string" />
+    <wsdl:part name="Retry" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RefundExistingCardHttpGetOut">
+    <wsdl:part name="Body" element="tns:RefundReturn" />
+  </wsdl:message>
+  <wsdl:message name="RefundHttpGetIn">
+    <wsdl:part name="LoginToken" type="s:string" />
+    <wsdl:part name="CardNumber" type="s:string" />
+    <wsdl:part name="CardStartDate" type="s:string" />
+    <wsdl:part name="CardExpiryDate" type="s:string" />
+    <wsdl:part name="CardIssueNumber" type="s:string" />
+    <wsdl:part name="Amount" type="s:string" />
+    <wsdl:part name="TransactionNumber" type="s:string" />
+    <wsdl:part name="DateToPerformRefund" type="s:string" />
+    <wsdl:part name="AuthCode" type="s:string" />
+    <wsdl:part name="SID" type="s:string" />
+    <wsdl:part name="CustomerReference" type="s:string" />
+    <wsdl:part name="Note" type="s:string" />
+    <wsdl:part name="Retry" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RefundHttpGetOut">
+    <wsdl:part name="Body" element="tns:RefundReturn" />
+  </wsdl:message>
+  <wsdl:message name="ValidateCardHttpGetIn">
+    <wsdl:part name="LoginToken" type="s:string" />
+    <wsdl:part name="CardNumber" type="s:string" />
+    <wsdl:part name="CardStartDate" type="s:string" />
+    <wsdl:part name="CardExpiryDate" type="s:string" />
+    <wsdl:part name="CardIssueNumber" type="s:string" />
+    <wsdl:part name="SID" type="s:string" />
+    <wsdl:part name="TransactionNumber" type="s:string" />
+    <wsdl:part name="ValidateMethodFlag" type="s:string" />
+    <wsdl:part name="CardTokenRequired" type="s:string" />
+    <wsdl:part name="CustomerReference" type="s:string" />
+    <wsdl:part name="Note" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ValidateCardHttpGetOut">
+    <wsdl:part name="Body" element="tns:ValidationExtendedResponse" />
+  </wsdl:message>
+  <wsdl:message name="ChangePasswordHttpGetIn">
+    <wsdl:part name="LoginToken" type="s:string" />
+    <wsdl:part name="UserID" type="s:string" />
+    <wsdl:part name="OldPassword" type="s:string" />
+    <wsdl:part name="NewPassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ChangePasswordHttpGetOut">
+    <wsdl:part name="Body" element="tns:ChangePasswordReturn" />
+  </wsdl:message>
+  <wsdl:message name="ChangeCardAssociatedWithTokenHttpGetIn">
+    <wsdl:part name="LoginToken" type="s:string" />
+    <wsdl:part name="CardToken" type="s:string" />
+    <wsdl:part name="NewCardNumber" type="s:string" />
+    <wsdl:part name="NewExpiryDate" type="s:string" />
+    <wsdl:part name="NewStartDate" type="s:string" />
+    <wsdl:part name="NewIssueNumber" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ChangeCardAssociatedWithTokenHttpGetOut">
+    <wsdl:part name="Body" element="tns:ChangeCardReturn" />
+  </wsdl:message>
+  <wsdl:message name="GetTokenisedInformationHttpGetIn">
+    <wsdl:part name="LoginToken" type="s:string" />
+    <wsdl:part name="CardNumber" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetTokenisedInformationHttpGetOut">
+    <wsdl:part name="Body" element="tns:GetTokenisedInformationReturn" />
+  </wsdl:message>
+  <wsdl:message name="AuthoriseHttpPostIn">
+    <wsdl:part name="LoginToken" type="s:string" />
+    <wsdl:part name="CardNumber" type="s:string" />
+    <wsdl:part name="CardStartDate" type="s:string" />
+    <wsdl:part name="CardExpiryDate" type="s:string" />
+    <wsdl:part name="CardIssueNumber" type="s:string" />
+    <wsdl:part name="Amount" type="s:string" />
+    <wsdl:part name="SourceID" type="s:string" />
+    <wsdl:part name="AuthOnly" type="s:string" />
+    <wsdl:part name="TransactionNumber" type="s:string" />
+    <wsdl:part name="CustomerReference" type="s:string" />
+    <wsdl:part name="Cv2AvsCV2" type="s:string" />
+    <wsdl:part name="Cv2AvsAddress" type="s:string" />
+    <wsdl:part name="Cv2AvsPostCode" type="s:string" />
+    <wsdl:part name="Note" type="s:string" />
+    <wsdl:part name="IsRecurring" type="s:string" />
+    <wsdl:part name="Retry" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AuthoriseHttpPostOut">
+    <wsdl:part name="Body" element="tns:AuthResponse" />
+  </wsdl:message>
+  <wsdl:message name="AuthoriseExistingCardHttpPostIn">
+    <wsdl:part name="LoginToken" type="s:string" />
+    <wsdl:part name="CardToken" type="s:string" />
+    <wsdl:part name="Amount" type="s:string" />
+    <wsdl:part name="SourceID" type="s:string" />
+    <wsdl:part name="TransactionNumber" type="s:string" />
+    <wsdl:part name="CustomerReference" type="s:string" />
+    <wsdl:part name="AuthOnly" type="s:string" />
+    <wsdl:part name="Note" type="s:string" />
+    <wsdl:part name="CardStartDate" type="s:string" />
+    <wsdl:part name="CardExpiryDate" type="s:string" />
+    <wsdl:part name="CardIssueNumber" type="s:string" />
+    <wsdl:part name="Cv2AvsCV2" type="s:string" />
+    <wsdl:part name="Cv2AvsAddress" type="s:string" />
+    <wsdl:part name="Cv2AvsPostCode" type="s:string" />
+    <wsdl:part name="IsRecurring" type="s:string" />
+    <wsdl:part name="Retry" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AuthoriseExistingCardHttpPostOut">
+    <wsdl:part name="Body" element="tns:AuthResponse" />
+  </wsdl:message>
+  <wsdl:message name="LoginHttpPostIn">
+    <wsdl:part name="UserID" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+    <wsdl:part name="MachineName" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="LoginHttpPostOut">
+    <wsdl:part name="Body" element="tns:LoginReturn" />
+  </wsdl:message>
+  <wsdl:message name="SettlementExistingCardHttpPostIn">
+    <wsdl:part name="LoginToken" type="s:string" />
+    <wsdl:part name="CardToken" type="s:string" />
+    <wsdl:part name="AuthorisationID" type="s:string" />
+    <wsdl:part name="Amount" type="s:string" />
+    <wsdl:part name="TransactionNumber" type="s:string" />
+    <wsdl:part name="DateToPerformSettlement" type="s:string" />
+    <wsdl:part name="AuthCode" type="s:string" />
+    <wsdl:part name="SID" type="s:string" />
+    <wsdl:part name="CustomerReference" type="s:string" />
+    <wsdl:part name="Note" type="s:string" />
+    <wsdl:part name="CardStartDate" type="s:string" />
+    <wsdl:part name="CardExpiryDate" type="s:string" />
+    <wsdl:part name="CardIssueNumber" type="s:string" />
+    <wsdl:part name="IsRecurring" type="s:string" />
+    <wsdl:part name="Retry" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SettlementExistingCardHttpPostOut">
+    <wsdl:part name="Body" element="tns:SettlementReturn" />
+  </wsdl:message>
+  <wsdl:message name="SettlementHttpPostIn">
+    <wsdl:part name="LoginToken" type="s:string" />
+    <wsdl:part name="CardNumber" type="s:string" />
+    <wsdl:part name="CardStartDate" type="s:string" />
+    <wsdl:part name="CardExpiryDate" type="s:string" />
+    <wsdl:part name="CardIssueNumber" type="s:string" />
+    <wsdl:part name="Amount" type="s:string" />
+    <wsdl:part name="TransactionNumber" type="s:string" />
+    <wsdl:part name="DateToPerformSettlement" type="s:string" />
+    <wsdl:part name="AuthCode" type="s:string" />
+    <wsdl:part name="SID" type="s:string" />
+    <wsdl:part name="CustomerReference" type="s:string" />
+    <wsdl:part name="Note" type="s:string" />
+    <wsdl:part name="IsRecurring" type="s:string" />
+    <wsdl:part name="Retry" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SettlementHttpPostOut">
+    <wsdl:part name="Body" element="tns:SettlementReturn" />
+  </wsdl:message>
+  <wsdl:message name="RefundExistingCardHttpPostIn">
+    <wsdl:part name="LoginToken" type="s:string" />
+    <wsdl:part name="CardToken" type="s:string" />
+    <wsdl:part name="SettlementID" type="s:string" />
+    <wsdl:part name="Amount" type="s:string" />
+    <wsdl:part name="TransactionNumber" type="s:string" />
+    <wsdl:part name="DateToPerformRefund" type="s:string" />
+    <wsdl:part name="AuthCode" type="s:string" />
+    <wsdl:part name="SID" type="s:string" />
+    <wsdl:part name="CustomerReference" type="s:string" />
+    <wsdl:part name="Note" type="s:string" />
+    <wsdl:part name="CardStartDate" type="s:string" />
+    <wsdl:part name="CardExpiryDate" type="s:string" />
+    <wsdl:part name="CardIssueNumber" type="s:string" />
+    <wsdl:part name="Retry" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RefundExistingCardHttpPostOut">
+    <wsdl:part name="Body" element="tns:RefundReturn" />
+  </wsdl:message>
+  <wsdl:message name="RefundHttpPostIn">
+    <wsdl:part name="LoginToken" type="s:string" />
+    <wsdl:part name="CardNumber" type="s:string" />
+    <wsdl:part name="CardStartDate" type="s:string" />
+    <wsdl:part name="CardExpiryDate" type="s:string" />
+    <wsdl:part name="CardIssueNumber" type="s:string" />
+    <wsdl:part name="Amount" type="s:string" />
+    <wsdl:part name="TransactionNumber" type="s:string" />
+    <wsdl:part name="DateToPerformRefund" type="s:string" />
+    <wsdl:part name="AuthCode" type="s:string" />
+    <wsdl:part name="SID" type="s:string" />
+    <wsdl:part name="CustomerReference" type="s:string" />
+    <wsdl:part name="Note" type="s:string" />
+    <wsdl:part name="Retry" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RefundHttpPostOut">
+    <wsdl:part name="Body" element="tns:RefundReturn" />
+  </wsdl:message>
+  <wsdl:message name="ValidateCardHttpPostIn">
+    <wsdl:part name="LoginToken" type="s:string" />
+    <wsdl:part name="CardNumber" type="s:string" />
+    <wsdl:part name="CardStartDate" type="s:string" />
+    <wsdl:part name="CardExpiryDate" type="s:string" />
+    <wsdl:part name="CardIssueNumber" type="s:string" />
+    <wsdl:part name="SID" type="s:string" />
+    <wsdl:part name="TransactionNumber" type="s:string" />
+    <wsdl:part name="ValidateMethodFlag" type="s:string" />
+    <wsdl:part name="CardTokenRequired" type="s:string" />
+    <wsdl:part name="CustomerReference" type="s:string" />
+    <wsdl:part name="Note" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ValidateCardHttpPostOut">
+    <wsdl:part name="Body" element="tns:ValidationExtendedResponse" />
+  </wsdl:message>
+  <wsdl:message name="ChangePasswordHttpPostIn">
+    <wsdl:part name="LoginToken" type="s:string" />
+    <wsdl:part name="UserID" type="s:string" />
+    <wsdl:part name="OldPassword" type="s:string" />
+    <wsdl:part name="NewPassword" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ChangePasswordHttpPostOut">
+    <wsdl:part name="Body" element="tns:ChangePasswordReturn" />
+  </wsdl:message>
+  <wsdl:message name="ChangeCardAssociatedWithTokenHttpPostIn">
+    <wsdl:part name="LoginToken" type="s:string" />
+    <wsdl:part name="CardToken" type="s:string" />
+    <wsdl:part name="NewCardNumber" type="s:string" />
+    <wsdl:part name="NewExpiryDate" type="s:string" />
+    <wsdl:part name="NewStartDate" type="s:string" />
+    <wsdl:part name="NewIssueNumber" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="ChangeCardAssociatedWithTokenHttpPostOut">
+    <wsdl:part name="Body" element="tns:ChangeCardReturn" />
+  </wsdl:message>
+  <wsdl:message name="GetTokenisedInformationHttpPostIn">
+    <wsdl:part name="LoginToken" type="s:string" />
+    <wsdl:part name="CardNumber" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetTokenisedInformationHttpPostOut">
+    <wsdl:part name="Body" element="tns:GetTokenisedInformationReturn" />
+  </wsdl:message>
+  <wsdl:portType name="PaymentAPISoap">
+    <wsdl:operation name="Authorise">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Create authorisation using a card PAN.</wsdl:documentation>
+      <wsdl:input message="tns:AuthoriseSoapIn" />
+      <wsdl:output message="tns:AuthoriseSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AuthoriseExistingCard">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Create authorisation using a card token.</wsdl:documentation>
+      <wsdl:input message="tns:AuthoriseExistingCardSoapIn" />
+      <wsdl:output message="tns:AuthoriseExistingCardSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Authenticate user.</wsdl:documentation>
+      <wsdl:input message="tns:LoginSoapIn" />
+      <wsdl:output message="tns:LoginSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SettlementExistingCard">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Create a settlement using a card token.</wsdl:documentation>
+      <wsdl:input message="tns:SettlementExistingCardSoapIn" />
+      <wsdl:output message="tns:SettlementExistingCardSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Settlement">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Create a settlement using a card PAN.</wsdl:documentation>
+      <wsdl:input message="tns:SettlementSoapIn" />
+      <wsdl:output message="tns:SettlementSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RefundExistingCard">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Create a refund using a card token.</wsdl:documentation>
+      <wsdl:input message="tns:RefundExistingCardSoapIn" />
+      <wsdl:output message="tns:RefundExistingCardSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Refund">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Create a refund using a card PAN.</wsdl:documentation>
+      <wsdl:input message="tns:RefundSoapIn" />
+      <wsdl:output message="tns:RefundSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ValidateCard">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Validate a card using card PAN.</wsdl:documentation>
+      <wsdl:input message="tns:ValidateCardSoapIn" />
+      <wsdl:output message="tns:ValidateCardSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassword">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Change Password.</wsdl:documentation>
+      <wsdl:input message="tns:ChangePasswordSoapIn" />
+      <wsdl:output message="tns:ChangePasswordSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeCardAssociatedWithToken">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Change Card Associated with a Token</wsdl:documentation>
+      <wsdl:input message="tns:ChangeCardAssociatedWithTokenSoapIn" />
+      <wsdl:output message="tns:ChangeCardAssociatedWithTokenSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTokenisedInformation">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get card information associated with card number</wsdl:documentation>
+      <wsdl:input message="tns:GetTokenisedInformationSoapIn" />
+      <wsdl:output message="tns:GetTokenisedInformationSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="PaymentAPIHttpGet">
+    <wsdl:operation name="Authorise">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Create authorisation using a card PAN.</wsdl:documentation>
+      <wsdl:input message="tns:AuthoriseHttpGetIn" />
+      <wsdl:output message="tns:AuthoriseHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AuthoriseExistingCard">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Create authorisation using a card token.</wsdl:documentation>
+      <wsdl:input message="tns:AuthoriseExistingCardHttpGetIn" />
+      <wsdl:output message="tns:AuthoriseExistingCardHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Authenticate user.</wsdl:documentation>
+      <wsdl:input message="tns:LoginHttpGetIn" />
+      <wsdl:output message="tns:LoginHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SettlementExistingCard">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Create a settlement using a card token.</wsdl:documentation>
+      <wsdl:input message="tns:SettlementExistingCardHttpGetIn" />
+      <wsdl:output message="tns:SettlementExistingCardHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Settlement">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Create a settlement using a card PAN.</wsdl:documentation>
+      <wsdl:input message="tns:SettlementHttpGetIn" />
+      <wsdl:output message="tns:SettlementHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RefundExistingCard">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Create a refund using a card token.</wsdl:documentation>
+      <wsdl:input message="tns:RefundExistingCardHttpGetIn" />
+      <wsdl:output message="tns:RefundExistingCardHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Refund">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Create a refund using a card PAN.</wsdl:documentation>
+      <wsdl:input message="tns:RefundHttpGetIn" />
+      <wsdl:output message="tns:RefundHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ValidateCard">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Validate a card using card PAN.</wsdl:documentation>
+      <wsdl:input message="tns:ValidateCardHttpGetIn" />
+      <wsdl:output message="tns:ValidateCardHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassword">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Change Password.</wsdl:documentation>
+      <wsdl:input message="tns:ChangePasswordHttpGetIn" />
+      <wsdl:output message="tns:ChangePasswordHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeCardAssociatedWithToken">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Change Card Associated with a Token</wsdl:documentation>
+      <wsdl:input message="tns:ChangeCardAssociatedWithTokenHttpGetIn" />
+      <wsdl:output message="tns:ChangeCardAssociatedWithTokenHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTokenisedInformation">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get card information associated with card number</wsdl:documentation>
+      <wsdl:input message="tns:GetTokenisedInformationHttpGetIn" />
+      <wsdl:output message="tns:GetTokenisedInformationHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="PaymentAPIHttpPost">
+    <wsdl:operation name="Authorise">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Create authorisation using a card PAN.</wsdl:documentation>
+      <wsdl:input message="tns:AuthoriseHttpPostIn" />
+      <wsdl:output message="tns:AuthoriseHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AuthoriseExistingCard">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Create authorisation using a card token.</wsdl:documentation>
+      <wsdl:input message="tns:AuthoriseExistingCardHttpPostIn" />
+      <wsdl:output message="tns:AuthoriseExistingCardHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Authenticate user.</wsdl:documentation>
+      <wsdl:input message="tns:LoginHttpPostIn" />
+      <wsdl:output message="tns:LoginHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SettlementExistingCard">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Create a settlement using a card token.</wsdl:documentation>
+      <wsdl:input message="tns:SettlementExistingCardHttpPostIn" />
+      <wsdl:output message="tns:SettlementExistingCardHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Settlement">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Create a settlement using a card PAN.</wsdl:documentation>
+      <wsdl:input message="tns:SettlementHttpPostIn" />
+      <wsdl:output message="tns:SettlementHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RefundExistingCard">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Create a refund using a card token.</wsdl:documentation>
+      <wsdl:input message="tns:RefundExistingCardHttpPostIn" />
+      <wsdl:output message="tns:RefundExistingCardHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Refund">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Create a refund using a card PAN.</wsdl:documentation>
+      <wsdl:input message="tns:RefundHttpPostIn" />
+      <wsdl:output message="tns:RefundHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ValidateCard">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Validate a card using card PAN.</wsdl:documentation>
+      <wsdl:input message="tns:ValidateCardHttpPostIn" />
+      <wsdl:output message="tns:ValidateCardHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassword">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Change Password.</wsdl:documentation>
+      <wsdl:input message="tns:ChangePasswordHttpPostIn" />
+      <wsdl:output message="tns:ChangePasswordHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeCardAssociatedWithToken">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Change Card Associated with a Token</wsdl:documentation>
+      <wsdl:input message="tns:ChangeCardAssociatedWithTokenHttpPostIn" />
+      <wsdl:output message="tns:ChangeCardAssociatedWithTokenHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTokenisedInformation">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Get card information associated with card number</wsdl:documentation>
+      <wsdl:input message="tns:GetTokenisedInformationHttpPostIn" />
+      <wsdl:output message="tns:GetTokenisedInformationHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PaymentAPISoap" type="tns:PaymentAPISoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Authorise">
+      <soap:operation soapAction="http://secure-payment-processing.com/Authorise" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AuthoriseExistingCard">
+      <soap:operation soapAction="http://secure-payment-processing.com/AuthoriseExistingCard" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <soap:operation soapAction="http://secure-payment-processing.com/Login" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SettlementExistingCard">
+      <soap:operation soapAction="http://secure-payment-processing.com/SettlementExistingCard" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Settlement">
+      <soap:operation soapAction="http://secure-payment-processing.com/Settlement" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RefundExistingCard">
+      <soap:operation soapAction="http://secure-payment-processing.com/RefundExistingCard" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Refund">
+      <soap:operation soapAction="http://secure-payment-processing.com/Refund" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidateCard">
+      <soap:operation soapAction="http://secure-payment-processing.com/ValidateCard" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassword">
+      <soap:operation soapAction="http://secure-payment-processing.com/ChangePassword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangeCardAssociatedWithToken">
+      <soap:operation soapAction="http://secure-payment-processing.com/ChangeCardAssociatedWithToken" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTokenisedInformation">
+      <soap:operation soapAction="http://secure-payment-processing.com/GetTokenisedInformation" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PaymentAPISoap12" type="tns:PaymentAPISoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Authorise">
+      <soap12:operation soapAction="http://secure-payment-processing.com/Authorise" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AuthoriseExistingCard">
+      <soap12:operation soapAction="http://secure-payment-processing.com/AuthoriseExistingCard" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <soap12:operation soapAction="http://secure-payment-processing.com/Login" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SettlementExistingCard">
+      <soap12:operation soapAction="http://secure-payment-processing.com/SettlementExistingCard" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Settlement">
+      <soap12:operation soapAction="http://secure-payment-processing.com/Settlement" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RefundExistingCard">
+      <soap12:operation soapAction="http://secure-payment-processing.com/RefundExistingCard" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Refund">
+      <soap12:operation soapAction="http://secure-payment-processing.com/Refund" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidateCard">
+      <soap12:operation soapAction="http://secure-payment-processing.com/ValidateCard" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassword">
+      <soap12:operation soapAction="http://secure-payment-processing.com/ChangePassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangeCardAssociatedWithToken">
+      <soap12:operation soapAction="http://secure-payment-processing.com/ChangeCardAssociatedWithToken" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTokenisedInformation">
+      <soap12:operation soapAction="http://secure-payment-processing.com/GetTokenisedInformation" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PaymentAPIHttpGet" type="tns:PaymentAPIHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="Authorise">
+      <http:operation location="/Authorise" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AuthoriseExistingCard">
+      <http:operation location="/AuthoriseExistingCard" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <http:operation location="/Login" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SettlementExistingCard">
+      <http:operation location="/SettlementExistingCard" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Settlement">
+      <http:operation location="/Settlement" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RefundExistingCard">
+      <http:operation location="/RefundExistingCard" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Refund">
+      <http:operation location="/Refund" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidateCard">
+      <http:operation location="/ValidateCard" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassword">
+      <http:operation location="/ChangePassword" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangeCardAssociatedWithToken">
+      <http:operation location="/ChangeCardAssociatedWithToken" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTokenisedInformation">
+      <http:operation location="/GetTokenisedInformation" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PaymentAPIHttpPost" type="tns:PaymentAPIHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="Authorise">
+      <http:operation location="/Authorise" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AuthoriseExistingCard">
+      <http:operation location="/AuthoriseExistingCard" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <http:operation location="/Login" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SettlementExistingCard">
+      <http:operation location="/SettlementExistingCard" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Settlement">
+      <http:operation location="/Settlement" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RefundExistingCard">
+      <http:operation location="/RefundExistingCard" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Refund">
+      <http:operation location="/Refund" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidateCard">
+      <http:operation location="/ValidateCard" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassword">
+      <http:operation location="/ChangePassword" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangeCardAssociatedWithToken">
+      <http:operation location="/ChangeCardAssociatedWithToken" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTokenisedInformation">
+      <http:operation location="/GetTokenisedInformation" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PaymentAPI">
+    <wsdl:port name="PaymentAPISoap" binding="tns:PaymentAPISoap">
+      <soap:address location="http://localhost:1908/PaymentAPI.asmx" />
+    </wsdl:port>
+    <wsdl:port name="PaymentAPISoap12" binding="tns:PaymentAPISoap12">
+      <soap12:address location="http://localhost:1908/PaymentAPI.asmx" />
+    </wsdl:port>
+    <wsdl:port name="PaymentAPIHttpGet" binding="tns:PaymentAPIHttpGet">
+      <http:address location="http://localhost:1908/PaymentAPI.asmx" />
+    </wsdl:port>
+    <wsdl:port name="PaymentAPIHttpPost" binding="tns:PaymentAPIHttpPost">
+      <http:address location="http://localhost:1908/PaymentAPI.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
