@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+
+  <charity/>
+  <address/>
+  <categorised_charity/>
+  <charity_address/>
+
+  <event/>
+  <event_activity/>
+  <charitable_activity/>
+  
+  <person/>
+  <personal_address/>
+  <user/>
+  <user_auth_group/>
+  <user_profile/>
+  <url_details/>
+  <user_role/>
+  <charity_administrator/>
+
+  <email_address/>
+  <person_email_address/>
+
+  <telephone_number/>
+  <person_telephone_number/>
+
+  <bank/>
+  <bank_address/>
+  <bank_account/>
+  <charity_offline_reg/>
+  <fundraiser/> 
+  <fundraiser_group/>
+  <fundraiser_activity/>
+  <fundraising_charity_split/>
+  
+  <page/>
+  <page_widget/>
+  
+  <donor/>
+  <donation/>
+  <payment_card/>
+  
+</dataset>

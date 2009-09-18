@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema 
+	xmlns="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.virginmoneygiving.com/indexer-service" 
+	xmlns:tns="http://www.virginmoneygiving.com/indexer-service" 
+	xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" 
+    xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" 
+    jaxb:extensionBindingPrefixes="xjc" jaxb:version="2.1"
+	elementFormDefault="qualified">
+
+    <simpleType name="IndexedType">
+        <annotation>
+            <documentation>
+                Defines possible indexed types
+            </documentation>
+        </annotation>
+        <restriction base="token">
+            <enumeration value="FUNDRAISER_ACTIVITY"/>
+            <enumeration value="EVENT"/>
+            <enumeration value="CHARITY"/>
+        </restriction>
+    </simpleType>
+
+    <complexType name="IndexerCharity">
+    	<sequence>
+    		<element name="id" type="string"></element>
+    		<element name="name" type="string"></element>
+    		<element name="url" type="string"></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="IndexerUpdate">
+    	<sequence>
+    		<element name="id" type="string"></element>
+    		<element name="logoUrl" type="string"></element>
+    		<element name="name" type="string"></element>
+    		<element name="title" type="string"></element>
+    		<element name="url" type="string"></element>
+    		<element name="description" type="string" minOccurs="0" maxOccurs="1"></element>
+    		<element name="location" type="string" minOccurs="0" maxOccurs="1"></element>
+    		<element name="date" type="date" minOccurs="0" maxOccurs="1"></element>
+    		<element name="registeredNumber" type="string" minOccurs="0" maxOccurs="1"></element>
+    		<element name="fundraisers" type="string" minOccurs="0" maxOccurs="unbounded"></element>
+    		<element name="charities" type="tns:IndexerCharity" minOccurs="0" maxOccurs="unbounded"></element>
+            <element name="type" type="tns:IndexedType"></element>
+    		<element name="fundraiserId" type="string"></element>
+    		<element name="teamActivity" type="boolean" default="false"></element>
+    	</sequence>
+    </complexType>
+
+    <element name="updateInIndexMessage">
+    	<complexType>
+    		<sequence>
+    			<element name="indexerUpdate" type="tns:IndexerUpdate"></element>
+    		</sequence>
+    	</complexType></element>
+    <element name="deleteFromIndexMessage">
+    	<complexType>
+    		<sequence>
+    			<element name="indexerUpdate" type="tns:IndexerUpdate"></element>
+    		</sequence>
+    	</complexType></element>
+</schema>

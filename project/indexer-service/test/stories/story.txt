@@ -1,0 +1,26 @@
+4 scenarios executed successfully
+
+  Story: charity is modified
+   Narrative: Update Search Results When A Charity Is Modified
+      As a Giver
+      I want to get updated search results when a charity is modified
+      So that I can be sure the search results are up to date
+
+    scenario An existing charity's name is changed
+      given there are two charities called 'RSPC Cats' and 'RSP Dogs'
+      when 'RSPC Cats' name is changed to 'RSPC Hens'
+      when a search string of 'pc he' is entered
+      then the search result contains one hit for 'RSPC Hens'
+
+    scenario An existing charity is deleted
+      given there are two charities called 'RSPC Cats' and 'RSP Dogs'
+      when 'RSPC Dogs' is deleted
+      when a search string of 'dogs' is entered
+      then the search result contains no hits
+
+    scenario An new charity is added
+      given there are two charities called 'RSPC Cats' and 'RSP Dogs'
+      when 'RSPC Hens  is created
+      when a search string of 'rspc' is entered
+      then the search result contains 3 hits for 'RSPC Dogs', 'RSCP Cats' and 'RSPC Hens'
+

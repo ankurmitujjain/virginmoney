@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:util="http://www.springframework.org/schema/util"	
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+    http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+	
+	<!--  Constants for charity category. -->
+	<util:constant id="CATEGORY_ID_ANIMALS_THAT_HELP_PEOPLE"
+                 static-field="com.virginmoneygiving.integrationtests.webdriver.charity.registration.CharityRegistrationSetCategoryPage.CATEGORY_ID_ANIMALS_THAT_HELP_PEOPLE"/>
+                 
+  	<util:constant id="CATEGORY_ID_CHILD_PROTECTION"
+                 static-field="com.virginmoneygiving.integrationtests.webdriver.charity.registration.CharityRegistrationSetCategoryPage.CATEGORY_ID_CHILD_PROTECTION"/>
+                 
+    
+	<util:list id="categoryCodes" list-class="java.util.ArrayList">
+       <ref bean="CATEGORY_ID_ANIMALS_THAT_HELP_PEOPLE"/>
+	   <ref bean="CATEGORY_ID_CHILD_PROTECTION"/>
+    </util:list>
+    
+    <!--  Add more elements here to register multiple charities. -->             
+	<util:list id="charities" list-class="java.util.ArrayList">
+       <ref bean="charityRegistrationDetails" />
+    </util:list>
+
+	
+	<bean id="charityRegistrationDetails" class="com.virginmoneygiving.integrationtests.webdriver.charity.CharityRegistrationDetails">
+		<property name="charityDetails.name" value="Auto Test Charity 001" />
+		<property name="charityDetails.registrationNumber" value="AUTO001" />
+		<property name="charityDetails.addressLine1" value="1 Some Street" />
+		<property name="charityDetails.addressLine2" value="Some Place" />
+		<property name="charityDetails.town" value="Some Town" />
+		<property name="charityDetails.county" value="Some County" />
+		<property name="charityDetails.postCode" value="W14 4RF" />		
+		<property name="charityDetails.categories" ref="categoryCodes"/> <!-- value="5,10" / -->				
+		<property name="charityDetails.description" value="This is an automated test charity"/>
+		<property name="charityDetails.commonName" value="Auto Test Charity One" />
+		<property name="charityDetails.abbreviations" value="AUTO01" />
+		<property name="charityDetails.accountingEndDateDay" value="01" />
+		<property name="charityDetails.accountingEndDateMonth" value="01" />
+		<property name="charityDetails.accountingEndDateYear" value="2010" />
+		<property name="charityDetails.logoPath" value="not found" />
+		
+		<property name="administratorDetails.title" value="Mr" />
+		<property name="administratorDetails.firstName" value="Forename" />
+		<property name="administratorDetails.lastName" value="Surname" />
+		<property name="administratorDetails.occupation" value="Being Rich" />
+		<property name="administratorDetails.telephoneNumber" value="07919222876" />
+		<property name="administratorDetails.email" value="auto001.c.admin@example.com" />
+		
+		<property name="securityDetails.dobDay" value="01" />
+		<property name="securityDetails.dobMonth" value="01" />
+		<property name="securityDetails.dobYear" value="1990" />
+		<property name="securityDetails.password" value="pa55word!!" />
+		
+		<property name="trusteeDetails.title" value="Mr" />
+		<property name="trusteeDetails.firstName" value="Foo" />
+		<property name="trusteeDetails.lastName" value="Foo" />
+		<property name="trusteeDetails.dobDay" value="01" />
+		<property name="trusteeDetails.dobMonth" value="01" />
+		<property name="trusteeDetails.dobYear" value="1970" />
+		<property name="trusteeDetails.countryCode" value="GB" />
+		<property name="trusteeDetails.addressLine1" value="1" />
+		<property name="trusteeDetails.addressLine2" value="2" />
+		<property name="trusteeDetails.town" value="Someville" />
+		<property name="trusteeDetails.county" value="Somesex" />
+		<property name="trusteeDetails.postCode" value="W14 4RF" />
+	</bean>
+
+</beans>

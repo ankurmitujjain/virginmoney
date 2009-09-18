@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+	<description>
+		Properties to be loaded for integration testing
+	</description>
+
+	<!-- Load giving web service property using the system variable. -->
+	<bean id="propertyPlaceholderConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="searchSystemEnvironment">
+			<value>true</value>
+		</property>
+		<property name="systemPropertiesModeName">
+			<value>SYSTEM_PROPERTIES_MODE_FALLBACK</value>
+		</property>
+		<property name="locations" ref="propertyFileLocations" />
+	</bean>
+
+	<bean id="propertyFileLocations" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<value>classpath:integration-testing.properties</value>
+			</list>
+		</constructor-arg>
+	</bean>
+</beans>

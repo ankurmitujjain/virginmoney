@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--==========================================================================
+  - Adds five charities to the database. All share the same address and
+  - bank. All are ok to go live. Note that admin user won't be able to
+  - log in unless data hase been set up in secure-ws and secure-data. See
+  - CreatorUtils for more info. 
+  =========================================================================-->
+<dataset>
+
+
+  <charity id="1" CHARITY_STATUS_CODE="LIV"/>
+  <charity id="2" CHARITY_STATUS_CODE="LIV"/>
+  <charity id="3" CHARITY_STATUS_CODE="LIV"/>
+  <charity id="4" CHARITY_STATUS_CODE="LIV"/>
+  <charity id="5" CHARITY_STATUS_CODE="LIV"/>
+
+</dataset>

@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <address ADDRESS_LINE_1="1" POSTCODE="AA1 1AA" COUNTRY_ISO_CODE="GB" ADDRESS_TYPE_CODE="Admin"/>
+  <address ADDRESS_LINE_1="1" POSTCODE="AA1 1AA" COUNTRY_ISO_CODE="GB" ADDRESS_TYPE_CODE="Register"/>
+  <address ADDRESS_LINE_1="1" POSTCODE="AA1 1AA" ADDRESS_TYPE_CODE="Billing"/>
+
+  <categorised_charity CATEGORY_ID="5"/>
+
+  <charity NAME="Charity One" CHARITY_REGISTER_CODE="New" REGISTERED_CHARITY_NUMBER="1" REGISTRATION_FEE_IND="N" CHARITY_STATUS_CODE="IRC" FORMS_COMPLETED_IND="N"/>
+
+  <charity_administrator MAIN_IND="Y"/>
+
+  <email_address EMAIL_ADDRESS="c.admin@one.com" EMAIL_ADDRESS_TYPE="C"/>
+
+  <person DOB_DAY="1" DOB_MONTH="1" DOB_YEAR="1965" TITLE="Mr" FORENAME="Charity" SURNAME="Admin" OCCUPATION="Charity Administrator"/>
+
+<!-- Can't check link tables as ID is not fixed and rows are just ID refs
+  - Could do something with ReplacementDataSet to set IDs as we find them, but it smells to me
+  <charity_address />
+  <person_email_address ID="1" PERSON_ID="1" emailAddresses_ID="1"/>
+
+  <person_telephone_number ID="1" PERSON_ID="1" telephoneNumbers_ID="1"/>
+  <person_telephone_number ID="2" PERSON_ID="1" telephoneNumbers_ID="2"/>
+-->
+  <telephone_number PRESENTATION_NUMBER=""/>
+  <telephone_number PRESENTATION_NUMBER="01111 111111"/>
+
+  <user LOGIN_EMAIL_ADDRESS="c.admin@one.com"/>
+
+  <user_role ROLE_CODE="Admin"/>
+</dataset>

@@ -1,0 +1,30 @@
+<ehcache>
+    <!-- defaults -->
+    <diskStore 
+        path="java.io.tmpdir"/>
+    <defaultCache 
+        maxElementsInMemory="50" 
+        eternal="false" 
+        timeToIdleSeconds="300" 
+        timeToLiveSeconds="600" 
+        overflowToDisk="true" 
+		maxElementsOnDisk="1000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="120"
+		memoryStoreEvictionPolicy="LRU"
+	/>
+	
+	<!-- Cache for static reference data - not yet tuned! -->
+    <cache 
+        name="profanityServiceStaticDataCache" 
+        maxElementsInMemory="5000" 
+        eternal="false" 
+        timeToIdleSeconds="300" 
+        timeToLiveSeconds="600" 
+        overflowToDisk="true" 
+		maxElementsOnDisk="10000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="180"
+		memoryStoreEvictionPolicy="LRU"
+	/>
+</ehcache>

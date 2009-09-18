@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+
+  <event NAME="Selenium Event" EVENT_STATUS_CODE="PUB" MAXIMUM_CHARITIES="1" DESCRIPTION="Walk the Oxfordshire Way" EVENT_DATETIME="2009-09-30 00:00:00.0" LOCATION_ISO_CODE="GB-OXF" JOINING_INSTRUCTIONS="Turn up and walk" WEBSITE_URL="" CONTACT_NAME="Wally Walker" CONTACT_TELEPHONE="" CONTACT_EMAIL_ADDRESS="w.walker@charityone.vmgtest.com" EVENT_TIME_TEXT="8:00" OPERATIONAL_EVENT_IND="N"/>
+  <event_activity ACTIVITY_TYPE_CODE="026"/>
+
+</dataset>

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+ - A set of pending events.
+ - [date] should be substitued for a suitable value 
+ -->
+<dataset>
+
+  <event ID="1" EVENT_STATUS_CODE="PUB"/>
+  <event ID="2" EVENT_STATUS_CODE="PUB"/>
+  <event ID="3" EVENT_STATUS_CODE="PUB"/>
+  <event ID="4" EVENT_STATUS_CODE="PUB"/>
+  <event ID="5" EVENT_STATUS_CODE="PUB"/>
+
+</dataset>

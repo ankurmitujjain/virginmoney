@@ -1,0 +1,30 @@
+<com.virginmoney.glis.messages.CollectedRegistrationFeeBatch>
+	<batchNumber>somebatch</batchNumber>
+	<ok>true</ok>
+	<feePayments>
+		<com.virginmoney.glis.messages.RegistrationFeePaymentCollected>
+			<invoiceNumber>ICR000000000001</invoiceNumber>
+			<charityReference>VMG</charityReference>
+			<feeAmount>100.0</feeAmount>
+			<vatAmount>15.0</vatAmount>
+		</com.virginmoney.glis.messages.RegistrationFeePaymentCollected>
+		<com.virginmoney.glis.messages.RegistrationFeePaymentCollected>
+			<invoiceNumber>ICR000000000002</invoiceNumber>
+			<charityReference>VMG</charityReference>
+			<feeAmount>100.0</feeAmount>
+			<vatAmount>15.0</vatAmount>
+		</com.virginmoney.glis.messages.RegistrationFeePaymentCollected>
+		<com.virginmoney.glis.messages.RegistrationFeePaymentCollected>
+			<invoiceNumber>ICR000000000003</invoiceNumber>
+			<charityReference>VMG</charityReference>
+			<feeAmount>100.0</feeAmount>
+			<vatAmount>15.0</vatAmount>
+		</com.virginmoney.glis.messages.RegistrationFeePaymentCollected>
+		<com.virginmoney.glis.messages.RegistrationFeePaymentCollected>
+			<invoiceNumber>ICR000000000004</invoiceNumber>
+			<charityReference>VMG</charityReference>
+			<feeAmount>100.0</feeAmount>
+			<vatAmount>15.0</vatAmount>
+		</com.virginmoney.glis.messages.RegistrationFeePaymentCollected>
+	</feePayments>
+</com.virginmoney.glis.messages.CollectedRegistrationFeeBatch>

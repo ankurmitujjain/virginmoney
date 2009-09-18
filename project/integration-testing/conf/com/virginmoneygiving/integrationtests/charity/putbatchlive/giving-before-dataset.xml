@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--==========================================================================
+  - Adds five charities to the database. All share the same address and
+  - bank. All are ok to go live. Note that admin user won't be able to
+  - log in unless data hase been set up in secure-ws and secure-data. See
+  - CreatorUtils for more info. 
+  =========================================================================-->
+<dataset>
+  
+  <!-- Other tables that may need to be cleared -->
+  <fundraiser/>
+  <fundraiser_activity/>
+  <fundraising_charity_split/>
+  <user_profile/>
+
+</dataset>

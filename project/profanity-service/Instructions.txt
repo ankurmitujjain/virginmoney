@@ -1,0 +1,29 @@
+#Usage instructions:
+
+1. Copy the /conf/jboss/deploy/profanity-ds.xml to the JBoss deploy folder.
+
+2. Update the profanity-ds.xml configurations to point VMG database settings - IPaddress, user-name and password.
+** Note: user-name and password (root/****) are dummy values.
+
+3. Update the web.xml in your project to load the spring configurations used by profanity-service as shown below
+	
+	Example:
+	 <context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			WEB-INF/spring/applicationContext*.xml,
+			classpath:profanity-db-context.xml
+		</param-value>
+  	   </context-param>
+	
+4. Run the following SQL scripts to create profanity schema and populate the master data.
+	
+  /database contains the create and master data scripts for profane database.
+  
+  00_base_script.sql - creates the schema if does not exist already.
+  01_create_schema.sql - creates the base tables.
+  02_profane_master_data_setup_script.sql - sets up master data.
+  
+  
+** Please note that this service is backed up by a ehcache implementation. 
+   Please make sure that following jars under thirdparty\libraries\ehcache will be variable on the classpath to use this service.

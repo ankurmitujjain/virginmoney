@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<!-- 
+	     This file sets up cache providers to prevent expensive Web Service lookups of reference data 
+	     Specify data to be cached using annotations
+             @Cacheable(modelId = "testCaching")
+	    
+	     see https://springmodules.dev.java.net/docs/reference/0.9/html_single/#cache
+	  -->
+	  
+	<!-- Caching module does not have any CachingListener implementations... -->
+
+	<!--  
+	  The created cache manager is an instance of net.sf.ehcache.CacheManager
+	-->
+	<bean id="ehCacheManager"
+	  class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+	  <property name="configLocation">
+			<value>classpath:META-INF/profanity-service-ehcache.xml</value>
+	  </property>
+	</bean>
+	
+	<bean id="cacheProviderFacade"
+	  class="org.springmodules.cache.provider.ehcache.EhCacheFacade">
+	  <property name="cacheManager" ref="ehCacheManager" />
+	</bean>
+
+    <!-- ensure proxy wrapping for interceptors -->
+	<bean id="cacheAutoProxy" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="beanNames">
+			<list>
+				<idref bean="profaneDAO"/>
+			</list>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>cachingInterceptor</value>
+				<value>flushingInterceptor</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- process annotations -->
+	<bean id="cachingAttributeSource"
+	  class="org.springmodules.cache.annotations.AnnotationCachingAttributeSource">
+	</bean>
+	
+	<bean id="cachingInterceptor"
+	  class="org.springmodules.cache.interceptor.caching.MetadataCachingInterceptor">
+	  <property name="cacheProviderFacade" ref="cacheProviderFacade" />
+	  <property name="cachingAttributeSource" ref="cachingAttributeSource" />
+	  <property name="cachingModels">
+		<props>
+		  <prop key="testCaching">cacheName=testCache</prop>
+		  <prop key="staticDataCaching">cacheName=profanityServiceStaticDataCache</prop>
+		</props>
+	  </property>
+	</bean>
+	
+	<bean id="cachingAttributeSourceAdvisor"
+	  class="org.springmodules.cache.interceptor.caching.CachingAttributeSourceAdvisor">
+	  <constructor-arg ref="cachingInterceptor" />
+	</bean>
+
+	<!-- Cache flushing (TODO: make it time based?) -->
+	<bean id="flushingAttributeSource"
+	  class="org.springmodules.cache.annotations.AnnotationFlushingAttributeSource">
+	</bean>
+	
+	<bean id="flushingInterceptor"
+	  class="org.springmodules.cache.interceptor.flush.MetadataFlushingInterceptor">
+	  <property name="cacheProviderFacade" ref="cacheProviderFacade" />
+	  <property name="flushingAttributeSource" ref="flushingAttributeSource" />
+	  <property name="flushingModels">
+		<props>
+		  <prop key="testFlushing">cacheNames=testCache</prop>
+		</props>
+	  </property>
+	</bean>
+	
+	<bean id="flushingAttributeSourceAdvisor"
+	  class="org.springmodules.cache.interceptor.flush.FlushingAttributeSourceAdvisor">
+	  <constructor-arg ref="flushingInterceptor" />
+	</bean> 
+	
+</beans>	

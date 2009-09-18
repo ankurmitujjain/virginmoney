@@ -1,0 +1,72 @@
+
+
+4. Over-ride Runtime Variables
+===============================
+
+There are two runtime variables that are used in indexer-service.
+
+queue.name			The name of the jms queue the service will listen on
+solr.server.url		The url to connect to the solr server
+
+The default values are shown below
+
+queue.name=queue/indexerQueue
+solr.server.url=http://localhost:8080/apache-solr-1.3.0
+
+They can be over-ridden by editing file indexer-service.properties
+
+Test
+=====
+
+Open ${svn}/indexer-service/test/stories/DON0020/CharityIsModifiedStory.groovy and change the hard-coded paths to fit your local environment.
+Open ${svn}/indexer-service/test/stories/DON0020/FundraiserIsModifiedStory.groovy and change the hard-coded paths to fit your local environment.
+
+Run target "test-easyb", examine the files in test/stories to see examples of usage and creating messages to add, index and delete 
+charities and fundraisers. There are also some unit test classes in the test directory for more examples. 
+
+The easyb tests are more of a complete end-to-end test using an embedded Solr server, while the unit tests use mock classes.
+
+Deployment Instructions - 
+
+1. Untar the tar file.
+
+2. Application deployment components within /JBoss/Main - 
+
+2.1 deploy-virgin - contains all the files to be placed in the deploy folder of jboss. 
+2.1.1 Solr war file
+When Solr starts it needs two variables:
+
+solr.solr.home tell it where to find it's config files
+solr.data.dir tells it where to write it's data indexes
+
+They can both be provided as system.properties values, so either set JAVA_OPTS or 
+pass them using -D when starting java
+
+solr.solr.home should be set to ${jboss}/conf/solr
+solr.data.dir should be set to a suitable location. Solr will need permission to write to the directory
+
+Start JBoss and the Solr service should start. You can check by using a browser 
+to hit http://localhost:8080/apache-solr-1.3.0/admin/
+
+2.2 lib-virgin - external library files to be copied to jboss_server_home folder.
+** Set classpath for lib-virgin on jboss.  
+
+2.3 conf - contains JBoss configuration file. Please copy this file to jboss server conf folder. 
+2.3.1 solr sub-directory contains configuration files for Solr. Review to check all values are appropriate
+
+2.4 external-configuration - stores application configuration files. Copy this folder as-is on the file system**.
+
+2.4.1 Create the system property GIVING_CONF_HOME to point to the location of this folder. 
+           eg: -DGIVING_CONF_HOME=/user/home/VMG/external-configuration
+
+** Please note that JBoss user should have access permission to this folder location.
+
+3. Delete following jars from jboss -> production -> lib folder since they conflict with other jars used in the application. 
+If not deleted the application server will give some error while deployiong the war file.
+--asm.jar
+--asm-attrs.jar
+--cglib.jar
+--jboss-jaxws.jar
+
+Note:
+Please increase the permgen size in run.conf as appropriate (256 m)

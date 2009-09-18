@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:util="http://www.springframework.org/schema/util"	
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+    http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+	
+    <!--  Add more elements here to register multiple charities. -->             
+	<util:list id="fundraisers" list-class="java.util.ArrayList">
+       <ref bean="fundraiserRegistrationDetails" />
+    </util:list>
+    
+    <bean id="fundraiserRegistrationDetails" class="com.virginmoneygiving.integrationtests.webdriver.fundraiser.FundraiserRegistrationDetails">
+    	<property name="administratorDetails.title" value="Mr" />
+		<property name="administratorDetails.firstName" value="fundraiser" />
+		<property name="administratorDetails.lastName" value="details" />
+		
+		<property name="administratorDetails.occupation" value="Being Rich" />
+		<property name="administratorDetails.telephoneNumber" value="07919222876" />
+		<property name="administratorDetails.email" value="auto001.c.admin@example.com" />
+		
+		<property name="securityDetails.dobDay" value="10" />
+		<property name="securityDetails.dobMonth" value="10" />
+		<property name="securityDetails.dobYear" value="1982" />
+		<property name="securityDetails.password" value="admin*1239" />
+		<property name="securityDetails.confirmPassword" value="admin*1239" />
+		
+		
+		<property name="fundraiserDetails.reasonCode" value="CHALLENGE" />
+		<property name="fundraiserDetails.eventCompletionDay" value="12" />
+		<property name="fundraiserDetails.eventCompletionMonth" value="12" />
+		<property name="fundraiserDetails.eventCompletionYear" value="2010" />
+		<property name="fundraiserDetails.charityName" value="Auto Test Charity 001" />
+		<property name="fundraiserDetails.buildingNameAndNumber" value="1234" />
+		<property name="fundraiserDetails.town" value="town" />
+		<property name="fundraiserDetails.county" value="country" />
+		<property name="fundraiserDetails.postCode" value="SK8 2EL" />
+		<property name="fundraiserDetails.preferredTelephoneNumber" value="07787899123" />
+		<property name="fundraiserDetails.preferredTelephoneNumberType" value="L" />
+		<property name="fundraiserDetails.emailAddress" value="fundraiser.details@arrkgroup.com" />
+
+		<property name="fundraiserDetails.fundraiserUrl" value="fundraiserdetails" />
+		<property name="fundraiserDetails.pageTitle" value="pagetitlesss" />
+		<property name="fundraiserDetails.personalComment" value="message details" />
+    </bean>
+    
+</beans>

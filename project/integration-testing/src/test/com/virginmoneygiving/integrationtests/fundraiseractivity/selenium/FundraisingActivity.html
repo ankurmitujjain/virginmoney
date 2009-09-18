@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>FundraisingActivity</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">FundraisingActivity</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/fundraiser-web/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>ui=fundraiser-web::fundraiserTopLevelActions(action=Choose Fundraising Reason)</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>ui=fundraiser-pages::personalChallenge()</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>ui=fundraiser-pages::fundraiserEvents(action=031)</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>ui=fundraiser-pages::eventsDetails()</td>
+	<td>label=Non-location specific</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>ui=fundraiser-pages::eventCompletionDay()</td>
+	<td>31</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>ui=fundraiser-pages::eventCompletionMonth()</td>
+	<td>12</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>ui=fundraiser-pages::eventCompletionYear()</td>
+	<td>2009</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>ui=fundraiser-pages::eventDuration()</td>
+	<td>label=1 month</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>ui=fundraiser-pages::alone()</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>ui=fundraiser-pages::charityName()</td>
+	<td>Charity One</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>ui=fundraiser-pages::fundraisingTargetAmount()</td>
+	<td>1000</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>ui=fundraiser-pages::contributedNo()</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>fundraiserCharitySave_0</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>ui=fundraiser-pages::unregisteredNext()</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>ui=fundraiser-pages::registerfundraiser.title()</td>
+	<td>label=Mr</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>ui=common-pages::firstName()</td>
+	<td>Freddy</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>ui=common-pages::lastName()</td>
+	<td>Fundraiser</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>ui=common-pages::regBuildingNmNo()</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>ui=common-pages::regPostCode()</td>
+	<td>AA1 1AA</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>ui=fundraiser-pages::preferredTelephoneNumberType()</td>
+	<td>label=Home</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>ui=common-pages::emailAddress()</td>
+	<td>f.fundraiser@vmgtest.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>alternativeTelephoneNumber</td>
+	<td>01111 111111</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>termsAndConditionsAccepted</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>fundraiserdetailsForm_0</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>ui=common-pages::dayOfBirth()</td>
+	<td>01</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>ui=common-pages::monthOfBirth()</td>
+	<td>01</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>ui=common-pages::yearOfBirth()</td>
+	<td>1965</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>ui=common-pages::password()</td>
+	<td>Pa55word!</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>ui=common-pages::confirmpass()</td>
+	<td>Pa55word!</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>ui=fundraiser-pages::eventTabNext()</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Virgin Money Giving | Fundraising | Choose URL</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>uniqueUrlForm_0</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>ui=fundraiser-pages::createFundraiserPage()</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>createFundraiserPage_pageDetails_url</td>
+	<td>Freddy's Personal Challenge</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>createFundraiserPage_0</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>ui=fundraiser-pages::myPage()</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

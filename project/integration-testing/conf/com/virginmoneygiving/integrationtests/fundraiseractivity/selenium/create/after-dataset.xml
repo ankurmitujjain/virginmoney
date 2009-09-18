@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--==========================================================================
+  - Adds a live charity to the database and cleans out all the fundraiser and 
+  - fundraiser-activity related tables  
+  =========================================================================-->
+<dataset>
+
+  <url_details URL="Freddy.Fundraiser" URL_TYPE_CODE="fundraiser"/>
+  <fundraiser FUNDRAISER_STATUS_CODE="REGISTERED"/>
+  <fundraiser_activity CHARITIES_CONTRIBUTION_IND="N" FUNDRAISING_AS_GROUP_IND="I" FUND_RAISING_TARGET="1000.00" OPEN_PERIOD="1" OTHER_ACTIVITY_TYPE="" ACTIVITY_TYPE_CODE="031" LOCATION_CODE="ANY" FUNDRAISING_REASON_CODE="CHALLENGE" CHARITIES_SUPPORTED_IND="S"/>
+  <fundraising_charity_split SPLIT_PERCENTAGE="100"/>
+
+  <page TITLE="Enter title" PAGE_STATUS_CODE="ACT" PAGE_TYPE_CODE="FUND" URL="Freddy&apos;s Personal Challenge" MESSAGE=""/>
+
+</dataset>
