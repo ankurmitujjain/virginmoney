@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+
+    <appender name="LOGGER" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="testresults/addresslookup_ws_local.log"/>
+        <param name="Append" value="false"/>
+        <param name="MaxFileSize" value="20MB"/>
+        <param name="MaxBackupIndex" value="10"/>
+
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d : %-8p : [%-40C{1}] [NDC : %x]  [MESSAGE : %-200m]  [SOURCE : %l] %n"/>
+        </layout>
+    </appender>
+
+
+    <!-- specific logger for IFDS call timings -->
+    <appender name="VIRGIN_IFDS_TIMINGS" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="testresults/addresslookup_ifds_timings_local.log"/>
+        <param name="Append" value="false"/>
+        <param name="MaxFileSize" value="20MB"/>
+        <param name="MaxBackupIndex" value="10"/>
+
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d : %-8p : [%-40C{1}] [NDC : %x]  [MESSAGE : %-200m]  [SOURCE : %l] %n"/>
+        </layout>
+    </appender>
+
+
+    <appender name="SYSTEM" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="testresults/addresslookup_ws_local_system.log"/>
+        <param name="Append" value="false"/>
+        <param name="MaxFileSize" value="10MB"/>
+        <param name="MaxBackupIndex" value="10"/>
+
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d : %-8p : [%-40C{1}] [NDC : %x]  [MESSAGE : %-200m]  [SOURCE : %l] %n"/>
+        </layout>
+    </appender>
+
+
+
+    <!-- log the vm classes to a seperate file -->
+     <category name="com.virginmoney" additivity="false">
+       <priority value="TRACE"/>
+       <appender-ref ref="LOGGER" />
+    </category>
+    <!-- log the vm classes to a seperate file -->
+     <category name="uk.co.postcodeanywhere" additivity="false">
+       <priority value="TRACE"/>
+       <appender-ref ref="LOGGER" />
+    </category>
+
+   <!-- log the ifds call timings to their own file -->
+   <category name="com.virginmoney.ifds.utils.WebServiceLogging" additivity="false">
+      <priority value="DEBUG"/>         <!-- PLEASE LEAVE AT DEBUG LEVEL -->
+      <appender-ref ref="VIRGIN_IFDS_TIMINGS" />
+   </category>
+
+
+    <!-- log everything else as we are in test mode -->
+    <root>
+        <priority value="TRACE"/>
+        <appender-ref ref="SYSTEM"/>
+    </root>
+
+ </log4j:configuration>

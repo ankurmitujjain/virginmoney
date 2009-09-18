@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd 
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<description>
+		Collected Registration Fees Job invoked by JMS from GLIS 
+	</description>
+
+	<import resource="classpath:/property-context.xml" />
+
+	<context:annotation-config />
+	<tx:annotation-driven />
+
+	<!-- Job Configuration - Start-->
+	<bean id="collectedRegistrationFeesJob" parent="simpleJob">
+		<property name="name" value="Collected Registration Fees Job" />
+		<property name="steps">
+			<list>
+				<bean id="step1" parent="paymentSimpleStep">
+					<property name="itemReader" ref="collectedRegistrationFeesXmlItemReader" />
+					<property name="itemProcessor" ref="collectedRegistrationFeesItemProcessor" />
+					<property name="itemWriter" ref="collectedRegistrationFeesXmlWriter" />
+					<property name="commitInterval" value="1000" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<!-- Job Configuration - End-->
+
+	<!-- 
+		XML Reader to read file of data from GLIS.
+	-->
+	<bean id="collectedRegistrationFeesXmlItemReader"
+		class="org.springframework.batch.item.xml.StaxEventItemReader" scope="step">
+
+		<property name="fragmentRootElementName" value="com.virginmoney.glis.messages.RegistrationFeePaymentCollected"/>
+		<property name="resource" value="#{jobParameters[filename]}"/>
+        <!--<property name="resource" value="file:///GivingBatch/output/CRFPAYCOLL200904281504612.xml"/>-->
+        <property name="unmarshaller">
+			<bean class="org.springframework.oxm.xstream.XStreamMarshaller"></bean>
+		</property>
+	</bean>
+	<bean class="org.springframework.batch.core.scope.StepScope" />
+
+	<bean id="collectedRegistrationFeesItemProcessor"
+		class="com.virginmoneygiving.givingbatch.processor.CollectedRegistrationFeesProcessor">
+		<property name="paymentService" ref="paymentService" />
+        <property name="locatorImpl"    ref="givingBatchExtServiceLocator" />
+    </bean>
+
+	<!-- XMLItemWriter Configuration -->
+	<bean class="org.springframework.batch.item.xml.StaxEventItemWriter"
+		id="collectedRegistrationFeesXmlWriter">
+		<property name="resource" value="file:${givingbatch.output.folder}/collectedRegistrationFees.xml" />
+		<property name="marshaller" ref="collectedRegistrationFeesMarshallingSerializer" />
+		<property name="rootTagName" value="collectedRegistrationFeesBatch" />
+		<property name="overwriteOutput" value="true" />
+	</bean>
+
+	<!-- XStreamMarshaller Configuration - Start -->
+	<bean class="org.springframework.oxm.xstream.XStreamMarshaller"
+		id="collectedRegistrationFeesMarshallingSerializer">
+		<property name="aliases" ref="aliases" />
+	</bean>
+
+	<util:map id="aliases">
+		<entry key="RegistrationFee"
+			value="com.virginmoneygiving.givingbatch.domain.RegistrationFee" />
+		<entry key="feeDetails"
+			value="com.virginmoneygiving.givingbatch.domain.PaymentType" />
+		<entry key="vatDetails"
+			value="com.virginmoneygiving.givingbatch.domain.TaxType" />
+		<entry key="charityReference" value="java.lang.String" />
+		<entry key="invoiceNumber" value="java.lang.String" />
+		<entry key="bankAccountUniqueId" value="java.lang.String" />
+		<entry key="eventRef" value="java.lang.Integer" />
+	</util:map>
+
+	<!-- XStreamMarshaller Configuration - End -->
+
+	<!-- Dozer Mapping Configuration -->
+	<bean id="dozerMapper" class="net.sf.dozer.util.mapping.DozerBeanMapper">
+		<property name="mappingFiles">
+			<list>
+				<value>batch-dozer-mapping.xml</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>

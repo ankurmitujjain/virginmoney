@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.w3.org/2001/XMLSchema" 
+	xmlns:ocp="http://www.virginmoneygiving.com/type/online-card-payment/"
+	xmlns:cardpayment="http://www.virginmoneygiving.com/type/online-card-payment/card-payment"
+	xmlns:header="http://www.virginmoneygiving.com/type/header/"
+	targetNamespace="http://www.virginmoneygiving.com/type/online-card-payment/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+	xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+	elementFormDefault="qualified">
+
+    <xsd:import namespace="http://www.virginmoneygiving.com/type/header/"
+		schemaLocation="header.xsd" />
+    <xsd:import namespace="http://www.virginmoneygiving.com/type/online-card-payment/card-payment"
+		schemaLocation="card-payment.xsd" />
+
+
+	<xsd:element name="AuthoriseWithCardRequest"> 
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Header" type="header:MessageHeader" />
+				<xsd:element name="guid" type="xsd:string" nillable="false" />
+				<xsd:element name="paymentDetails" type="cardpayment:ServicePaymentDetails"
+					nillable="false" />
+				<xsd:element name="cardDetails" type="cardpayment:ServiceCardDetails"
+					nillable="false" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="AuthoriseWithCardResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="result" type="cardpayment:ServiceAuthorisationResult" />
+			</xsd:sequence>			
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="AuthoriseWithTokenRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Header" type="header:MessageHeader" />
+				<xsd:element name="guid" type="xsd:string" nillable="false" />
+				<xsd:element name="paymentDetails" type="cardpayment:ServicePaymentDetails"
+					nillable="false" />
+				<xsd:element name="cardDetails" type="cardpayment:ServiceCardDetails"
+					nillable="false" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="AuthoriseWithTokenResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="result" type="cardpayment:ServiceAuthorisationResult" />
+			</xsd:sequence>
+		</xsd:complexType> 
+	</xsd:element>
+
+	<xsd:element name="AuthoriseWithAuthenticationRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Header" type="header:MessageHeader" />
+				<xsd:element name="guid" type="xsd:string" nillable="false" />
+				<xsd:element name="paymentDetails" type="cardpayment:ServicePaymentDetails"
+					nillable="false" />
+				<xsd:element name="cardDetails" type="cardpayment:ServiceCardDetails"
+					nillable="false" />
+				<xsd:sequence>
+					<xsd:element name="authResponseData" minOccurs="0" maxOccurs="unbounded" type="cardpayment:ServiceNameValuePair" />
+				</xsd:sequence>					
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="AuthoriseWithAuthenticationResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="result" type="cardpayment:ServiceAuthorisationResult" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+</xsd:schema>

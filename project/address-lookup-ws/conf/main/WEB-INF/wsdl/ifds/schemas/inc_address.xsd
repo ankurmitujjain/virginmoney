@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" attributeFormDefault="unqualified" version="*$Revision: 180 $" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="address" type="addressType">
+		<xs:annotation>
+			<xs:documentation>holds all the address lines of an address</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="addressKind">
+		<xs:simpleType>
+			<xs:restriction base="xs:string"/>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="addressLine">
+		<xs:annotation>
+			<xs:documentation>holds one line of an address, e.g. the first line of an address like a house name: Marloes</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:minLength value="0"/>
+				<xs:maxLength value="50"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="addressNumber">
+		<xs:annotation>
+			<xs:documentation>holds the house number, flat1, 22, 55 etc.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:minLength value="0"/>
+				<xs:maxLength value="50"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:complexType name="addressType">
+		<xs:sequence>
+			<xs:element name="lines">
+				<xs:complexType>
+					<xs:sequence maxOccurs="5">
+						<xs:element ref="line"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element ref="postCode"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="addressLinesType">
+		<xs:sequence>
+			<xs:element name="lines">
+				<xs:complexType>
+					<xs:sequence maxOccurs="5">
+						<xs:element ref="line"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="countryCode" default="GB">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:minLength value="0"/>
+				<xs:maxLength value="3"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="line" type="lineType">
+		<xs:annotation>
+			<xs:documentation>hold and address line and the line number of the line</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="lineType">
+		<xs:sequence>
+			<xs:element name="lineNo">
+				<xs:simpleType>
+					<xs:restriction base="xs:short">
+						<xs:minInclusive value="1"/>
+						<xs:maxInclusive value="5"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element ref="addressLine"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="postCode">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:minLength value="0"/>
+				<xs:maxLength value="50"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+</xs:schema>

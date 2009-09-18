@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" attributeFormDefault="unqualified" version="*$Revision: 180 $" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="debitCard">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="debitCardNameID"/>
+        <xs:element name="debitCardDescription">
+          <xs:simpleType>
+            <xs:restriction base="xs:string"/>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="debitCardSecurity">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="csv">
+          <xs:annotation>
+            <xs:documentation>The last few digits on the reverse side of the card.</xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:minLength value="3"/>
+              <xs:maxLength value="4"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="debitCardDetails">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="holderName" type="xs:string"/>
+        <xs:element name="cardNumber" type="xs:string"/>
+        <xs:element name="issueNumber" minOccurs="0">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:minLength value="1"/>
+              <xs:maxLength value="2"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="validFrom" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="month" type="xs:gMonth"/>
+              <xs:element name="year" type="xs:gYear"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="expiryDate">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="month" type="xs:gMonth"/>
+              <xs:element name="year" type="xs:gYear"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="debitCardNameID">
+    <xs:annotation>
+      <xs:documentation>visa, mastercard</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="35"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+</xs:schema>

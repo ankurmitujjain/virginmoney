@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<!-- Join the JBoss MBean server -->
+	<bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
+		<property name="locateExistingServerIfPossible"><value>true</value></property>
+	</bean>
+
+	<!-- Export the TLG Failover Web Service Locator and Heartbeat as MBeans -->
+    <bean class="org.springframework.jmx.export.MBeanExporter">
+		<property name="server" ref="mbeanServer"/>
+        <property name="registrationBehaviorName"><value>REGISTRATION_REPLACE_EXISTING</value></property>
+        <property name="beans">
+            <map>
+                <entry key="VirginMoneyGiving:name=tlgWsLocator" value-ref="tlgWsLocator"/>
+                <entry key="VirginMoneyGiving:name=tlgHeartbeat" value-ref="tlgHeartbeat"/>
+            </map>
+        </property>
+        <property name="assembler">
+        	<bean class="org.springframework.jmx.export.assembler.InterfaceBasedMBeanInfoAssembler">
+        	    <property name="interfaceMappings">
+        			<props>
+        			  <prop key="tlgWsLocator">com.virginmoneygiving.cardpayment.transport.TLGFailover</prop>
+        			  <prop key="tlgHeartbeat">com.virginmoneygiving.cardpayment.transport.TLGHeartbeat</prop>
+        			</props>
+        	    </property>
+	        </bean>
+	    </property>
+    </bean>
+    
+    <!-- The beans are declared in proxies so they are all grouped together -->
+</beans>

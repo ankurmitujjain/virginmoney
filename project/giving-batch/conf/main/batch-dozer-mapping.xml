@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mappings PUBLIC "-//DOZER//DTD MAPPINGS//EN"
+   "http://dozer.sourceforge.net/dtd/dozerbeanmapping.dtd">
+<mappings>
+
+	<configuration>
+		<custom-converters>
+			<converter
+				type="com.virginmoneygiving.givingbatch.dozer.converter.DateConverter">
+				<class-a>javax.xml.datatype.XMLGregorianCalendar</class-a>
+				<class-b>java.sql.Date</class-b>
+			</converter>
+			<converter
+				type="com.virginmoneygiving.givingbatch.dozer.converter.TimestampConverter">
+				<class-a>java.sql.Timestamp</class-a>
+				<class-b>javax.xml.datatype.XMLGregorianCalendar</class-b>
+			</converter>
+			<converter
+				type="com.virginmoneygiving.givingbatch.dozer.converter.UtilDateConverter">
+				<class-a>java.util.Date</class-a>
+				<class-b>javax.xml.datatype.XMLGregorianCalendar</class-b>
+			</converter> 
+		</custom-converters>
+	</configuration>
+
+	<!--
+		Mapping service objects to domain objects. Since the domain structure
+		doen't allow for one-one recursive mapping within object graph.This
+		can be achieved through the service end point implementation.
+	-->
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.DonationPaymentInitiatedBatch</class-a>
+		<class-b>com.virginmoney.glis.messages.DonationPaymentInitiatedBatch</class-b>
+	</mapping>
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.Batch</class-a>
+		<class-b>com.virginmoney.glis.messages.Batch</class-b>
+	</mapping>
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.MessageHeader</class-a>
+		<class-b>com.virginmoney.glis.messages.MessageHeader</class-b>
+	</mapping>
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.PaymentType</class-a>
+		<class-b>com.virginmoney.glis.messages.PaymentType</class-b>
+		<field>
+			 <a>transactionDate</a>
+   			<b>date</b>
+		</field>
+	</mapping>
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.PaymentInitiated</class-a>
+		<class-b>com.virginmoney.glis.messages.PaymentInitiated</class-b>
+		<field>
+			 <a>paymentType</a>
+   			<b>cardPaymentDetails</b>
+		</field>
+	</mapping>
+		<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.FailedPayment</class-a>
+		<class-b>com.virginmoney.glis.messages.FailedPayment</class-b>
+		<field>
+			 <a>paymentType</a>
+   			<b>failedPaymentDetails</b>
+		</field>
+	</mapping>
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.DonationPaymentCollectedBatch</class-a>
+		<class-b>com.virginmoney.glis.messages.DonationPaymentCollectedBatch</class-b>
+	</mapping>
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.DonationPaymentCollected</class-a>
+		<class-b>com.virginmoney.glis.messages.DonationPaymentCollected</class-b>
+	</mapping>
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.DonationPayment</class-a>
+		<class-b>com.virginmoney.glis.messages.DonationPayment</class-b>
+	</mapping>
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.GiftAidReceivedBatch</class-a>
+		<class-b>com.virginmoney.glis.messages.GiftAidReceivedBatch</class-b>
+	</mapping>
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.GiftAidReceived</class-a>
+		<class-b>com.virginmoney.glis.messages.GiftAidReceived</class-b>
+	</mapping>
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.GiftAidClaimedBatch</class-a>
+		<class-b>com.virginmoney.glis.messages.GiftAidClaimedBatch</class-b>
+	</mapping>
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.Transaction</class-a>
+		<class-b>com.virginmoney.glis.messages.Transaction</class-b>
+	</mapping>
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.TransactionChargePaidBatch</class-a>
+		<class-b>com.virginmoney.glis.messages.TransactionChargePaidBatch</class-b>
+	</mapping>
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.TransactionChargePaid</class-a>
+		<class-b>com.virginmoney.glis.messages.TransactionChargePaid</class-b>
+	</mapping>
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.TaxType</class-a>
+		<class-b>com.virginmoney.glis.messages.TaxType</class-b>
+	</mapping>
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.CharitiesBatch</class-a>
+		<class-b>com.virginmoney.glis.messages.CharitiesBatch</class-b>
+	</mapping>
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.BankAccountType</class-a>
+		<class-b>com.virginmoney.glis.messages.BankAccountType</class-b>
+		<field>
+			<a>primaryUserFlag</a>
+			<b>primaryUseFlag</b>
+		</field>
+	</mapping>
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.Charities</class-a>
+		<class-b>com.virginmoney.glis.messages.Charity</class-b>
+		<field>
+			<a>registeredAddress.postcodeOrZipCode</a>
+			<b>registeredAddress.postcodeOrZip</b>
+		</field>
+		<field>
+			<a>administrationAddress.postcodeOrZipCode</a>
+			<b>administrationAddress.postcodeOrZip</b>
+		</field>
+	</mapping>
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.RegistrationFee</class-a>
+		<class-b>com.virginmoney.glis.messages.RegistrationFee</class-b>
+	</mapping>
+	
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.CollectRegularDonationRequest</class-a>
+		<class-b>com.virginmoneygiving.givingmanagement.service.messages.GivingServiceDonationDetails</class-b>
+	</mapping>
+	
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.MessageHeader</class-a>
+		<class-b>com.virginmoneygiving.paymentmanagement.service.messages.MessageHeader</class-b>
+	</mapping>
+	
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.MessageHeader</class-a>
+		<class-b>com.virginmoneygiving.givingmanagement.service.messages.MessageHeader</class-b>
+	</mapping>
+	
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.SaveRegularDonationRequest</class-a>
+		<class-b>com.virginmoneygiving.paymentmanagement.service.messages.CreateRegularWebDonationRequest</class-b>
+	</mapping>
+	
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.ServiceCardTransaction</class-a>
+		<class-b>com.virginmoneygiving.paymentmanagement.service.messages.ServiceCardTransaction</class-b>
+	</mapping>
+	
+	<mapping>
+		<class-a>com.virginmoneygiving.givingbatch.domain.DonationDistribution</class-a>
+		<class-b>com.virginmoneygiving.paymentmanagement.service.messages.DonationDistribution</class-b>
+	</mapping>
+	
+	<!-- END  -->
+
+</mappings>
+

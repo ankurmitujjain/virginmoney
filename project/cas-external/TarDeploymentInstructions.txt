@@ -1,0 +1,77 @@
+Deployment Instructions -
+
+1. Untar the tar file.
+
+2. Application deployment components within /JBoss/Main -
+
+2.1 deploy-virgin - contains all the files to be placed in the deploy folder of jboss.
+2.1.1. Update cas-external-ds.xml configurations to point to VMG Database settings - IP Address, user name and password.
+** Please note that the database user ID and Password (root/*******) are dummy values.
+
+2.2 external-configuration - stores application configuration files. Copy this folder as-is on the file system**.
+** Modify the vmgssozone.properties as specified in Appendix-A below
+
+2.2.1 Create the system property GIVING_CONF_HOME to point to the location of this folder.
+           eg: -DGIVING_CONF_HOME=/user/home/VMG/external-configuration
+
+** Please note that JBoss user should have access permission to this folder location.
+
+2.2.2 Set system properties on the Jboss server as specified in Appendix-B below.
+
+3. Configure jboss to run on HTTPs channel.
+** CAS server requires a HTTPs channel for processing all requests.
+
+4. This application requires a running instance of security-ws to process the user requests.
+   Please refer security-ws README.txt for configuration details that are required for all giving applications.
+
+5. Delete following jars from jboss -> production -> lib folder since they conflict with other jars used in the application.
+If not deleted the application server will give some error while deployiong the war file.
+--asm.jar
+--asm-attrs.jar
+--cglib.jar
+--jboss-jaxws.jar
+
+
+6. Database SQL Scripts - contained within /database -
+
+6.1 Scripts for giving database within /database - following script -
+cas_ticket_registry_create.sql  - creates the schema and tables.
+
+
+
+Note:
+Please increase the permgen size in run.conf as appropriate (256 m)
+
+Additional information
+----------------------------
+
+Test SSO application is up and running
+   https://{URL OF SERVER WHERE SSO APPLICATION HAS BEEN DEPLOYED}:{HTTPS PORT}/vmgssozone/vmgLoginJAvascriptDisabled
+   Example: https://wolf.unix.vmoney.local:8443/vmgssozone/vmgLoginJAvascriptDisabled
+
+Appendix-A
+------------------
+
+
+   Modify external-configuration -> vmgssozone.properties as shown below
+
+   Set "current.vm.secure.server.name" property to point to jboss instance where fundraiser-web application has been deployed.
+   Example : current.vm.secure.server.name=http://wolf.unix.vmoney.local:8080
+
+
+Appendix-B
+------------------
+
+   > -Dsecurity.service.wsdl.url= http://{jboss_server_name}:{jboss_server_port}/security-ws/security-service?wsdl
+     This should point to a secure-ws instance deployed on the onshore environment.
+     Example : -Dsecurity.service.wsdl.url= http://10.0.1.145:8080/security-ws/security-service?wsdl
+
+   > -Dcurrent.vm.secure.server.name= http://{jboss_server_name}:{jboss_server_port}
+      This should point to jboss instance where charity-web.war and fundraiser-web has been deployed.
+      Example : -Dcurrent.vm.secure.server.name=http://wolf.unix.vmoney.local:8080
+
+    > -Dservice.givingmanagement.wsdl.url= http://{jboss_server_name}:{jboss_server_port}/giving-management-ws/givingManagement?wsdl
+     This should point to a giving-management-ws instance deployed on the onshore environment.
+     Example :  -Dservice.givingmanagement.wsdl.url= http://10.0.5.100:8080/giving-management-ws/givingManagement?wsdl
+
+

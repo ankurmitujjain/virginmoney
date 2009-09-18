@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	<!-- Configuration for Business Activity Monitoring Service -->
+
+	<!-- JBoss JNDI Connection Factory -->
+	<bean name="connectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="java:ConnectionFactory" />
+	</bean>
+
+	<!--  JMS Destination for BAM service -->
+	<bean name="bamDestination" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="${bam.queue.name}" />
+	</bean>
+
+	<!-- jmsTemplate for BAM clients -->
+	<bean name="bamJmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="defaultDestination" ref="bamDestination" />
+		<property name="receiveTimeout" value="1" />
+	</bean>
+
+	<!-- Queue sender to line up messages in queue -->
+	<bean id="bamJmsQueueSender"
+		class="com.virginmoneygiving.bamservice.client.jms.BusinessActivityJmsMessageSender">
+		<property name="jmsTemplate" ref="bamJmsTemplate" />
+	</bean>
+
+	<!-- Application event listeners to send messages to the BAM service -->
+	<bean id="businessActivityEventListener"
+		class="com.virginmoneygiving.bamservice.client.listener.BusinessActivityEventListener">
+		<property name="jmsQueueSender" ref="bamJmsQueueSender" />
+	</bean>
+
+	<!-- BAM service to be used by event generators -->
+	<bean id="businessActivityMonitoringService"
+		class="com.virginmoneygiving.bamservice.client.service.impl.BusinessActivityMonitoringServiceImpl" />
+
+	<!-- Configuration for Business Activity Monitoring Service -->
+
+</beans>

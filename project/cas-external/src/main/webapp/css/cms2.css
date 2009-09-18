@@ -1,0 +1,145 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+    background: url(../images/blue.png);
+    font-size: 76.1%;
+    font-family: verdana;
+    color: #ffffff;
+    background-color: #333333;
+}
+
+.clear {
+  clear: both;
+}
+
+.container {
+    height: 350px;
+    width: 400px;
+    background: url(../images/bg.png);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -200px;
+    margin-top: -200px;
+}
+
+.form-title-small {
+  float: left;
+  width: 100px;
+  text-align: right;
+  padding-top: 2px;
+  padding-bottom: 5px;
+}
+
+
+.display-dataitem-small {
+  float: left;
+  width: 100px;
+  text-align: left;
+  font-weight:bold;
+  padding-top: 2px;
+  padding-bottom: 5px;
+  color: #AAFFFF; 
+}
+
+.loginerrors {
+  float: left;
+  width: 300px;
+  text-align: left;
+  font-weight:bold;
+  padding-top: 2px;
+  padding-bottom: 5px;
+  color: #FFFF00;
+}
+
+.login-ok {
+  float: left;
+  width: 300px;
+  text-align: left;
+  font-weight:bold;
+  padding-top: 2px;
+  padding-bottom: 5px;
+  color: #FFFF00;
+}
+
+.logout-ok {
+  float: left;
+  width: 300px;
+  text-align: left;
+  font-weight: normal;
+  padding-top: 2px;
+  padding-bottom: 5px;
+  color: #FFFF00;
+}
+
+input.error {background:#FFDEFF;}
+
+/* mark as required */
+.loginerrors {background: #333333;}
+
+.form-title-small label {
+  padding-right: 5px;
+  font-weight: bold;
+}
+
+.form-fields-large {
+  float: left;
+  width: 150px;
+  padding-bottom: 7px;
+}
+
+.form-fields-large input {
+    /*width:150px;*/
+    font-size:76.1%;
+    vertical-align:bottom;
+    height:20px;
+    border: 0;
+    color:#333333;
+    font-weight:bold;
+    font-family:verdana;
+}
+
+.form-fields-large div {
+  font-size:17px;
+  display:inline;
+  height:20px;
+  background: url(../images/input-bg-left-white.png) no-repeat left;
+}
+
+.form-fields-large div span {
+  font-size:17px;
+  margin-left:3px;
+  padding-right:3px;
+  background: url(../images/input-bg-right-white.png) no-repeat top right;
+}
+
+
+.form-group {
+  padding-top: 15px;
+}
+
+.form-group ul {
+  list-style-type:none;
+  padding-top: 10px;
+}
+
+#login {
+  padding: 50px;  
+}
+
+#logo {
+  background: url(../images/cms2.0-logo.png) no-repeat top left;
+  width: 240px;
+  height: 100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.button{
+ float:right;
+ padding-right:45px;   
+}
+

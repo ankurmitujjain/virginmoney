@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" attributeFormDefault="unqualified" version="*$Revision: 180 $" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:include schemaLocation="inc_global.xsd"/>
+	<xs:include schemaLocation="inc_address.xsd"/>
+	<xs:element name="request">
+		<xs:annotation>
+			<xs:documentation>Requests an address search, using postcode and optionally either the house name or number. If the postcode is valid and the addressline or addressNumber is invalid, success will be false but a list of possible addresses will be returned</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="addressLine"/>
+				<xs:element ref="postCode"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getAddress_Req">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="header"/>
+				<xs:element ref="request"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

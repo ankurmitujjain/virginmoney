@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><metadata>
+  <groupId>com.sun.xml.ws</groupId>
+  <artifactId>metro-webservices-api</artifactId>
+  <version>1.3</version>
+  <versioning>
+    <versions>
+      <version>1.3</version>
+    </versions>
+    <lastUpdated>20090327103457</lastUpdated>
+  </versioning>
+</metadata>

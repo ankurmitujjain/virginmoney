@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
+
+	<description>
+		Event Registration Fee Payment Collected Job 
+	</description>
+
+	<import resource="classpath:/property-context.xml" />
+
+	<!-- Job Configuration - Start-->
+	<bean id="collectRegularDonationJob" parent="simpleJob">
+		<property name="name" value="Collect Regular Donation Job" />
+		<property name="steps">
+			<list>
+				<bean id="step1" parent="givingSimpleStep">
+					<property name="itemReader" ref="collectRegularDonationJpaPagingItemReader" />
+					<property name="itemProcessor" ref="compositeItemProcessor" />
+					<property name="itemWriter" ref="collectRegularDonationXmlWriter" />
+					<property name="listeners">
+						<list>
+							<ref bean="collectRegularDonationItemTransformer" />
+							<ref bean="collectRegularDonationListener" />
+						</list>
+					</property>
+					<property name="commitInterval" value="5000" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<!-- Job Configuration - End-->
+
+	<!-- Tasklet Configuration -->
+	<bean id="collectRegularDonationListener"
+		class="com.virginmoneygiving.givingbatch.listener.CollectRegularDonationUploadListener">
+		<property name="jmsEmailTemplate" ref="jmsEmailTemplate" />
+		<property name="batchDelegate" ref="batchDelegate" />
+		<property name="givingService" ref="givingService" />
+	</bean>
+	
+	<bean name="jmsEmailTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="defaultDestination" ref="emailDestination" />
+		<property name="receiveTimeout" value="1" />
+	</bean>
+	
+	<!-- JBoss JNDI Connection Factory -->
+	<bean name="connectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="java:ConnectionFactory" />
+	</bean>
+	
+	<!--  JMS Destination for Indexer service -->
+	<bean name="emailDestination" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="queue/emailTemplateQueue" />
+	</bean>
+
+	<!-- JPAPagingItemReader -->
+	<bean id="collectRegularDonationJpaPagingItemReader"
+		class="org.springframework.batch.item.database.JpaPagingItemReader">
+		<property name="entityManagerFactory" ref="givingEntityManagerFactory" />
+		<property name="queryString"
+			value="select don from Donation don, RegularDonation r where don.regularDonation = r.id and
+			(SELECT COUNT(pc) FROM PaymentCard pc, User u, UserRole ur, Donor d WHERE pc.person.id = u.person.id AND
+			u.id = ur.user.id AND ur.id = d.userRole.id) &gt; 0 and r.startDatetime &lt; current_date and
+			 (r.endDatetime is null or r.endDatetime &gt; current_date) and
+			 (date(r.nextPaymentDate) is null or date(r.nextPaymentDate) &lt;= current_date )
+			 and dayofmonth(current_date)= r.paymentDay and (r.statusIndicator is null or r.statusIndicator = 'ACTIVE')
+			 and don.id = (SELECT MAX(dn1.id)  FROM Donation dn1 WHERE dn1.regularDonation = r.id)" />
+		<property name="pageSize" value="5000" />
+	</bean>
+
+
+	<!-- Composite Item Processor Configuration - Start -->
+	<bean id="compositeItemProcessor"
+		class="org.springframework.batch.item.support.CompositeItemProcessor">
+		<property name="itemProcessors">
+			<list>
+				<ref bean="collectRegularDonationItemProcessor" />
+				<ref bean="collectRegularDonationItemTransformer" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="collectRegularDonationItemProcessor"
+		class="com.virginmoneygiving.givingbatch.processor.CollectRegularDonationItemProcessor">
+		<property name="givingService" ref="givingService" />
+	</bean>
+
+	<bean id="collectRegularDonationItemTransformer"
+		class="com.virginmoneygiving.givingbatch.transformer.CollectRegularDonationItemTransformer">
+		<property name="jmsEmailTemplate" ref="jmsEmailTemplate" />
+		<property name="batchDelegate" ref="batchDelegate" />
+		<property name="givingService" ref="givingService" />
+		<property name="locatorImpl" ref="givingBatchExtServiceLocator"/>
+	</bean>
+
+	<!-- Composite Item Processor Configuration - End -->
+
+	<!-- XMLItemWriter Configuration - Start -->
+	<bean class="org.springframework.batch.item.xml.StaxEventItemWriter"
+		id="collectRegularDonationXmlWriter">
+		<property name="resource" value="file:${givingbatch.output.folder}/collectRegularDonationJob.xml" />
+		<property name="marshaller"
+			ref="eventRegistrationFeePaymentCollectedMarshallingSerializer" />
+		<property name="rootTagName" value="regularDonationRecord" />
+		<property name="overwriteOutput" value="true" />
+	</bean>
+
+	<bean class="org.springframework.oxm.xstream.XStreamMarshaller"
+		id="eventRegistrationFeePaymentCollectedMarshallingSerializer">
+		<property name="aliases" ref="aliases" />
+	</bean>
+
+	<util:map id="aliases">
+
+		<entry key="RegularDonation"
+			value="com.virginmoneygiving.givingbatch.domain.RegularDonationRecord" />
+		<entry key="nextCollectionDate" value="java.sql.Date" />
+		<entry key="nameOnCard" value="java.lang.String" />
+		<entry key="paymentAmount"
+			value="java.math.BigDecimal" />
+		<entry key="cardType" value="java.lang.String" />
+	</util:map>
+
+	<!-- XMLItemWriter Configuration - Start -->
+
+	<!-- Dozer Mapping Configuration -->
+	<bean id="dozerMapper" class="net.sf.dozer.util.mapping.DozerBeanMapper">
+		<property name="mappingFiles">
+			<list>
+				<value>batch-dozer-mapping.xml</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mappings PUBLIC "-//DOZER//DTD MAPPINGS//EN"
+   "http://dozer.sourceforge.net/dtd/dozerbeanmapping.dtd">
+<mappings>
+
+	<mapping>
+		<!-- this may be unnecessary -->
+		<class-a>com.virginmoneygiving.cardpayment.service.messages.ServicePaymentTypeEnum</class-a>
+		<class-b>com.virginmoneygiving.cardpayment.business.PaymentTypeEnum</class-b>
+	</mapping>
+
+	<mapping>
+		<!-- this may be unnecessary -->
+		<class-a>com.virginmoneygiving.cardpayment.service.messages.ServicePaymentDetails</class-a>
+		<class-b>com.virginmoneygiving.cardpayment.business.PaymentDetails</class-b>
+	</mapping>
+	
+	<mapping>
+		<!-- this may be unnecessary -->
+		<class-a>com.virginmoneygiving.cardpayment.service.messages.ServiceCardDetails</class-a>
+		<class-b>com.virginmoneygiving.cardpayment.business.CardDetails</class-b>
+	</mapping>
+
+	<mapping>
+		<class-a>com.virginmoneygiving.cardpayment.business.AuthorisationResult</class-a>
+		<class-b>com.virginmoneygiving.cardpayment.service.messages.ServiceAuthorisationResult</class-b>
+		<!-- Hope this will do getAuthRequestData() and pass it in -->
+		<field custom-converter-id="mapNVPConverter">
+			<a>authRequestData</a>
+			<b>authRequestData</b>
+		</field>
+	</mapping>
+	
+</mappings>

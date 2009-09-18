@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd 
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<description>
+		processEvent Jobs - Used to call glis.processEvent() to promt glis into sending out 
+		payment settled batches.
+		The processingType to be sent is supplied as a job-parameter, as is the categoryType 
+	</description>
+
+	<import resource="classpath:/property-context.xml" />
+
+	<context:annotation-config />
+	<tx:annotation-driven />
+
+	<!-- 
+	 - Generic Tasklet Configuration. Use as a parent and change the variables for each
+	 - job definition  
+	 -->
+	<bean id="processEventTask"
+		class="com.virginmoneygiving.givingbatch.tasklet.ProcessEventTasklet" abstract="true">
+		<property name="batchDelegate" ref="batchDelegate" />
+		<property name="paymentService" ref="paymentService" />
+		<property name="generateSequenceHelper" ref="generateSequenceHelper" /> 
+		
+	</bean>
+
+	<!-- processEventCollectedRegistrationFeesJob -->
+	<bean id="processEventCollectedRegistrationFeesJob" parent="simpleJob">
+		<property name="name" value="process Event Collected Registration Fees Job" />
+		<property name="steps">
+			<list>
+				<bean id="step1" parent="taskletStep">
+					<property name="tasklet">
+						<bean parent="processEventTask">
+							<property name="processingType" value="CHARITY-REGISTRATION-FEE-PAYMENT-COLLECTED" />
+							<property name="categoryType" value="PROCESS" />
+							<property name="locatorImpl" ref="givingBatchExtServiceLocator" />
+						</bean>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+<!--		<bean id="processEventCollectedWebDonationsJob" parent="simpleJob">-->
+<!--		<property name="name" value="processEventCollectedWebDonationsJob" />-->
+<!--		<property name="steps">-->
+<!--			<list>-->
+<!--				<bean id="step2" parent="taskletStep">-->
+<!--					<property name="tasklet">-->
+<!--						<bean parent="processEventTask">-->
+<!--							<property name="processingType" value="WEB-DONATIONS-PAYMENT-COLLECTED" />-->
+<!--							<property name="categoryType" value="PROCESS" />-->
+<!--							<property name="sequenceReferenceType" value="INVOICE"/>-->
+<!--							<property name="sequenceTransactionType" value="WEB_DONATION"/>-->
+<!--						</bean>-->
+<!--					</property>-->
+<!--				</bean>-->
+<!--			</list>-->
+<!--		</property>-->
+<!--	</bean>-->
+<!--	-->
+<!--		<bean id="processEventCollectedRegularDonationsJob" parent="simpleJob">-->
+<!--		<property name="name" value="processEventCollectedRegularDonationsJob" />-->
+<!--		<property name="steps">-->
+<!--			<list>-->
+<!--				<bean id="step3" parent="taskletStep">-->
+<!--					<property name="tasklet">-->
+<!--						<bean parent="processEventTask">-->
+<!--							<property name="processingType" value="WEB-REGULAR-DONATIONS-PAYMENT-COLLECTED" />-->
+<!--							<property name="categoryType" value="PROCESS" />-->
+<!--							<property name="sequenceReferenceType" value="INVOICE"/>-->
+<!--							<property name="sequenceTransactionType" value="REGULARDONATION"/>-->
+<!--						</bean>-->
+<!--					</property>-->
+<!--				</bean>-->
+<!--			</list>-->
+<!--		</property>-->
+<!--	</bean>-->
+<!--	-->
+<!--		<bean id="processEventCollectedEventRegistrationJob" parent="simpleJob">-->
+<!--		<property name="name" value="processEventCollectedEventRegistrationJob" />-->
+<!--		<property name="steps">-->
+<!--			<list>-->
+<!--				<bean id="step4" parent="taskletStep">-->
+<!--					<property name="tasklet">-->
+<!--						<bean parent="processEventTask">-->
+<!--							<property name="processingType" value="WEB-EVENT-REGISTRATION-FEE-PAYMENT-COLLECTED" />-->
+<!--							<property name="categoryType" value="PROCESS" />-->
+<!--							<property name="sequenceReferenceType" value="INVOICE"/>-->
+<!--							<property name="sequenceTransactionType" value="EVENT_REGISTRATION_FEE"/>-->
+<!--						</bean>-->
+<!--					</property>-->
+<!--				</bean>-->
+<!--			</list>-->
+<!--		</property>-->
+<!--	</bean>-->
+<!--	-->
+<!--		<bean id="processEventPaidTransactionChargeJob" parent="simpleJob">-->
+<!--		<property name="name" value="processEventPaidTransactionChargeJob" />-->
+<!--		<property name="steps">-->
+<!--			<list>-->
+<!--				<bean id="step5" parent="taskletStep">-->
+<!--					<property name="tasklet">-->
+<!--						<bean parent="processEventTask">-->
+<!--							<property name="processingType" value="TRANSACTION-CHARGE-PAID" />-->
+<!--							<property name="categoryType" value="PROCESS" />-->
+<!--							<property name="sequenceReferenceType" value="INVOICE"/>-->
+<!--							<property name="sequenceTransactionType" value="TRANSACTION_CHARGE"/>-->
+<!--						</bean>-->
+<!--					</property>-->
+<!--				</bean>-->
+<!--			</list>-->
+<!--		</property>-->
+<!--	</bean>-->
+<!--	-->
+<!--		<bean id="processEventPaidTransactionFeeJob" parent="simpleJob">-->
+<!--		<property name="name" value="processEventPaidTransactionFeeJob" />-->
+<!--		<property name="steps">-->
+<!--			<list>-->
+<!--				<bean id="step6" parent="taskletStep">-->
+<!--					<property name="tasklet">-->
+<!--						<bean parent="processEventTask">-->
+<!--							<property name="processingType" value="TRANSACTION-FEE-PAID" />-->
+<!--							<property name="categoryType" value="PROCESS" />-->
+<!--							<property name="sequenceReferenceType" value="INVOICE"/>-->
+<!--							<property name="sequenceTransactionType" value="VMG_TRANSACTION_FEE"/>-->
+<!--						</bean>-->
+<!--					</property>-->
+<!--				</bean>-->
+<!--			</list>-->
+<!--		</property>-->
+<!--	</bean>-->
+<!--	-->
+<!--		<bean id="processEventReceivedGiftAidJob" parent="simpleJob">-->
+<!--		<property name="name" value="processEventReceivedGiftAidJob" />-->
+<!--		<property name="steps">-->
+<!--			<list>-->
+<!--				<bean id="step7" parent="taskletStep">-->
+<!--					<property name="tasklet">-->
+<!--						<bean parent="processEventTask">-->
+<!--							<property name="processingType" value="GIFT-AID-RECEIVED" />-->
+<!--							<property name="categoryType" value="PROCESS" />-->
+<!--							<property name="sequenceReferenceType" value="INVOICE"/>-->
+<!--							<property name="sequenceTransactionType" value="GIFT_AID"/>-->
+<!--						</bean>-->
+<!--					</property>-->
+<!--				</bean>-->
+<!--			</list>-->
+<!--		</property>-->
+<!--	</bean>-->
+<!--	-->
+<!--		<bean id="processEventReceivedTransitionalReliefJob" parent="simpleJob">-->
+<!--		<property name="name" value="processEventReceivedTransitionalReliefJob" />-->
+<!--		<property name="steps">-->
+<!--			<list>-->
+<!--				<bean id="step8" parent="taskletStep">-->
+<!--					<property name="tasklet">-->
+<!--						<bean parent="processEventTask">-->
+<!--							<property name="processingType" value="TRANSITIONAL-RELIEF-RECEIVED" />-->
+<!--							<property name="categoryType" value="PROCESS" />-->
+<!--							<property name="sequenceReferenceType" value="INVOICE"/>-->
+<!--							<property name="sequenceTransactionType" value="TRANSITIONAL_RELIEF"/>-->
+<!--						</bean>-->
+<!--					</property>-->
+<!--				</bean>-->
+<!--			</list>-->
+<!--		</property>-->
+<!--	</bean>-->
+	
+</beans>

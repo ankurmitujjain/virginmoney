@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd 
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<description>
+		Regular Donation Job 
+	</description>
+
+	<import resource="classpath:/property-context.xml" />
+
+	<context:annotation-config />
+	<tx:annotation-driven />
+	
+	<!-- Job Configuration - Start-->
+	<bean id="regularDonationPaymentInitiatedJob" parent="simpleJob">
+		<property name="name" value="Regular Donation Job" />
+		<property name="steps">
+			<list>
+				<bean id="step1" parent="paymentSimpleStep">
+					<property name="itemReader" ref="regularDonationJpaPagingItemReader" />
+					<property name="itemProcessor" ref="compositeItemProcessor" />
+					<property name="itemWriter" ref="regularDonationXmlWriter" /> 
+					<property name="listeners">
+						<list>
+							<ref bean="regularDonationTransformer" />
+							 <!--<ref bean="regularDonationXmlWriter" /> :: HunarC-Duplicate requests -->
+						</list>
+					</property> 
+					
+					<property name="commitInterval" value="10000" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<!-- Job Configuration - End-->
+
+	<!-- Tasklet Configuration -->
+	<bean id="regularDonationTask"
+		class="com.virginmoneygiving.givingbatch.tasklet.RegularDonationUploadTasklet">
+		<property name="batchDelegate" ref="batchDelegate" />
+	</bean>
+
+	<!-- JPAPagingItemReader -->
+	<bean id="regularDonationJpaPagingItemReader"
+		class="org.springframework.batch.item.database.JpaPagingItemReader">
+		<property name="entityManagerFactory" ref="paymentEntityManagerFactory" />
+		<property name="queryString"
+			value=" select p from Payment p, CardTransaction c  where p.cardTransaction = c.id and  p.paymentStatus.code = 'REGPAYINIT' AND p.paymentType.code = 'REGULARDON' and ( p.batchStatus is null or p.batchStatus != 'REGPAYINIT_PROCESSED' ) order by c.cardType" />
+		<property name="pageSize" value="10000" />
+	</bean>
+
+	<!-- Composite Item Processor Configuration - Start -->
+	<bean id="compositeItemProcessor"
+		class="org.springframework.batch.item.support.CompositeItemProcessor">
+		<property name="itemProcessors">
+			<list>
+				<ref bean="regularDonationItemProcessor" />
+				 <ref bean="regularDonationTransformer" /> 
+			</list>
+		</property>
+	</bean>
+
+	<bean id="regularDonationItemProcessor"
+		class="com.virginmoneygiving.givingbatch.processor.RegularDonationProcessor">
+		<property name="paymentService" ref="paymentService" />
+	</bean>
+
+	<bean id="regularDonationTransformer"
+		class="com.virginmoneygiving.givingbatch.transformer.RegularDonationTransformer" />
+
+	<!-- Composite Item Processor Configuration - End -->
+
+
+	<!-- XMLItemWriter Configuration -->
+	<bean class="com.virginmoneygiving.givingbatch.writer.RegularDonationXMLWriter"
+		id="regularDonationXmlWriter">
+		<property name="resource" value="file:${givingbatch.output.folder}/regularDonation.xml" />
+		<property name="batchDelegate" ref="batchDelegate" />
+		<property name="paymentService" ref="paymentService" />
+		<property name="generateSequenceHelper" ref="generateSequenceHelper" />
+		<property name="marshaller" ref="regularDonationMarshallingSerializer" />
+		<property name="rootTagName" value="RegularDonationBatch" />
+		<property name="overwriteOutput" value="true" />
+	</bean>
+
+	<!-- XStreamMarshaller Configuration - Start -->
+	<bean class="org.springframework.oxm.xstream.XStreamMarshaller"
+		id="regularDonationMarshallingSerializer">
+		<property name="aliases" ref="aliases" />
+	</bean>
+
+	<util:map id="aliases">
+		<entry key="RegularDonationPayment"
+			value="com.virginmoneygiving.givingbatch.domain.RegularDonationPayment" />
+		<entry key="cardType" value="java.lang.String" />
+		<entry key="cardPaymentDetails"
+			value="com.virginmoneygiving.givingbatch.domain.PaymentType" />
+		<entry key="invoiceNumber" value="java.lang.String" />
+	</util:map>
+
+	<!-- XStreamMarshaller Configuration - End -->
+
+</beans>

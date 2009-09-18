@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions
+    name="addresslookupService"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    targetNamespace="http://www.virginmoney.com/vmDataTypes/"
+    xmlns:tns="http://www.virginmoney.com/vmDataTypes/"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:vm="http://www.virginmoney.com/vmDataTypes/"
+    xmlns:fault="http://www.virginmoney.com/vmDataTypes/faults/"
+    xmlns:exception="http://www.virginmoney.com/vmDataTypes/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+
+    <types>
+        <xs:schema>
+            <xs:import namespace="http://www.virginmoney.com/vmDataTypes/"
+                        schemaLocation="addressLookupService.xsd"/>
+            <xs:import namespace="http://www.virginmoney.com/vmDataTypes/faults/" schemaLocation="fault.xsd"/>
+        </xs:schema>
+    </types>
+
+    <message name="AddressLookupRequest">
+        <part name="lookupRequest" element="vm:addressLookupRequest"/>
+    </message>
+
+    <message name="AddressLookupResponse">
+        <part name="result" element="vm:addressLookupResponse"/>
+    </message>
+
+    <message name="AddressLookupException">
+        <part name="AddressLookupException" element="fault:ServiceFaultException" />
+    </message>
+
+
+
+    <portType name="AddressLookupServicePortType">
+        <operation name="AddressLookup">
+            <xs:documentation>Searches for Addresses which match a postcode and optional building name</xs:documentation>
+
+            <input message="vm:AddressLookupRequest"/>
+            <output message="vm:AddressLookupResponse"/>
+            <fault name="PostcodeLookupException" message="vm:AddressLookupException"/>
+        </operation>
+
+    </portType>
+
+    <binding name="AddressLookupServiceBinding" type="vm:AddressLookupServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+
+       <operation name="AddressLookup">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body use="literal" />
+            </input>
+            <output>
+                <soap:body use="literal" />
+            </output>
+            <fault name="PostcodeLookupException">
+                    <soap:fault name="PostcodeLookupException" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </fault>
+        </operation>
+
+    </binding>
+
+    <service name="AddressLookupService">
+        <port name="AddressLookupServicePortType" binding="vm:AddressLookupServiceBinding">
+            <soap:address location="http://localhost:8080/AddressLookupService/addressLookupService" />
+        </port>
+    </service>
+</definitions>

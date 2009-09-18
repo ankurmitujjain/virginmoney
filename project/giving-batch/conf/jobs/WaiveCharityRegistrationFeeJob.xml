@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd 
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<description>
+		Waived Charity Registration Fee Job 
+	</description>
+
+	<import resource="classpath:/property-context.xml" />
+
+	<context:annotation-config />
+	<tx:annotation-driven />
+
+	<!-- Job Configuration - Start-->
+	<bean id="waiveCharityRegFeeJob" parent="simpleJob">
+		<property name="name" value="Waive Registration Fee Job" />
+		<property name="steps">
+			<list>
+				<bean parent="paymentSimpleStep">
+					<property name="itemReader" ref="waiveCharityRegFeeJpaPagingItemReader" />
+					<property name="itemProcessor" ref="compositeItemProcessor" />
+					<property name="itemWriter" ref="waiveCharityRegFeeXmlWriter" />
+					<property name="listeners">
+						<list>
+							<ref bean="waiveCharityRegFeeTransformer" />
+							<ref bean="waiveCharityRegFeeTask" />
+						</list>
+					</property>
+					<property name="commitInterval" value="1000" />
+				</bean>
+				
+			</list>
+		</property>
+	</bean>
+	<!-- Job Configuration - End-->
+
+	<!-- Tasklet Configuration -->
+	<bean id="waiveCharityRegFeeTask"
+		class="com.virginmoneygiving.givingbatch.listener.WaiveCharityRegFeeUploadTasklet">
+		<property name="batchDelegate" ref="batchDelegate" />
+	</bean>
+
+	<bean class="org.springframework.batch.core.scope.StepScope" />
+    
+    <!-- JPAPagingItemReader -->
+	<bean id="waiveCharityRegFeeJpaPagingItemReader" scope="step"
+		class="org.springframework.batch.item.database.JpaPagingItemReader">
+		<property name="entityManagerFactory" ref="paymentEntityManagerFactory" />
+		<property name="queryString"
+			value="select p from Payment p, VatAmount v where v.payment.id = p.id
+			          and p.paymentType.code = 'CHTYREGFEE' and p.paymentStatus.code = 'CRFPWAIVED'
+			          and (p.batchStatus is null or p.batchStatus != 'CRFPWAIVED')
+			          and date(p.updatedDateTime) &lt;= STR_TO_DATE('#{jobParameters[cutOffDate]}', '%d-%m-%Y %H:%i:%s')  " />
+		<property name="pageSize" value="1000" />
+	</bean>
+
+	<!-- Composite Item Processor Configuration - Start -->
+	<bean id="compositeItemProcessor"
+		class="org.springframework.batch.item.support.CompositeItemProcessor">
+		<property name="itemProcessors">
+			<list>
+				<ref bean="waiveCharityRegFeeItemProcessor" />
+				<ref bean="waiveCharityRegFeeTransformer" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="waiveCharityRegFeeItemProcessor"
+		class="com.virginmoneygiving.givingbatch.processor.WaiveCharityRegFeeItemProcessor">
+		<property name="paymentService" ref="paymentService" />
+	</bean>
+
+	<bean id="waiveCharityRegFeeTransformer"
+		class="com.virginmoneygiving.givingbatch.transformer.WaiveCharityRegFeeTransformer" >
+		<property name="locatorImpl" ref="givingBatchExtServiceLocator" />
+		</bean>
+
+	<!-- Composite Item Processor Configuration - End -->
+
+
+	<!-- XMLItemWriter Configuration -->
+	<bean class="org.springframework.batch.item.xml.StaxEventItemWriter"
+		id="waiveCharityRegFeeXmlWriter">
+		<property name="resource" value="file:${givingbatch.output.folder}/waiveRegistrationFee.xml" />
+		<property name="marshaller" ref="waiveCharityRegFeeMarshallingSerializer" />
+		<property name="rootTagName" value="WaiveRegistrationFeeBatch" />
+		<property name="overwriteOutput" value="true" />
+	</bean>
+
+	<!-- XStreamMarshaller Configuration - Start -->
+	<bean class="org.springframework.oxm.xstream.XStreamMarshaller"
+		id="waiveCharityRegFeeMarshallingSerializer">
+		<property name="aliases" ref="aliases" />
+	</bean>
+
+	<util:map id="aliases">
+		<entry key="WaiveRegistrationFee"
+			value="com.virginmoneygiving.givingbatch.domain.WaiveRegistrationFee" />
+		<entry key="creditNoteNumber" value="java.lang.String" />
+		<entry key="charityReference" value="java.lang.String" />
+		<entry key="feeDetails"
+			value="com.virginmoneygiving.givingbatch.domain.PaymentType" />
+		<entry key="vatDetails"
+			value="com.virginmoneygiving.givingbatch.domain.TaxType" />
+		<entry key="eventRef" value="java.lang.Integer"/>
+		<entry key="invoiceNumber" value="java.lang.String"/>
+		<entry key="bankAccountUniqueId" value="java.lang.String" />
+	</util:map>
+
+	<!-- XStreamMarshaller Configuration - End -->
+
+	<!-- Dozer Mapping Configuration -->
+	<bean id="dozerMapper" class="net.sf.dozer.util.mapping.DozerBeanMapper">
+		<property name="mappingFiles">
+			<list>
+				<value>batch-dozer-mapping.xml</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>

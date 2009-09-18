@@ -1,0 +1,15 @@
+Deployment Instructions - 
+
+1. Untar the tar file.
+
+2. Application deployment components within /JBoss/Main - 
+
+2.1 deploy-virgin - contains all the files to be placed in the deploy folder of jboss. 
+
+2.2 set JAVA_OPTS in run.conf of jboss server for following system properties. 
+    postcodeAnywhere.service.url
+    postcodeAnywhere.accountCode
+    postcodeAnywhere.licenseKey
+
+Note:
+Please increase the permgen size in run.conf as appropriate (256 m)

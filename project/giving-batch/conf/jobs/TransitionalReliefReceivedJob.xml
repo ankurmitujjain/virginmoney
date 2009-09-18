@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd 
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<description>
+		Receive Transitional Relief Job 
+	</description>
+
+	<import resource="classpath:/property-context.xml" />
+
+	<context:annotation-config />
+	<tx:annotation-driven />
+
+	<!-- Job Configuration - Start-->
+	<bean id="transitionalReliefReceivedJob" parent="simpleJob">
+		<property name="name" value="Receive Transitional Relief Job" />
+		<property name="steps">
+			<list>
+				<bean id="step1" parent="paymentSimpleStep">
+					<property name="itemReader" ref="transitionalReliefReceivedJpaPagingItemReader" />
+					<property name="itemProcessor" ref="compositeItemProcessor" />
+					<property name="itemWriter" ref="transitionalReliefReceivedXmlWriter" />
+					<property name="listeners">
+						<list>
+							<ref bean="transitionalReliefReceivedTransformer" />
+							<ref bean="transitionalReliefReceivedTask" />
+						</list>
+					</property>
+					<property name="commitInterval" value="10000" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<!-- Job Configuration - End-->
+
+	<!-- Tasklet Configuration -->
+	<bean id="transitionalReliefReceivedTask"
+		class="com.virginmoneygiving.givingbatch.listener.TransitionalReliefReceivedUploadListener">
+		<property name="batchDelegate" ref="batchDelegate" />
+	</bean>
+
+	<!-- 
+		TODO: Date clauses 
+	-->
+    <bean class="org.springframework.batch.core.scope.StepScope" />
+    
+    <!-- JPAPagingItemReader -->
+	<bean id="transitionalReliefReceivedJpaPagingItemReader" scope="step"
+		class="org.springframework.batch.item.database.JpaPagingItemReader">
+		<property name="entityManagerFactory" ref="paymentEntityManagerFactory" />
+		<property name="queryString"
+			value="from TransitionalReliefAmount tra where tra.transitionalReliefStatus.code = 'TRNRLFRECD'
+			        AND tra.batchStatus = 'TRANRLFCLM'
+			        and date(tra.createdDateTime) &lt;= STR_TO_DATE('#{jobParameters[cutOffDate]}', '%d-%m-%Y %H:%i:%s') " />
+		<property name="pageSize" value="10000" />
+	</bean>
+
+	<!-- Composite Item Processor Configuration - Start -->
+	<bean id="compositeItemProcessor"
+		class="org.springframework.batch.item.support.CompositeItemProcessor">
+		<property name="itemProcessors">
+			<list>
+				<ref bean="transitionalReliefReceivedItemProcessor" />
+				<ref bean="transitionalReliefReceivedTransformer" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 
+		TODO: Refactor for Charity Registration Fee 
+	-->
+	<bean id="transitionalReliefReceivedItemProcessor"
+		class="com.virginmoneygiving.givingbatch.processor.TransitionalReliefReceivedProcessor">
+		<property name="paymentService" ref="paymentService" />
+	</bean>
+
+	<!-- 
+		TODO: Refactor for Charity Registration Fee 
+	-->
+
+	<bean id="transitionalReliefReceivedTransformer"
+		class="com.virginmoneygiving.givingbatch.transformer.TransitionalReliefReceivedTransformer" >
+		<property name="locatorImpl" ref="givingBatchExtServiceLocator"/>
+        <property name="givingService" ref="givingService" />
+    </bean>
+
+	<!-- Composite Item Processor Configuration - End -->
+
+	<!-- DAO Implementation class configuration -->
+
+	<!-- XMLItemWriter Configuration -->
+	<bean class="org.springframework.batch.item.xml.StaxEventItemWriter"
+		id="transitionalReliefReceivedXmlWriter">
+		<property name="resource" value="file:${givingbatch.output.folder}/transitionalReliefReceived.xml" />
+		<property name="marshaller" ref="transitionalReliefReceivedMarshallingSerializer" />
+		<property name="rootTagName" value="transitionalReliefReceivedBatch" />
+		<property name="overwriteOutput" value="true" />
+	</bean>
+
+	<!-- XStreamMarshaller Configuration - Start -->
+	<bean class="org.springframework.oxm.xstream.XStreamMarshaller"
+		id="transitionalReliefReceivedMarshallingSerializer">
+		<property name="aliases" ref="aliases" />
+	</bean>
+
+	<util:map id="aliases">
+		<entry key="RegistrationFee"
+			value="com.virginmoneygiving.givingbatch.domain.RegistrationFee" />
+		<entry key="feeDetails"
+			value="com.virginmoneygiving.givingbatch.domain.PaymentType" />
+		<entry key="vatDetails"
+			value="com.virginmoneygiving.givingbatch.domain.TaxType" />
+		<entry key="charityReference" value="java.lang.String" />
+		<entry key="invoiceNumber" value="java.lang.String" />
+		<entry key="bankAccountUniqueId" value="java.lang.String" />
+		<entry key="eventRef" value="java.lang.Integer" />
+	</util:map>
+
+	<!-- XStreamMarshaller Configuration - End -->
+
+</beans>

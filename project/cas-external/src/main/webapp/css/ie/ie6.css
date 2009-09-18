@@ -1,0 +1,362 @@
+/*---[ Details ]---------------------------------------
+IE6/Win Fixes Style Sheet
+Client: Virgin Money Giving
+Author: Soup
+-------------------------------------------------------*/
+
+/*-----------------------------------------------------
+[01] Clearfixes
+[02] Misc Fixes
+[03] Component Fixes
+-------------------------------------------------------*/
+
+
+/* [01] Clearfixes
+-------------------------------------------------------*/
+.clearfix,
+#content,
+#site-controls,
+#header .container,
+.pagination,
+#vm-sponsortabs,
+#vm-createeventtabs,
+#vm-how-works,
+#vm-donation-calculator .vm-donation-calc-mid,
+#vm-donation-calculator .vm-donation-calc-white .calc form,
+#vm-donation-calculator .vm-donation-calc-white,
+#vm-donation-calculator .vm-donation-calc-content,
+#vm-search-results li,
+form.search-res-filters,
+form#vm-sponsor-info,
+form#vm-sponsor-info p,
+form#vm-sponsor-info div.pw-strength,
+#vm-create-page-one-organised,
+#vm-create-page-one-other .other-event,
+form p,
+.template-f #content-primary,
+.template-g #content-primary,
+.template-h #content-primary,
+#vm-recent-sponsors p.sponsor-info,
+#vm-charitiesheader,
+#vm-charitytabs,
+#vm-content-columns,
+#vm-sub-category-listing ul,
+#vm-content-donate-raise div,
+#vm-fundraisertabs,
+#vm-preview-of-page,
+#vm-category-list,
+#vm-categorynav  {
+	height: 1%;
+	}
+
+#content,
+#content-primary,
+#content-secondary,
+#content-callout,
+#content-sidebar {
+	overflow: visible;
+}
+
+/* [02] Misc Fixes
+-------------------------------------------------------*/
+h1.s1, h2.s1, h3.s1, h4.s1, h5.s1, h6.s1,
+h1.s2, h2.s2, h3.s2, h4.s2, h5.s2, h6.s2,
+h1.s3, h2.s3, h3.s3, h4.s3, h5.s3, h6.s3,
+h1.s4, h2.s4, h3.s4, h4.s4, h5.s4, h6.s4 {
+	padding: 0;
+	background: none;
+}
+
+ul.s1 {
+	background: none;
+}
+
+hr {
+	border: 1px solid #DDD;
+	}
+#header {
+	height: 138px;
+}
+
+#branding-logo {
+	filter: alpha(opacity=0);
+}
+
+/* Site Search */
+#search-site {
+	width: 151px;
+}
+#search-site input {
+	width: 7.7em; /* 90px */
+	top: -12px;/*made -12px from 0 to align the search input on ie-6 by pravin */
+}
+/*#search-site #search-submit {
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/branding/bg-search-submit.png", sizingMethod="crop");
+	margin-top: -17px;
+	position: relative;
+	top: 10px;
+	left: -5px;
+}
+#search-site #search-submit img {
+	visibility: hidden;
+}*/
+
+/* Site Controls */
+#site-controls,
+#site-controls a,
+#site-controls span {
+	height: 21px;
+}
+#site-controls .welcome {
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="../img/branding/bg-welcome.png", sizingMethod="crop");
+}
+
+#search-site #search-submit {   /*created for search button */
+	position: relative;
+	top: -3px; /*made -3px from 0px to align the search input on ie-6 by pravin */
+	left: -8px;
+
+}
+/*#site-controls .home {
+	cursor: pointer;
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/branding/ie6/imr-controls-home.png", sizingMethod="crop");
+}
+#site-controls .home:hover {
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/branding/ie6/imr-controls-home-rollover.png", sizingMethod="crop");
+}
+#site-controls .settings {
+	cursor: pointer;
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/branding/ie6/imr-controls-settings.png", sizingMethod="crop");
+}
+#site-controls .settings:hover {
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/branding/ie6/imr-controls-settings-rollover.png", sizingMethod="crop");
+}
+#site-controls .signin {
+	cursor: pointer;
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/branding/ie6/imr-controls-signin.png", sizingMethod="crop");
+}
+#site-controls .signin:hover {
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/branding/ie6/imr-controls-signin-rollover.png", sizingMethod="crop");
+}
+#site-controls .signout {
+	cursor: pointer;
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/branding/ie6/imr-controls-logout.png", sizingMethod="crop");
+}
+#site-controls .signout:hover {
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/branding/ie6/imr-controls-logout-rollover.png", sizingMethod="crop");
+}*/
+
+/* [03] Component Fixes
+-------------------------------------------------------*/
+/* Input With Submit */
+form.input-submit button {
+	top: 14px;
+	left: -8px;
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/branding/btn-submit.png", sizingMethod="crop");
+}
+form.input-submit button.blue-button {
+	top: 14px;
+	left: -8px;
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/branding/btn-submit-blue.png", sizingMethod="crop");
+}
+form.input-submit button.search {
+	top: 14px;
+	left: -8px;
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/branding/btn-search.png", sizingMethod="crop");
+}
+form.input-submit button img{
+	visibility: hidden;
+}
+
+/* Portal */
+#vm-portal div.vm-portal-panel .vm-portal-registering a img,
+#vm-portal div.vm-portal-panel .vm-portal-donating button img,
+#vm-portal div.vm-portal-panel .vm-portal-raising a img {
+	visibility:hidden;
+}
+#vm-portal div.vm-portal-panel .vm-portal-registering a {
+	background-image: none;
+	display:block;
+	height: 1%;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/branding/btn-register.png", sizingMethod="crop");
+	cursor:pointer;
+}
+#vm-portal div.vm-portal-panel .vm-portal-donating button {
+	background-image: none;
+	height: 1%;
+	top:5px;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/branding/btn-submit-blue.png", sizingMethod="crop");
+}
+#vm-portal div.vm-portal-panel .vm-portal-raising a {
+	background-image: none;
+	display:block;
+	height: 1%;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/branding/btn-create-your-page.png", sizingMethod="crop");
+	cursor:pointer;
+}
+#vm-portal div.vm-portal-panel .vm-portal-donating #sponser-input,
+#vm-portal div.vm-portal-panel .vm-portal-donating #charity-input {
+	top: -20px;
+}
+#vm-portal div.vm-portal-panel .vm-portal-donating .search-charity {
+	top: -10px;
+}
+
+/* Donations Calculator */
+#vm-donationcalc .inner {
+	height: 150px;
+}
+#vm-donationcalc .inner div div div div div div div {
+	height: 1%;
+}
+#vm-donationcalc .inner h2 {
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/components/vm-donation-calculator/imr-title.png", sizingMethod="crop");
+}
+#vm-donationcalc.narrow .inner h2 {
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/components/vm-donation-calculator/imr-title-narrow.png", sizingMethod="crop");
+}
+
+/* Totaliser */
+#vm-totaliser div div div.content {
+	height: 325px;
+}
+#vm-totaliser #vm-totaliser-thermometer-overlay {
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/components/vm-totaliser/overlay-thermometer.png", sizingMethod="crop");
+}
+#vm-totaliser #vm-totaliser-thermometer-total {
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/components/vm-totaliser/bg-thermometer-total.png", sizingMethod="crop");
+}
+#vm-totaliser a.sponsor img,
+#vm-totaliser a.donate img {
+	visibility: hidden;
+}
+#vm-totaliser a.sponsor {
+	cursor: pointer;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/components/vm-totaliser/btn-sponsorme.png", sizingMethod="crop");
+}
+#vm-totaliser .donate {
+	cursor: pointer;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/components/vm-totaliser/btn-makeadonation.png", sizingMethod="crop");
+}
+
+/* Countdown */
+#vm-countdown .content {
+	width: 80px;
+}
+
+/* Tooltip */
+div.tooltip.js div.header {
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/components/vm-tooltip/bg-top.png", sizingMethod="crop");
+}
+div.tooltip.js div.footer {
+	background: none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/img/components/vm-tooltip/bg-bottom.png", sizingMethod="crop");
+}
+
+/* Category Sub Nav */
+#vm-categorynav div {
+	height: 1%;
+}
+
+#vm-choose-category .column-2{
+width:200px;
+float:left;
+}
+
+
+
+#vm-categoryselect .col1{
+float:left;
+width:175px;
+margin-right:25px;
+}
+
+#vm-categoryselect .col2{
+float:left;
+width:175px;
+margin-right:25px;
+}
+
+#vm-categoryselect .col3{
+float:left;
+width:170px;
+margin-right:25px;
+}
+
+#vm-categoryselect .btnpos{
+float:right;
+}
+
+form.input-submit button.findcharity {
+background: url(../../img/branding/btn-findcharity.gif) transparent repeat scroll 0 0;
+height:41px;/* fixed for ie6 on date 18/11/08 */
+left:-18px;
+outline-style:none;
+outline-width:medium;
+overflow:hidden;
+position:relative;
+top:20px;
+width:148px;
+}
+
+/* created by dayanand [start]*/
+
+/*css for fua0020 created by dayanand on 13/11/2008 [Start]*/
+#content-primary.fua0020 #vm-registration-summary p span.columnOne{
+width:444px;
+float:left;
+display:block;
+}
+
+#content-primary.fua0020 #vm-registration-summary p span.columnOne input{
+width:85%;
+text-align:left;
+display:inline;
+padding:0;
+margin:0;
+}
+
+#content-primary.fua0020 #vm-registration-summary p.totalColumnalignment{
+text-align:right;
+}
+
+#content-primary.fua0020 #vm-registration-summary p.totalColumnalignment span{
+width:5em;
+padding:0 8.3em 0 2.5em;
+}
+
+#content-primary.fua0020 #vm-registration-summary p span input{
+text-align:right;
+width:5em;
+}
+
+/*css for fua0020 created by dayanand on 13/11/2008 [End]*/
+/* created by dayanand [end]*/
+
+#nav-site {
+	padding: 20px 0 15px 285px;
+	margin: 0;
+	height:40px;
+	width: 290px;
+	float: left;
+	list-style-type: none;
+}
+

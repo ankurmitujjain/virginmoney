@@ -1,0 +1,139 @@
+<html>
+    <body>
+        <p>
+            This Service provides a way to search for addresses using postcode and optional property data.
+        </p>
+        <p>
+            External service providers are called to perform the actual searches using a service proxy, as described in serviceproxy packages.
+            The search requests allows the external provider to be chosen by the caller, if required. If no choice is made the service will
+            make its own choice of provider.
+        </p>
+        <p>
+            Matching results are returned as a list of addresses in the form of a number of address lines, plus postcode, plus a 'single line'
+            version which can be used to populate a 'picklist'.
+        </p>
+        <p>
+            Depending upon the provider used, unformatted PAF address data may optionally be returned in addition to the main address results. This contains very
+            detailed data from the Post Office's PAF files, and includes details such as walksort codes,building and sub-building names and so on.
+        </p>
+        <p>
+            See {@link com.virginmoney.addresslookup.business.PAFData} for the full list of available data.
+        </p>
+        <p>
+            For a detailed explanation of the Royal Mail's PAF file format, visit the
+            <a href="http://www.royalmail.com/portal/rm/content3?catId=400085&mediaId=56000705#doclist">Royal Mail website</a> and download the PDF.
+            <br/>If the link is broken, there is a locally saved copy here <a href="PAF_Digest_Dec_03.pdf">PAF_Digest_Dec_03.pdf</a> and also in the 'docs' folder in the project
+        </p>
+        <p>For some example results from postcode anywhere, see the file 'examples_postcode_anywhere_responses.txt' in the 'docs' folder </p>
+        <p>
+        The following table defines the features available for each provider. See also {@link com.virginmoney.addresslookup.ws.AddressLookupServiceEndPoint}
+        </p>
+        <p>
+        <table border="1" cellpadding="5">
+			<thead>
+				<td><b><font size="+1">Feature</font></b></td>
+				<td width="100"><b><font size="+1">Postcode Anywhere</font></b></td>
+				<td width="100"><b><font size="+1">IFDS</font></b></td>
+				<td>Comments</td>
+			</thead>
+			<tbody>
+			<tr>
+					<td><b>Provider name in request</b></td>
+					<td>PostcodeAnywhere (for VM Giving ONLY this will be VMGivingConsumer or VMGivingOperator </td>
+					<td>IFDS</td>
+                    <td>Used in the search request to identify which service provider should be used;  defaults to Postcode Anywhere</td>
+			</tr>
+			<tr>
+					<td><b>Default search provider</b></td>
+					<td>Yes</td>
+					<td>No</td>
+                    <td>The IFDS system will only be used if explicitly requested</td>
+			</tr>
+			<tr>
+					<td><b>Postcode search</b></td>
+					<td>Yes</td>
+					<td>Yes</td>
+                    <td>Returns all results which match the postcode</td>
+			</tr>
+			<tr>
+					<td><b>Picklist entry in results</b></td>
+					<td>Yes</td>
+					<td>Yes</td>
+                    <td>Each address will include a 'single-line' version for use in picklists etc.</td>
+			</tr>
+			<tr>
+					<td><b>Sort building name in results</b></td>
+					<td>Yes</td>
+					<td>Yes</td>
+                    <td>Optional - addresses matching the 'searchBuilding' parameter will be at the start of the results, non-matching addresses will appear later in the results.</td>
+			</tr>
+			<tr>
+					<td><b>Return only matching results</b></td>
+					<td>Yes</td>
+					<td>Yes</td>
+                    <td>Optional - only addresses matching the 'searchBuilding' parameter will be returned, non-matching addresses not be returned</td>
+			</tr>
+             <tr>
+                    <td><b>Return formatted addresses</b></td>
+                    <td>Yes</td>
+                    <td>No</td>
+                    <td>The IFDS service does not provide sufficent detail to support address formatting. See {@link com.virginmoney.addresslookup.ws.AddressLookupServiceEndPoint} for supported formats</td>
+            </tr>
+			<tr>
+					<td><b>Return unformatted PAF address data</b></td>
+					<td>Yes</td>
+					<td>No</td>
+                    <td>The IFDS service does not provide PAF address data</td>
+			</tr>
+			</tbody>
+        </table>
+        </p>
+        <h3>WSDL location</h3>
+        <p>
+            The WSDL location for this service is http://servername/address-lookup-ws/addresslookup?wsdl
+        </p>
+        <h3>Environment setup</h3>
+        <p>
+            This service requires a number of system properties to be defined in order to communicate with its
+            back-end service providers, these are detailed below. Typically these are defined for JBoss in the
+            'virgin.properties' file
+        </p>
+        <p>
+            To communicate with Postcode Anywhere (the default address lookup provider) it needs the following system
+            properties to be defined. Please note that these are the test account values, and that in the live
+            environment each pair of properties will be different.
+            <ul>
+                <li>postcodeAnywhere.service.url=http://services.postcodeanywhere.co.uk/uk/simplelookup.asmx?wsdl</li>
+                <li># default Postcode Anywhere account details</li>
+                <li>postcodeAnywhere.accountCode=VIRGI11117</li>
+                <li>postcodeAnywhere.licenseKey=CH97-ZW47-JN11-MX65</li>
+                <li># Postcode Anywhere licence details for VM giving website</li>
+                <li>postcodeAnywhere.VMGivingConsumer.accountCode=VIRGI11117</li>
+                <li>postcodeAnywhere.VMGivingConsumer.licenseKey=CH97-ZW47-JN11-MX65</li>
+                <li># Postcode Anywhere licence details for VM giving call centre</li>
+                <li>postcodeAnywhere.VMGivingOperator.accountCode=VIRGI11117</li>
+                <li>postcodeAnywhere.VMGivingOperator.licenseKey=CH97-ZW47-JN11-MX65</li>
+            </ul>
+        </p>
+        <p>
+            To communicate with IFDS (the address lookup  provider for SIPS products ONLY)
+            it needs the following system properties to be defined. Please note that these are the test account values.
+            <ul>
+                <li>IFDS.WEBSERVICE_PORT_ADDRESS=http://qa-virgin-onlineservices.ifdsgroup.co.uk/OnlineServicesSoap/OnlineServicesSoapHttpuri</li>
+                <li>IFDS.MANCOID=000045</li>
+                <li>IFDS.SYSTEMINSTANCE=33</li>
+                <li>IFDS.SUBSYSTEMINSTANCE=0</li>
+                <li>IFDS.DEFAULTSESSIONID=0</li>
+            </ul>
+        </p>
+        <p>
+            The current VM infrastructure also requires proxy server properties to be present in order to communicate
+            with external systems. These are
+            <ul>
+                <li>http.proxyHost=zoinks.eit.wrl.virginmoney.com</li>
+                <li>http.proxyPort=8888</li>
+                <li>http.nonProxyHosts=*.unix.vmoney.local|localhost</li>
+            </ul>
+        </p>
+    </body>
+</html>

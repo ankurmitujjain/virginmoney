@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+
+    <!-- Giving GLIS Job Service JMS queue; messages are sent to this queue from the GLIS service -->
+    <mbean code="org.jboss.jms.server.destination.QueueService"
+           name="jboss.messaging.destination:service=Queue,name=virginMoneyGivingQ.glis_responses"
+           xmbean-dd="xmdesc/Queue-xmbean.xml">
+        <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+        <depends>jboss.messaging:service=PostOffice</depends>
+        <attribute name="Clustered">false</attribute>
+        <attribute name="SecurityConfig">
+            <security>
+                <role name="guest" read="true" write="true"/>
+                <role name="publisher" read="true" write="true" create="false"/>
+                <role name="noacc" read="false" write="false" create="false"/>
+            </security>
+        </attribute>
+    </mbean>
+
+    <!-- Queue used by Spring Integration 'completions' channel to send Completion messages -->
+    <mbean code="org.jboss.jms.server.destination.QueueService"
+           name="jboss.messaging.destination:service=Queue,name=givingBatchCompletionsQueue"
+           xmbean-dd="xmdesc/Queue-xmbean.xml">
+        <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+        <depends>jboss.messaging:service=PostOffice</depends>
+        <attribute name="Clustered">false</attribute>
+        <attribute name="SecurityConfig">
+            <security>
+                <role name="guest" read="true" write="true"/>
+                <role name="publisher" read="true" write="true" create="false"/>
+                <role name="noacc" read="false" write="false" create="false"/>
+            </security>
+        </attribute>
+    </mbean>
+
+    <!-- Queue used by Spring Integration 'batch' channel to send batch execution messages -->
+    <mbean code="org.jboss.jms.server.destination.QueueService"
+           name="jboss.messaging.destination:service=Queue,name=givingBatchExecutionQueue"
+           xmbean-dd="xmdesc/Queue-xmbean.xml">
+        <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+        <depends>jboss.messaging:service=PostOffice</depends>
+        <attribute name="Clustered">false</attribute>
+        <attribute name="SecurityConfig">
+            <security>
+                <role name="guest" read="true" write="true"/>
+                <role name="publisher" read="true" write="true" create="false"/>
+                <role name="noacc" read="false" write="false" create="false"/>
+            </security>
+        </attribute>
+    </mbean>
+
+    <!-- Queue used by Spring Integration 'triggers' channel to send Trigger messages -->
+    <mbean code="org.jboss.jms.server.destination.QueueService"
+           name="jboss.messaging.destination:service=Queue,name=givingBatchTriggersQueue"
+           xmbean-dd="xmdesc/Queue-xmbean.xml">
+        <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+        <depends>jboss.messaging:service=PostOffice</depends>
+        <attribute name="Clustered">false</attribute>
+        <attribute name="SecurityConfig">
+            <security>
+                <role name="guest" read="true" write="true"/>
+                <role name="publisher" read="true" write="true" create="false"/>
+                <role name="noacc" read="false" write="false" create="false"/>
+            </security>
+        </attribute>
+    </mbean>
+
+</server>
+	

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" attributeFormDefault="unqualified" version="*$Revision: 180 $" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="clientType">
+    <xs:annotation>
+      <xs:documentation>Organisation, individual etc.</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="clientStatus" default="ambiguous">
+    <xs:annotation>
+      <xs:documentation>Used to indicate if a client is unique on the system, can't be found on the system or there is an ambiguous match</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="ambiguous"/>
+        <xs:enumeration value="noMatch"/>
+        <xs:enumeration value="match"/>
+        <xs:enumeration value="oversees"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="companyName">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="30"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="DOB" type="xs:date">
+    <xs:annotation>
+      <xs:documentation>Date of Birth</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="email">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="employmentStatus" type="xs:string"/>
+  <xs:element name="firstName">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="15"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="gender">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="initial">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:length value="1"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="Initials">
+    <xs:complexType>
+      <xs:sequence maxOccurs="unbounded">
+        <xs:element ref="initial"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="jobTitle">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="30"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="maritalStatus">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="middleName">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="15"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="name">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="firstName"/>
+        <xs:element ref="middleName" minOccurs="0"/>
+        <xs:element ref="surname"/>
+        <xs:element ref="Initials" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NINO">
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="person" type="personType">
+    <xs:annotation>
+      <xs:documentation>Person</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="personType">
+    <xs:sequence>
+      <xs:element ref="title"/>
+      <xs:element ref="name"/>
+      <xs:element ref="email" minOccurs="0"/>
+      <xs:element ref="DOB"/>
+      <xs:element ref="NINO" minOccurs="0"/>
+      <xs:element name="doesNotHaveaNINO" type="xs:boolean" default="false" minOccurs="0"/>
+      <xs:element ref="gender"/>
+      <xs:element ref="maritalStatus"/>
+      <xs:element ref="clientType"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="title">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="50"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="prospectus" type="xs:boolean" default="false"/>
+  <xs:element name="role" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>e.g parent, POA etc</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="surname">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:maxLength value="35"/>
+        <xs:minLength value="0"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:complexType name="telePhoneNumberType">
+    <xs:sequence>
+      <xs:element name="teleType">
+        <xs:simpleType>
+          <xs:restriction base="xs:string"/>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="teleNumber" minOccurs="0">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="0"/>
+            <xs:maxLength value="25"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="teleNumbers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="telList">
+          <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="5">
+              <xs:element name="numbers" type="telePhoneNumberType"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="welcomeName">
+    <xs:annotation>
+      <xs:documentation>Also know as greeting name</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="30"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="url" type="xs:anyURI"/>
+</xs:schema>

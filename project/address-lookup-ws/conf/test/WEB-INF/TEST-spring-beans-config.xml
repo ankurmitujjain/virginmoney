@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+
+       xsi:schemaLocation="
+	   http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	   http://www.springframework.org/schema/tx
+	   http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+       http://jax-ws.dev.java.net/spring/core
+       http://jax-ws.dev.java.net/spring/core.xsd ">
+
+
+    <!-- Extends the main spring beans config by providing mock versions of some or all of the beans -->
+    <import resource="spring-beans-config.xml" />
+    
+
+    <!--  web service endpoint with mock service endpoints -->
+    <bean id="serviceEndPointWithMockServices" class="com.virginmoney.addresslookup.ws.AddressLookupServiceEndPoint">
+         <property name="addressSearchService"  ref="addressSearchWithMockServices"/>
+         <property name="mapper" ref="dozer" />     <!-- dozer is defined in the main spring-beans-config.xml file -->
+    </bean>
+
+    <!--  address search service bean with mock service endpoints -->
+    <bean id="addressSearchWithMockServices" class="com.virginmoney.addresslookup.service.AddressSearchServiceImpl">
+        <property name="addressSearchValidator" ref="addressSearchValidatorBean"/>    <!-- this bean  is defined in the main spring-beans-config.xml file -->
+         <property name="postcodeAnywhereServiceProxy"  ref="postcodeAnywhereServiceProxyWithMockServices"/>
+         <property name="IFDSServiceProxy"  ref="IFDSServiceProxyWithMockServices"/>
+    </bean>
+
+    <!--  Postcode Anywhere Service Proxy  with mock service locator  -->
+    <bean id="postcodeAnywhereServiceProxyWithMockServices" class="com.virginmoney.addresslookup.serviceproxy.postcodeanywhere.PostcodeAnywhereServiceProxyImpl">
+         <property name="webServiceLocator"  ref="mockPostcodeAnywhereServiceLocator"/>
+         <property name="mapper" ref="dozer" />      <!-- dozer is defined in the main spring-beans-config.xml file -->
+    </bean>
+
+    <!--  postcode anywhere service locator bean with mock service endpoints -->
+    <bean id="mockPostcodeAnywhereServiceLocator" class="com.virginmoney.addresslookup.serviceproxy.postcodeanywhere.mockObjects.MockPostcodeAnywhereWebServiceLocator">
+    </bean>
+
+    <!--  IFDS Service Proxy  with mock service locator -->
+    <bean id="IFDSServiceProxyWithMockServices" class="com.virginmoney.addresslookup.serviceproxy.ifds.IFDSServiceProxyImpl">
+         <property name="IFDSPortLocator"  ref="mockIFDSPortLocator"/>
+         <property name="mapper" ref="dozer" />      <!-- dozer is defined in the main spring-beans-config.xml file -->
+    </bean>
+
+    <!--  IFDS service locator bean with mock service endpoints -->
+    <bean id="mockIFDSPortLocator" class="com.virginmoney.addresslookup.serviceproxy.ifds.mockObjects.MockIFDSPortLocator">
+    </bean>
+
+
+</beans>

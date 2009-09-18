@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	
+	<bean id="simpleJob" class="org.springframework.batch.core.job.SimpleJob"
+		abstract="true">
+		<property name="jobRepository" ref="jobRepository" />
+		<property name="restartable" value="true" />
+	</bean>
+
+	<bean id="taskletStep" class="org.springframework.batch.core.step.tasklet.TaskletStep"
+		abstract="true">
+		<property name="transactionManager" ref="paymentTransactionManager" />
+		<property name="jobRepository" ref="jobRepository" />
+		<property name="allowStartIfComplete" value="true" />
+	</bean>
+
+	<bean id="givingSimpleStep"
+		class="org.springframework.batch.core.step.item.SimpleStepFactoryBean"
+		abstract="true">
+		<property name="transactionManager" ref="givingTransactionManager" />
+		<property name="jobRepository" ref="jobRepository" />
+		<property name="startLimit" value="100" />
+		<property name="commitInterval" value="1" />
+	</bean>
+
+	<bean id="paymentSimpleStep"
+		class="org.springframework.batch.core.step.item.SimpleStepFactoryBean"
+		abstract="true">
+		<property name="transactionManager" ref="paymentTransactionManager" />
+		<property name="jobRepository" ref="jobRepository" />
+		<property name="startLimit" value="100" />
+		<property name="commitInterval" value="1" />
+	</bean>
+
+	<bean id="paymentSkipLimitStep"
+		class="org.springframework.batch.core.step.item.FaultTolerantStepFactoryBean"
+		parent="paymentSimpleStep" abstract="true">
+		<property name="skipLimit" value="0" />
+	</bean>
+
+	<bean id="givingSkipLimitStep"
+		class="org.springframework.batch.core.step.item.FaultTolerantStepFactoryBean"
+		parent="givingSimpleStep" abstract="true">
+		<property name="skipLimit" value="0" />
+	</bean>
+
+	<!--
+ - Pulled up definitions that are common to all jobs 
+ -->
+	<!-- Delegate Configuration -->
+	<bean id="batchDelegate"
+		class="com.virginmoneygiving.givingbatch.delegate.BatchDelegate">
+		<property name="batchServiceProxy" ref="batchServiceProxy" />
+	</bean>
+
+	<bean id="batchServiceProxy"
+		class="com.virginmoneygiving.givingbatch.serviceproxy.impl.BatchServiceProxyImpl">
+		<property name="glisServiceLocator" ref="glisServiceLocator" />
+		<property name="dozer" ref="dozerMapper" />
+		<property name="alertServiceLocator" ref="alertServiceLocator" />
+		<property name="givingBatchExtManagementServiceLocatorImpl"
+			ref="givingBatchExtServiceLocator" />
+		<property name="givingManagementServiceLocator" ref="givingManagementServiceLocator"/>
+		<property name="paymentManagementServiceLocator" ref="paymentManagementServiceLocator"/>	
+	</bean>
+
+<!--
+    <bean id="givingManagementServiceLocator"
+		class="com.virginmoneygiving.givingbatch.serviceproxy.impl.GivingManagementServiceLocatorImpl">
+		<property name="webServiceURL" value="${givingmanagement.url.system.property}" />
+	</bean>
+-->
+
+	<bean id="glisServiceLocator"
+		class="com.virginmoneygiving.givingbatch.serviceproxy.impl.GlisWebServiceLocatorImpl">
+		<property name="webServiceURL">
+			<value>${glis.url.system.property}</value>
+		</property>
+	</bean>
+
+	<bean id="dozerMapper" class="net.sf.dozer.util.mapping.DozerBeanMapper">
+		<property name="mappingFiles">
+			<list>
+				<value>batch-dozer-mapping.xml</value>
+			</list>
+		</property>
+	</bean>
+
+
+	<bean id="paymentDAO"
+		class="com.virginmoneygiving.payment.dao.impl.JPAPaymentDAOImpl">
+		<property name="entityManager" ref="paymentEntityManager"/>
+	</bean>
+
+	<bean id="paymentService"
+		class="com.virginmoneygiving.payment.service.impl.PaymentServiceImpl">
+		<property name="paymentDAO" ref="paymentDAO" />
+	</bean>
+	
+
+	<bean id="charityDAO" class="com.virginmoneygiving.giving.dao.impl.JPACharityDAOImpl">
+		<property name="entityManager" ref="givingEntityManager"/>
+	</bean>
+	
+	<bean id="donorDAO" class="com.virginmoneygiving.giving.dao.impl.JPADonorDAOImpl">
+		<property name="entityManager" ref="givingEntityManager"/>
+	</bean>
+
+	<bean id="eventDAO" class="com.virginmoneygiving.giving.dao.impl.JPAEventDAOImpl">
+		<property name="entityManager" ref="givingEntityManager"/>
+	</bean>
+	
+	<bean id="fundraiserDAO" class="com.virginmoneygiving.giving.dao.impl.JPAFundraiserDAOImpl">
+		<property name="entityManager" ref="givingEntityManager"/>
+	</bean>
+
+	<bean id="givingService"
+		class="com.virginmoneygiving.giving.service.impl.GivingServiceImpl">
+		<property name="charityDAO" ref="charityDAO" />
+		<property name="eventDAO" ref="eventDAO" />
+		<property name="donorDAO" ref="donorDAO" />
+		<property name="fundraiserDAO" ref="fundraiserDAO" />
+	</bean>
+
+	<bean id="indexerEventService"
+		class="com.virginmoneygiving.indexerservice.client.event.impl.IndexerEventServiceImpl" />
+
+	<!-- JBoss JNDI Connection Factory -->
+	<bean name="connectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="java:ConnectionFactory" />
+	</bean>
+
+	<!-- JMS Transaction Manager -->
+	<bean id="jmsTransactionManager"
+		class="org.springframework.jms.connection.JmsTransactionManager">
+		<property name="connectionFactory" ref="connectionFactory" />
+	</bean>
+
+	<!--  JMS Destination for Indexer service -->
+	<bean name="indexerDestination" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName">
+			<value>${indexer.queue.name}</value>
+		</property>
+	</bean>
+
+	<!-- jmsTemplate for Indexer clients -->
+	<bean name="indexerJmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="defaultDestination" ref="indexerDestination" />
+		<property name="receiveTimeout" value="1" />
+	</bean>
+
+	<bean id="indexerJmsQueueSender"
+		class="com.virginmoneygiving.indexerservice.client.jms.IndexerJmsSender">
+		<property name="jmsTemplate" ref="indexerJmsTemplate" />
+	</bean>
+
+	<!--
+		Application event listeners to send messages to the Indexer service
+	-->
+	<bean id="indexerApplicationEventListener"
+		class="com.virginmoneygiving.indexerservice.client.listener.IndexerApplicationEventListener">
+		<property name="jmsQueueSender" ref="indexerJmsQueueSender" />
+	</bean>
+
+</beans>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:header="http://www.virginmoneygiving.com/type/header/"
+        targetNamespace="http://www.virginmoneygiving.com/type/header/"
+        elementFormDefault="qualified">
+
+	<!-- this common header should be in a separate resource component
+	and shared by those that need it, instead this is a copy of what 
+	payment-management was/us using -->
+	
+    <complexType name="MessageHeader">
+        <sequence>
+            <element name="SourceSystemId" minOccurs="1" maxOccurs="1">
+                <simpleType>
+                    <restriction base="token">
+                        <minLength value="1"/>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="SourceSubSystemId"   type="token" minOccurs="0" maxOccurs="1"/>
+            <element name="BrandReference"      type="token" minOccurs="0" maxOccurs="1"/>
+            <element name="SystemTransactionID" minOccurs="1" maxOccurs="1">
+                <simpleType>
+                    <restriction base="token">
+                        <minLength value="4"/>
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="IPAddress"           type="token" />
+            <element name="SessionID"           type="token" />
+            <element name="UserName"            minOccurs="1" maxOccurs="1">
+                <simpleType>
+                    <restriction base="token">
+                        <minLength value="4"/>
+                    </restriction>
+                </simpleType>
+            </element>
+        </sequence>
+    </complexType>
+
+    <element name="MessageHeader" type="header:MessageHeader" />
+</schema>

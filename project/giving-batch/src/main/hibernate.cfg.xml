@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>
+
+        <!-- entities -->                        
+        <mapping class="com.virginmoneygiving.giving.domain.ActivityType"/>
+        <mapping class="com.virginmoneygiving.giving.domain.Address"/>
+        <mapping class="com.virginmoneygiving.giving.domain.AddressType"/>
+        <mapping class="com.virginmoneygiving.giving.domain.AuditAttributes"/>
+        <mapping class="com.virginmoneygiving.giving.domain.CardProvider"/>
+        <mapping class="com.virginmoneygiving.giving.domain.CategorisedCharity"/>
+        <mapping class="com.virginmoneygiving.giving.domain.Channel"/>
+        <mapping class="com.virginmoneygiving.giving.domain.CharitableActivity"/>
+        <mapping class="com.virginmoneygiving.giving.domain.Charity"/>
+        <mapping class="com.virginmoneygiving.giving.domain.CharityAdministrator"/>
+        <mapping class="com.virginmoneygiving.giving.domain.CharityCategory"/>
+        <mapping class="com.virginmoneygiving.giving.domain.CharityDonation"/>
+        <mapping class="com.virginmoneygiving.giving.domain.CharityRegister"/>
+        <mapping class="com.virginmoneygiving.giving.domain.CharityRegistrationForm"/>
+        <mapping class="com.virginmoneygiving.giving.domain.CharityStatus"/>
+        <mapping class="com.virginmoneygiving.giving.domain.CharitySubset"/>
+        <mapping class="com.virginmoneygiving.giving.domain.ClosureReason"/>
+        <mapping class="com.virginmoneygiving.giving.domain.Country"/>
+        <mapping class="com.virginmoneygiving.giving.domain.Donation"/>
+        <mapping class="com.virginmoneygiving.giving.domain.Donor"/>
+        <mapping class="com.virginmoneygiving.giving.domain.EmailAddress"/>
+        <mapping class="com.virginmoneygiving.giving.domain.Event"/>
+        <mapping class="com.virginmoneygiving.giving.domain.Fundraiser"/>
+        <mapping class="com.virginmoneygiving.giving.domain.FundraiserActivity"/>
+        <mapping class="com.virginmoneygiving.giving.domain.FundraiserActivityDonation"/>
+        <mapping class="com.virginmoneygiving.giving.domain.FundraiserStatus"/>
+        <mapping class="com.virginmoneygiving.giving.domain.FundraisingCharitySplit"/>
+        <mapping class="com.virginmoneygiving.giving.domain.FundraisingReason"/>
+        <mapping class="com.virginmoneygiving.giving.domain.Location"/>
+        <mapping class="com.virginmoneygiving.giving.domain.NamedQueryRepository"/>
+        <mapping class="com.virginmoneygiving.giving.domain.OccasionType"/>
+        <mapping class="com.virginmoneygiving.giving.domain.PaymentCard"/>
+        <mapping class="com.virginmoneygiving.giving.domain.Person"/>
+        <mapping class="com.virginmoneygiving.giving.domain.ProfanePhrase"/>
+        <mapping class="com.virginmoneygiving.giving.domain.RegistrationForm"/>
+        <mapping class="com.virginmoneygiving.giving.domain.Role"/>
+        <mapping class="com.virginmoneygiving.giving.domain.TelephoneNumber"/>
+        <mapping class="com.virginmoneygiving.giving.domain.User"/>
+        <mapping class="com.virginmoneygiving.giving.domain.UserProfile"/>
+        <mapping class="com.virginmoneygiving.giving.domain.UserRole"/>
+
+    </session-factory>
+
+</hibernate-configuration>

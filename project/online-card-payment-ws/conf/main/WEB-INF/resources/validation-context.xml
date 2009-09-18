@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<!-- These validators use Valang - see https://springmodules.dev.java.net/docs/reference/0.8/html/validation.html#valang -->
+
+	<!-- TODO: payment type (enum) validation -->
+
+	<bean name="authenticationRequestValidator" class="org.springmodules.validation.valang.ValangValidator">
+		<property name="customFunctions">
+			<map>
+				<entry key="isNumeric">
+					<value>com.virginmoneygiving.cardpayment.validation.functions.IsNumericFunction</value>
+				</entry>
+				<entry key="checkAuthenticationResponse">
+					<value>com.virginmoneygiving.cardpayment.validation.functions.CheckAuthenticationResponseFunction</value>
+				</entry>
+			</map>
+		</property>
+		<property name="valang">
+			<value>
+				<!-- { <key> : <predicate_expression> : <message> [: <error_code> [: <args> ]] } -->
+				<![CDATA[
+					{guid : guid HAS LENGTH : 'guid must be supplied' : 'online-card-payment-ws.validation.guid.empty' }
+					{paymentDetails : paymentDetails NOT NULL : 'paymentDetails must be supplied' : 'online-card-payment-ws.validation.paymentdetails.empty' }
+					{authResponseData : ? HAS LENGTH AND checkAuthenticationResponse(?) == TRUE : 'Authentication Response Data must contain elements' } 
+				]]>
+			</value>
+		</property>
+	</bean>
+	
+	<bean name="cardRequestValidator" class="org.springmodules.validation.valang.ValangValidator">
+		<property name="customFunctions">
+			<map>
+				<entry key="isNumeric">
+					<value>com.virginmoneygiving.cardpayment.validation.functions.IsNumericFunction</value>
+				</entry>
+				<entry key="hasScale">
+					<value>com.virginmoneygiving.cardpayment.validation.functions.HasScaleFunction</value>
+				</entry>
+				<entry key="isValidExpiryYear">
+					<value>com.virginmoneygiving.cardpayment.validation.functions.IsValidExpiryYearFunction</value>
+				</entry>
+			</map>
+		</property>
+		<property name="valang">
+			<value>
+				<!-- { <key> : <predicate_expression> : <message> [: <error_code> [: <args> ]] } -->
+				<![CDATA[
+					{guid : ? HAS LENGTH : 'guid must be supplied' : 'online-card-payment-ws.validation.guid.empty' }
+					{paymentDetails : ? NOT NULL : 'paymentDetails must be supplied' : 'online-card-payment-ws.validation.paymentdetails.empty' }
+					{paymentDetails.amount : ? NOT NULL AND hasScale(?, '2') ==  TRUE : 'decimal amount is required' }
+					{paymentDetails.paymentRef : ? HAS LENGTH : 'Payment reference is required' }
+					{paymentDetails.currencyCode : ? HAS LENGTH : 'Currency code is required' }
+					{cardDetails : ? NOT NULL : 'cardDetails must be supplied' : 'online-card-payment-ws.validation.carddetails.empty' }
+					{cardDetails.startYear : ? NULL OR ( ? > 1970 AND cardDetails.startMonth NOT NULL ) : 'invalid start year' }
+					{cardDetails.startMonth : ? NULL OR ( ? BETWEEN 1 AND 12 AND cardDetails.startYear NOT NULL ) : 'invalid start year' }
+					{cardDetails.endYear : isValidExpiryYear(?) == TRUE : 'expiry year must be current' }
+					{cardDetails.endMonth : ? BETWEEN 1 AND 12 : 'expiry month must be a calendar month' }
+					{cardDetails.issueNumber : ? NULL OR ( ? BETWEEN 1 AND 99 ) : 'invalid issue number' }
+					{cardDetails.securityInfo : ? NOT NULL : 'card security information must be supplied' }
+					{cardDetails.securityInfo.houseNumber : ? NULL OR ? > 0 : 'invalid house number digits supplied' }
+					{cardDetails.securityInfo.csc : ? NOT NULL AND isNumeric(?) ==  TRUE AND length(?) BETWEEN 3 AND 4 : 'invalid card security code supplied' }
+					{cardDetails.securityInfo.postcode : ? HAS LENGTH AND isNumeric(?) == TRUE : 'invalid postcode digits supplied' }
+				]]>
+			</value>
+		</property>
+	</bean>
+
+	<bean name="tokenRequestValidator" class="org.springmodules.validation.valang.ValangValidator">
+		<property name="customFunctions">
+			<map>
+				<entry key="isNumeric">
+					<value>com.virginmoneygiving.cardpayment.validation.functions.IsNumericFunction</value>
+				</entry>
+				<entry key="hasScale">
+					<value>com.virginmoneygiving.cardpayment.validation.functions.HasScaleFunction</value>
+				</entry>
+				<entry key="isValidExpiryYear">
+					<value>com.virginmoneygiving.cardpayment.validation.functions.IsValidExpiryYearFunction</value>
+				</entry>
+			</map>
+		</property>
+		<property name="valang">
+			<value>
+				<!-- { <key> : <predicate_expression> : <message> [: <error_code> [: <args> ]] } -->
+				<![CDATA[
+					{guid : guid HAS LENGTH : 'guid must be supplied' : 'online-card-payment-ws.validation.guid.empty' }
+					{paymentDetails : paymentDetails NOT NULL : 'paymentDetails must be supplied' : 'online-card-payment-ws.validation.paymentdetails.empty' }
+					{paymentDetails.currencyCode : ? HAS LENGTH : 'Currency code is required' }
+					{paymentDetails.amount : ? NOT NULL AND hasScale(?, '2') ==  TRUE : 'decimal amount is required' }
+					{paymentDetails.paymentRef : ? HAS LENGTH : 'Payment reference is required' }
+					{cardDetails : cardDetails NOT NULL : 'cardDetails must be supplied' : 'online-card-payment-ws.validation.carddetails.empty' }
+					{cardDetails.token : ? HAS LENGTH : 'invalid card token' }
+					{cardDetails.endYear : isValidExpiryYear(?) == TRUE : 'expiry year must be current' }
+					{cardDetails.endMonth : ? BETWEEN 1 AND 12 : 'expiry month must be a calendar month' }
+				]]>
+			</value>
+		</property>
+	</bean>
+</beans>

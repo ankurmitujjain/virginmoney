@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
+
+	<description>
+		PutCharityLiveBatchJob 
+	</description>
+
+	<import resource="classpath:/property-context.xml" />
+
+	<!-- Job Configuration - Start-->
+	<bean id="putCharityLiveBatchJob" parent="simpleJob">
+		<property name="name" value="Put Charity Live Batch Job" />
+		<property name="steps">
+			<list>
+				<bean id="step1" parent="givingSimpleStep">
+					<property name="itemReader"
+						ref="initialRegistrationCompletedCharityJpaPagingItemReader" />
+					<property name="itemProcessor" ref="verifyCharityItemProcessor" />
+					<property name="itemWriter" ref="dummyItemWriter" />
+					<property name="commitInterval" value="1000" />
+					<property name="listeners">
+						<list>
+							<ref bean="dummyItemWriter" />
+						</list>
+					</property>
+				</bean>
+				<bean id="step2" parent="taskletStep">
+					<property name="tasklet" ref="charityLiveProcessingSummaryXmlWriter" />
+					<property name="stepExecutionListeners">
+						<list>
+							<ref bean="charityLiveProcessingSummaryXmlWriter" />
+						</list>
+					</property>
+					<property name="streams">
+						<list>
+							<ref bean="staxEventItemWriter" />
+						</list>
+					</property>
+				</bean>
+
+			</list>
+		</property>
+	</bean>
+	<!-- Job Configuration - End-->
+
+
+	<!-- JPAPagingItemReader -->
+	<bean id="initialRegistrationCompletedCharityJpaPagingItemReader"
+		class="org.springframework.batch.item.database.JpaPagingItemReader">
+		<property name="entityManagerFactory" ref="givingEntityManagerFactory" />
+		<property name="queryString"
+			value="select c from Charity c where c.charityStatus.code != 'LIV'" />
+		<property name="pageSize" value="1000" />
+	</bean>
+
+
+	<bean id="verifyCharityItemProcessor"
+		class="com.virginmoneygiving.givingbatch.processor.VerifyCharityItemProcessor">
+		<property name="givingService" ref="givingManagementServiceLocator" />
+		<property name="paymentService" ref="paymentManagementServiceLocator" />
+		<property name="indexerEventService" ref="indexerEventService"></property>
+        <property name="givingBatchExtServiceLocator" ref="givingBatchExtServiceLocator"/>
+    </bean>
+
+	<!--
+		A dummy writer to perform logging, only to fulfill configuration
+	-->
+	<bean id="dummyItemWriter"
+		class="com.virginmoneygiving.givingbatch.writer.LoggingItemWriter">
+		<property name="resource" value="file:${givingbatch.output.folder}/%JOB_NAME%/CharityLiveProcessingSummary.xml" />
+		<property name="marshaller"
+			ref="charityLiveProcessingSummaryMarshallingSerializer" />
+		<property name="rootTagName" value="putCharityLive" />
+		<property name="overwriteOutput" value="true" />
+	</bean>
+
+	<!-- XMLItemWriter Configuration -->
+	<bean
+		class="com.virginmoneygiving.givingbatch.writer.CharityLiveProcessingSummaryXmlWriter"
+		id="charityLiveProcessingSummaryXmlWriter">
+		<property name="writer" ref="staxEventItemWriter" />
+	</bean>
+
+	<bean id="staxEventItemWriter" class="org.springframework.batch.item.xml.StaxEventItemWriter">
+		<property name="resource" value="file:${givingbatch.output.folder}/CharityLiveProcessingSummary.xml" />
+		<property name="marshaller"
+			ref="charityLiveProcessingSummaryMarshallingSerializer" />
+		<property name="rootTagName" value="putCharityLive" />
+		<property name="overwriteOutput" value="true" />
+	</bean>
+
+
+	<!-- XStreamMarshaller Configuration - Start -->
+	<bean class="org.springframework.oxm.xstream.XStreamMarshaller"
+		id="charityLiveProcessingSummaryMarshallingSerializer">
+		<property name="aliases" ref="aliases" />
+	</bean>
+
+	<util:map id="aliases">
+		<entry key="summary"
+			value="com.virginmoneygiving.givingbatch.domain.PutCharityLiveJobSummary" />
+		<entry key="batchNumber" value="java.lang.String" />
+		<entry key="processDate" value="java.util.Date" />
+		<entry key="numberOfRecordsReviewed" value="java.lang.Integer" />
+		<entry key="numberOfSkippedRecords" value="java.lang.Integer" />
+		<entry key="numberOfCharitiesPutLive" value="java.lang.Integer" />
+		<entry key="failedRecords"
+			value="com.virginmoneygiving.givingbatch.domain.FailedToGoLiveCharity" />
+		<entry key="charityReference" value="java.lang.Long" />
+		<entry key="charityName" value="java.lang.String" />
+		<entry key="failureReason" value="java.lang.String" />
+		<entry key="ok" value="java.lang.Boolean" />
+	</util:map>
+	<!-- XStreamMarshaller Configuration - End -->
+
+    <!-- Dozer Mapping Configuration -->
+	<bean id="dozerMapper" class="net.sf.dozer.util.mapping.DozerBeanMapper">
+		<property name="mappingFiles">
+			<list>
+				<value>batch-dozer-mapping.xml</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>

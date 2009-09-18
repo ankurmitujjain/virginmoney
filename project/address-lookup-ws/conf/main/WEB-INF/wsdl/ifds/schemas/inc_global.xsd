@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" attributeFormDefault="unqualified" version="*$Revision: 180 $" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="balance" type="valueAmountType"/>
+  <xs:element name="character">
+    <xs:annotation>
+      <xs:documentation>Character</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="1"/>
+        <xs:maxLength value="1"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="clientID" default="00000000">
+    <xs:annotation>
+      <xs:documentation>Client identifier, padded with leading zeros</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:length value="8"/>
+        <xs:pattern value="[0-9]{8}"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="clientInvestments">
+    <xs:annotation>
+      <xs:documentation>Holds the type of investments the client has: collectives, pension</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="pension"/>
+        <xs:enumeration value="collectives"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="component">
+    <xs:annotation>
+      <xs:documentation>component</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="componentID"/>
+        <xs:element ref="componentName"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="componentID">
+    <xs:annotation>
+      <xs:documentation>Numeric for componentID 01,02,03 i.e. (investmentType)</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:length value="2"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="componentName">
+    <xs:annotation>
+      <xs:documentation>cash, equity, lifeInsurance</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="20"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="date" type="xs:date">
+    <xs:annotation>
+      <xs:documentation>Date</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="dateRange">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="from" type="xs:date"/>
+        <xs:element name="to" type="xs:date"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="deal">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="dealID" minOccurs="0"/>
+        <xs:element ref="dealRef" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="dealID" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>STP</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="dealRef" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>non STP</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="effectiveDate" type="xs:date">
+    <xs:annotation>
+      <xs:documentation>Date on wich something became effective</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="header">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="mc"/>
+        <xs:element ref="source"/>
+        <xs:element ref="sessionID"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="internetID" default="AA00000000A">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="128"/>
+        <xs:pattern value="[A-Z]{2}[0-9]{8}[A-Z]{1}"/>
+        <xs:pattern value="[a-z,0-9]{12}[A-Z]{1}"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="interestRate">
+    <xs:simpleType>
+      <xs:restriction base="xs:double">
+        <xs:minInclusive value="0"/>
+        <xs:maxInclusive value="100"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="jointHolder">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="unitholderID"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="marketing" type="marketingType">
+    <xs:annotation>
+      <xs:documentation>Indicators to see what methods can be used to contact client</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="marketingCode">
+    <xs:annotation>
+      <xs:documentation>Holds MC marketing code</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="30"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:complexType name="marketingType">
+    <xs:sequence>
+      <xs:element name="mailAllowed" type="xs:boolean" default="false"/>
+      <xs:element name="teleCallAllowed" type="xs:boolean" default="false"/>
+      <xs:element name="emailAllowed" type="xs:boolean" default="false"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="mc" default="000000">
+    <xs:annotation>
+      <xs:documentation>Management Company id</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="6"/>
+        <xs:maxLength value="6"/>
+        <xs:pattern value="[0-9]{6}"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="percentage" default="0">
+    <xs:annotation>
+      <xs:documentation>percentage</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:double">
+        <xs:minInclusive value="0"/>
+        <xs:maxInclusive value="100"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:complexType name="percentageType">
+    <xs:sequence>
+      <xs:element ref="percentage"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="position">
+    <xs:annotation>
+      <xs:documentation>Position</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:int">
+        <xs:totalDigits value="1"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="pinOrPassword">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="4"/>
+        <xs:maxLength value="10"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:complexType name="pinOrPasswordType">
+    <xs:sequence>
+      <xs:element ref="pinOrPassword"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="price" type="xs:double"/>
+  <xs:element name="sessionID" default="0">
+    <xs:annotation>
+      <xs:documentation>Token to be passed in all calls for authentication purposes. Set to 0 if session managment is not being used or -1 session has not been allocated</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="128"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="securityAnswer">
+    <xs:annotation>
+      <xs:documentation>Security Answer required when the client logs in for the first time with PIN Number</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="128"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="securityQuestion">
+    <xs:annotation>
+      <xs:documentation>Security Question required when the client logs in for the first time with PIN Number</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="128"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="source">
+    <xs:annotation>
+      <xs:documentation>Identfies where the message originated</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="systemInstance"/>
+        <xs:element name="subSystemInstance" type="xs:int" default="0">
+          <xs:annotation>
+            <xs:documentation>Used to identify a subsystem within a systemInstance</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="requestUniqueID" default="0" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Allocated by originating sender of request so they can track the message</xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:minLength value="0"/>
+              <xs:maxLength value="20"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="responseUniqueID" default="0" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Allocated by system sending the response so they can track the message</xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:minLength value="0"/>
+              <xs:maxLength value="20"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="source_IP_address" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>IP address of sender. Logged so the originating sender could be traced if there were security issues. </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="systemInstance" type="xs:int" default="0">
+    <xs:annotation>
+      <xs:documentation>Used to identify the source of the request and is defined in tb_ThirdPartySource</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="taxYear" type="xs:gYear"/>
+  <xs:element name="time" type="xs:time">
+    <xs:annotation>
+      <xs:documentation>Time</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="totalContributions" type="valueAmountType" default="0">
+    <xs:annotation>
+      <xs:documentation>Amount of money that have been put in by the investor , not distributions etc(subscription amount)</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="totalValue" type="valueAmountType" default="0">
+    <xs:annotation>
+      <xs:documentation>Total number of units held * by the unit price amount</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="unitholderID">
+    <xs:annotation>
+      <xs:documentation>Unitholder identifier</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="10"/>
+        <xs:maxLength value="10"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="units" type="unitAmountType">
+    <xs:annotation>
+      <xs:documentation>Units</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="unitAmountType">
+    <xs:simpleContent>
+      <xs:extension base="xs:double"/>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:element name="userCode">
+    <xs:annotation>
+      <xs:documentation>User identification key</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:length value="35"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="vp">
+    <xs:annotation>
+      <xs:documentation>Valuation points</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="aVP" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="date"/>
+              <xs:element ref="time"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="valueAmountType">
+    <xs:simpleContent>
+      <xs:extension base="xs:double"/>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:schema>

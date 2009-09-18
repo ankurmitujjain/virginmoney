@@ -1,0 +1,393 @@
+/*---[ Details ]---------------------------------------
+IE7/Win Fixes Style Sheet
+Client: Virgin Money Giving
+Author: Soup
+-------------------------------------------------------*/
+
+/*-----------------------------------------------------
+[01] Clearfixes
+[02] Misc Fixes
+[03] Component Fixes
+-------------------------------------------------------*/
+
+
+/* [01] Clearfixes
+-------------------------------------------------------*/
+/* Forces hasLayout */
+.clearfix,
+#content,
+#site-controls,
+#header .container,
+.pagination,
+#vm-sponsortabs,
+#vm-createeventtabs,
+#vm-how-works,
+#vm-donation-calculator .vm-donation-calc-mid,
+#vm-donation-calculator .vm-donation-calc-white .calc form,
+#vm-donation-calculator .vm-donation-calc-white,
+#vm-donation-calculator .vm-donation-calc-content,
+#vm-search-results li,
+form.search-res-filters,
+form#vm-sponsor-info,
+form#vm-sponsor-info p,
+form#vm-sponsor-info div.pw-strength,
+#vm-create-page-one-organised,
+#vm-create-page-one-other .other-event,
+form p,
+.template-f #content-primary,
+.template-g #content-primary,
+.template-h #content-primary,
+#vm-recent-sponsors p.sponsor-info,
+#vm-charitiesheader,
+#vm-charitytabs,
+#vm-content-columns,
+#vm-sub-category-listing ul,
+#vm-content-donate-raise div,
+#vm-fundraisertabs,
+#vm-fundraiserNetworkTeamtabs,
+#vm-fundraiser-peopletabs,
+#vm-fundraiser-changenetworkstab,
+#vm-preview-of-page,
+#vm-category-list,
+#vm-eventpaymenttabs,
+#vm-categorynav {
+	display: inline-block;
+	}
+.clearfix,
+#content,
+#site-controls,
+#header .container,
+.pagination,
+#vm-sponsortabs,
+#vm-createeventtabs,
+#vm-how-works,
+#vm-donation-calculator .vm-donation-calc-mid,
+#vm-donation-calculator .vm-donation-calc-white .calc form,
+#vm-donation-calculator .vm-donation-calc-white,
+#vm-donation-calculator .vm-donation-calc-content,
+#vm-search-results li,
+form.search-res-filters,
+form#vm-sponsor-info,
+form#vm-sponsor-info p,
+form#vm-sponsor-info div.pw-strength,
+#vm-create-page-one-organised,
+#vm-create-page-one-other .other-event,
+form p,
+.template-f #content-primary,
+.template-g #content-primary,
+.template-h #content-primary,
+#vm-recent-sponsors p.sponsor-info,
+#vm-charitiesheader,
+#vm-charitytabs,
+#vm-content-columns,
+#vm-sub-category-listing ul,
+#vm-content-donate-raise div,
+#vm-fundraisertabs,
+#vm-fundraiserNetworkTeamtabs,
+#vm-preview-of-page,
+#vm-category-list,
+#vm-eventpaymenttabs,
+#vm-categorynav {
+	display: block;
+	}
+
+/* [02] Misc Fixes
+-------------------------------------------------------*/
+hr {
+	border: 1px solid #DDD;
+	}
+#branding-logo {
+	filter: alpha(opacity=0);
+}
+
+#search-site label {
+	zoom: 1;
+	width: 60px;
+}
+#search-site input {
+	top:0px;
+	margin-bottom:8px;
+}
+/*
+#search-site #search-submit {
+	margin-top: -8px;
+	position: relative;
+	top: 10px;
+	left: -10px;
+}*/
+
+/* [03] Component Fixes
+-------------------------------------------------------*/
+/* Input With Submit */
+form.input-submit button {
+	top: 10px;
+}
+
+/* Portal */
+#vm-portal div.vm-portal-panel .vm-portal-donating #sponser-input,
+#vm-portal div.vm-portal-panel .vm-portal-donating #charity-input {
+	top: -20px;
+}
+#vm-portal div.vm-portal-panel .vm-portal-donating .search-charity {
+	top: -10px;
+}
+
+/* Donations Calculator */
+#vm-donationcalc .inner div div div div div div div {
+	height: 1%;
+}
+
+/* Category Sub Nav */
+#vm-categorynav div {
+	height: 1%;
+}
+
+/**********************************************CSS FOR ITERATION - 2 STARTS HERE*************************************/
+
+.createevent .eventtypecol1{
+width:300px;/*change 275px to 300px;*/
+margin-bottom:1px;
+float:left;
+}
+
+span.dropshadow,
+
+span.dropshadow span {
+
+            background: url('../../img/branding/bg-dropshadow-bottom.gif') bottom right no-repeat;
+
+            display: inline-block;
+
+            /*display: block;
+
+            float: left;*/
+
+            font-size: 0;
+
+}
+
+
+
+span.dropshadow span {
+
+            background: url('../../img/branding/bg-dropshadow-top.gif') top left no-repeat;
+
+}
+
+span.dropshadow span span {
+
+            background: url('../../img/branding/bg-dropshadow-topright.gif') top right no-repeat;
+
+}
+
+span.dropshadow span span span {
+
+            background: url('../../img/branding/bg-dropshadow-bottomleft.gif') bottom left no-repeat;
+
+            padding: 2px 5px 8px 5px;
+
+}
+
+span.dropshadow img {
+
+            border: 5px solid #FFF;
+
+}
+
+
+
+.browsecatbanner {
+
+background:transparent url(../../img/misc/ban-charitypaperimg.gif) no-repeat scroll 0 0;
+
+height:161px;
+
+padding:65px 25px 0;
+
+width:216px;
+
+}
+
+.homepagerightimg p {
+padding:165px 0 0 48px;
+}
+
+.multipleElementContainer{
+display:block;
+float:left;
+margin-bottom:6px;
+}
+
+p.Columntotal {
+float:right;
+padding-right:99px;
+}
+
+.setupevent-search-results td input[type="radio"]{
+margin-top:-0.2em;
+}
+
+/* to fix the event screens defect starts here [start] */
+.createevent .eventtypecol1 {
+float:left;
+display:block;
+width:278px;
+}
+
+.ddmmyylabel{
+padding-left:20px;
+}
+
+.createevent input[type="checkbox"], .createevent input[type="radio"] {
+margin:0 0.1em 0 -0.5em;
+}
+.uploadbtnforevent {
+margin-left:30em;
+margin-top:0.5em;
+}
+
+table.regulardon-search-results input[type="radio"]{
+margin-left:-0.1em;
+}
+
+.yourdonation input{
+vertical-align:-3px;
+}
+.spanreadonlytxt{
+display:block;
+padding-top:8px;
+height:10px;
+float:left;
+width:325px;
+}
+/* to fix the event screens defect ends here [end] */
+
+
+/* to fix the charity screens defect starts here [start] */
+.vm-charity-registration-details .webpageaddlabel{
+margin-top:3px;
+}
+
+.inputBoxAlignment{
+vertical-align:-4px;
+}
+
+.donatenowban .buttonlinks{
+padding:5px 0px 0px 18px;
+}
+
+.donatenowban .buttonseclinks {
+padding:0 0 0 18px;
+}
+
+
+input[type="checkbox"].checkBoxAlignment{
+margin-left:-0.4em;
+}
+/* to fix the charity screens defect ends here [end] */
+
+.vm-charity-registration-details h3.alerts{
+background:none;
+padding-bottom:0;
+}
+
+span.column1{
+text-align:left;
+width:275px;
+display:block;
+float:left;
+padding-top:1px;
+}
+
+span.column2{
+text-align:left;
+width:70px;
+display:block;
+float:left;
+}
+
+span.column3{
+
+width:156px;
+display:block;
+float:left;
+}
+
+span.column4{
+text-align:left;
+width:105px;
+display:block;
+float:left;
+}
+
+input[type="checkbox"].alert{
+
+margin-top:0px;
+}
+/*css ends for Alert screen */
+
+#footer .virginmoney {
+float:left;
+margin-top:10px;
+}
+
+.userdivblockforall{
+margin-left:5px;
+float: left;
+display: block;
+width: 105px;
+}
+
+.txtfieldaddlable{
+height:75px;
+}
+
+.addresstxtfield input{
+margin:2px 0px;
+}
+.radioLabel{
+float:none;
+width:auto;
+display:inline;
+font-weight:normal;
+}
+img.verticlealign-add-btn{
+margin-bottom:-11px;
+position:relative;
+top:-8px;
+vertical-align:middle;
+}
+
+#footer-left-panel-padding{ 
+padding-left:55px;
+padding-top:0px;
+}
+
+#footer ul.top {
+	padding: 20px 0 5px 0;
+	margin: 0;
+	list-style: none;
+	float:left;
+	width:650px;
+}
+#footer .visit-vm{
+padding-top:0px;
+padding-bottom:0px;
+
+
+}
+
+#footer-left-panel { 
+width:780px;
+float:left;
+height:140px;}
+
+#footer ul li {
+	display: inline;
+	color: #FFF;
+	padding:0 5px 5px 0;
+}
+
+#footer ul li a{
+	padding-right:5px;
+}

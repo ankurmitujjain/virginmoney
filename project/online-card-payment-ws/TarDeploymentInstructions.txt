@@ -1,0 +1,56 @@
+Online Card Payment Service
+
+This is an integration service to the online payment processor 
+- this implementation integrates with The Logic Group.
+
+1. Untar the tar file.
+
+
+2. Database
+ - pre-requirement: a user for 'cardpayment'
+2.1 Execute the 01_create_cardpayment_schema.ddl.sql script
+
+
+3. System config
+
+3.1 Hosts
+/etc/hosts or DNS entries are required for TLG Secure Payment servers e.g.
+80.40.141.1     wsp1.secure-payment-processing.com
+
+3.2 Proxy system properties (if relevant)
+The Web Service locator requires the following system parameters:
+https.proxyHost
+https.proxyPort 
+
+
+4. Application deployment
+
+4.1 deploy-virgin - contains all the files to be placed in the deploy folder of jboss server. 
+4.1.1. Update onlinecardpayment-ds.xml configurations to point to VMG Database settings - IP Address, user name and password.
+** Please note that the database user ID and Password (cardpayment/*******) are dummy values.
+
+4.2 lib-virgin - external library files to be copied to jboss_server_home folder.
+
+** Set classpath for lib-virgin .  
+
+4.4 external-configuration - stores application configuration files. Copy this folder as-is on the file system**.
+
+4.4.1 Create the system property GIVING_CONF_HOME to point to the location of this folder. 
+           eg: -DGIVING_CONF_HOME=/user/home/VMG/external-configuration
+
+** Please note that JBoss user should have access permission to this folder location.
+
+
+Edit online-card-payment-ws.properties to: 
+4.4.2 set https.proxyHost and https.proxyPort as required.
+TBC - these may be commented out if the matching https system parameters are set as Spring can also use system properties.
+
+4.4.3 set the (internal) Alert Service URL (alertservice.url.system.property)
+
+4.4.4 set the (external https) 3D Secure landing page URLs (threed.donation.good.url, threed.donation.bad.url, threed.eventreg.good.url, threed.eventreg.bad.url)
+
+4.4.5 Ensure the TLG Payer Authentication shared secret (threed.sharedsecret) and OPAL Merchant ID (threed.merchantid) are correct.
+
+4.4.6 Ensure the TLG Payer Authentication MPI URLs are correct (mpi.primary.url, mpi.secondary.url).
+
+

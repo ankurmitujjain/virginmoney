@@ -1,0 +1,3155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions  xmlns:tns="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+  xmlns:wsr="http://www.openuri.org/2002/10/soap/reliability/"
+  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:soap12enc="http://www.w3.org/2003/05/soap-encoding"
+  xmlns:conv="http://www.openuri.org/2002/04/wsdl/conversation/"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:s="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://schemas.xmlsoap.org/wsdl/"
+  targetNamespace="java:uk.co.ifdsgroup.onlineservices.messages.soap">
+
+<!--
+    PLEASE NOTE
+    ===========
+
+    This is a COPY of the IFDS wsdl file (the original is called OnlineServicesSoapHttpuri.wsdl) from which all
+    operations not required by this service have been commented out. This reduces the volume of generated code
+    and allows simpler mock object to be created for JUnit testing.
+-->
+
+<!--
+ <message   name="getPensionDetails">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getPensionDetailsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="setSwitch">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="setSwitchResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getFirstTransDate_Pensions">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getFirstTransDate_PensionsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="setWithdrawal_ISA">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="setWithdrawal_ISAResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getContributionLimits_ISA">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getContributionLimits_ISAResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="msg_send_OS">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="msg_send_OSResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getFirstTransDate_Collectives">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getFirstTransDate_CollectivesResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="workflowRequest">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="workflowRequestResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="setRSF_Deposit">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="setRSF_DepositResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getHistory_UT">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getHistory_UTResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getRSF_Adhoc_Deposit">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getRSF_Adhoc_DepositResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getUnclearedBalance_UT">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getUnclearedBalance_UTResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="setRSF_ISA">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="setRSF_ISAResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ -->
+ <message   name="getAddress">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getAddressResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <!--<message   name="getDebitCardTypes_Pensions">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getDebitCardTypes_PensionsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getBACSCollectionDate_Pensions">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getBACSCollectionDate_PensionsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getSummary_Pensions">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getSummary_PensionsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="setTopUpDC_Pensions">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="setTopUpDC_PensionsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="userValidateAnswer">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="userValidateAnswerResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="setRSF_byComponent">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="setRSF_byComponentResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="setContributions_Pensions">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="setContributions_PensionsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="msg_changeStatus_OS">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="msg_changeStatus_OSResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getUnclearedBalance_PEP">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getUnclearedBalance_PEPResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="setTopUpAdhocDD_Pensions">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="setTopUpAdhocDD_PensionsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="setSwitch_Pensions">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="setSwitch_PensionsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getSummary_Deposit">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getSummary_DepositResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="clientDetermination">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="clientDeterminationResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getClientDetails">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getClientDetailsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getAccruedInterest_Collectives">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getAccruedInterest_CollectivesResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="userLogout">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="userLogoutResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getBACSCollectionDate_Collectives">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getBACSCollectionDate_CollectivesResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getPayrollSchedule_Pensions">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getPayrollSchedule_PensionsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getRSF_Deposit">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getRSF_DepositResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getUnclearedBalance_Deposit">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getUnclearedBalance_DepositResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getRSF_Adhoc_Pensions">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getRSF_Adhoc_PensionsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getTarget_Pension">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getTarget_PensionResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getFunds_Pensions">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getFunds_PensionsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getInvestments">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getInvestmentsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="validateDebitCard">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="validateDebitCardResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getRSF_UT">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getRSF_UTResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="setTopUpDC_ISA">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="setTopUpDC_ISAResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getDebitCardTypes_Collectives">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getDebitCardTypes_CollectivesResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="msg_getList_OS">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="msg_getList_OSResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getRSF_Pensions">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getRSF_PensionsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getHistory_PEP">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getHistory_PEPResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getHistory_Pensions">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getHistory_PensionsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="userForgotten_pinOrPassword">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="userForgotten_pinOrPasswordResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="userLogin">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="userLoginResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="setTopUpAdhocDD_Deposit">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="setTopUpAdhocDD_DepositResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getForm">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getFormResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getStandingData">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getStandingDataResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getSummary_ISA">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getSummary_ISAResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="userRegister">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="userRegisterResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getCollectiveInvestments">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getCollectiveInvestmentsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getAvailableFund_Collectives">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getAvailableFund_CollectivesResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getSummary_PEP">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getSummary_PEPResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getContribution_Pensions">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getContribution_PensionsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getDDI">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getDDIResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getUnclearedBalance_ISA">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getUnclearedBalance_ISAResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getHistory_ISA">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getHistory_ISAResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="msg_get_OS">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="msg_get_OSResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getHistory_Deposit">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getHistory_DepositResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="create_UT">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="create_UTResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="validateBankAccount">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="validateBankAccountResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getAvailableTaxYears_Pensions">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getAvailableTaxYears_PensionsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getLinkedBankAccount">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getLinkedBankAccountResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getRSF_ISA">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getRSF_ISAResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="setTopUpAdhocDD_ISA">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="setTopUpAdhocDD_ISAResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getRSF_Adhoc_ISA">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getRSF_Adhoc_ISAResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="userChangePassword">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="userChangePasswordResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getAvailableContribution_ISA">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getAvailableContribution_ISAResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getSummary_UT">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getSummary_UTResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="setWithdrawal_Deposit">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="setWithdrawal_DepositResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="setClientDetails">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="setClientDetailsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getFunds_Collectives">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getFunds_CollectivesResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="create_Pensions">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="create_PensionsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="userForgotten_InternetID">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="userForgotten_InternetIDResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getPensions">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getPensionsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getPayrollInformation_Pensions">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getPayrollInformation_PensionsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="create_ISA">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="create_ISAResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getInfoPack_Collectives">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getInfoPack_CollectivesResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="setTopUpDC_UT">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="setTopUpDC_UTResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="getInterestRate_Collectives">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="getInterestRate_CollectivesResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>
+ <message   name="setRSF_Pensions">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="string">
+  </part>
+ </message>
+ <message   name="setRSF_PensionsResponse">
+  <part    xmlns:partns="http://www.w3.org/2001/XMLSchema"
+    type="partns:string"
+    name="result">
+  </part>
+ </message>-->
+ <portType   name="OnlineServicesSoapHttpPort">
+ <!--
+   <operation    name="getPensionDetails">
+   <input     message="tns:getPensionDetails">
+   </input>
+   <output     message="tns:getPensionDetailsResponse">
+   </output>
+  </operation>
+  <operation    name="setSwitch">
+   <input     message="tns:setSwitch">
+   </input>
+   <output     message="tns:setSwitchResponse">
+   </output>
+  </operation>
+  <operation    name="getFirstTransDate_Pensions">
+   <input     message="tns:getFirstTransDate_Pensions">
+   </input>
+   <output     message="tns:getFirstTransDate_PensionsResponse">
+   </output>
+  </operation>
+  <operation    name="setWithdrawal_ISA">
+   <input     message="tns:setWithdrawal_ISA">
+   </input>
+   <output     message="tns:setWithdrawal_ISAResponse">
+   </output>
+  </operation>
+  <operation    name="getContributionLimits_ISA">
+   <input     message="tns:getContributionLimits_ISA">
+   </input>
+   <output     message="tns:getContributionLimits_ISAResponse">
+   </output>
+  </operation>
+  <operation    name="msg_send_OS">
+   <input     message="tns:msg_send_OS">
+   </input>
+   <output     message="tns:msg_send_OSResponse">
+   </output>
+  </operation>
+  <operation    name="getFirstTransDate_Collectives">
+   <input     message="tns:getFirstTransDate_Collectives">
+   </input>
+   <output     message="tns:getFirstTransDate_CollectivesResponse">
+   </output>
+  </operation>
+  <operation    name="workflowRequest">
+   <input     message="tns:workflowRequest">
+   </input>
+   <output     message="tns:workflowRequestResponse">
+   </output>
+  </operation>
+  <operation    name="setRSF_Deposit">
+   <input     message="tns:setRSF_Deposit">
+   </input>
+   <output     message="tns:setRSF_DepositResponse">
+   </output>
+  </operation>
+  <operation    name="getHistory_UT">
+   <input     message="tns:getHistory_UT">
+   </input>
+   <output     message="tns:getHistory_UTResponse">
+   </output>
+  </operation>
+  <operation    name="getRSF_Adhoc_Deposit">
+   <input     message="tns:getRSF_Adhoc_Deposit">
+   </input>
+   <output     message="tns:getRSF_Adhoc_DepositResponse">
+   </output>
+  </operation>
+  <operation    name="getUnclearedBalance_UT">
+   <input     message="tns:getUnclearedBalance_UT">
+   </input>
+   <output     message="tns:getUnclearedBalance_UTResponse">
+   </output>
+  </operation>
+  <operation    name="setRSF_ISA">
+   <input     message="tns:setRSF_ISA">
+   </input>
+   <output     message="tns:setRSF_ISAResponse">
+   </output>
+  </operation>
+  -->
+  <operation    name="getAddress">
+   <input     message="tns:getAddress">
+   </input>
+   <output     message="tns:getAddressResponse">
+   </output>
+  </operation>
+ <!-- <operation    name="getDebitCardTypes_Pensions">
+   <input     message="tns:getDebitCardTypes_Pensions">
+   </input>
+   <output     message="tns:getDebitCardTypes_PensionsResponse">
+   </output>
+  </operation>
+  <operation    name="getBACSCollectionDate_Pensions">
+   <input     message="tns:getBACSCollectionDate_Pensions">
+   </input>
+   <output     message="tns:getBACSCollectionDate_PensionsResponse">
+   </output>
+  </operation>
+  <operation    name="getSummary_Pensions">
+   <input     message="tns:getSummary_Pensions">
+   </input>
+   <output     message="tns:getSummary_PensionsResponse">
+   </output>
+  </operation>
+  <operation    name="setTopUpDC_Pensions">
+   <input     message="tns:setTopUpDC_Pensions">
+   </input>
+   <output     message="tns:setTopUpDC_PensionsResponse">
+   </output>
+  </operation>
+  <operation    name="userValidateAnswer">
+   <input     message="tns:userValidateAnswer">
+   </input>
+   <output     message="tns:userValidateAnswerResponse">
+   </output>
+  </operation>
+  <operation    name="setRSF_byComponent">
+   <input     message="tns:setRSF_byComponent">
+   </input>
+   <output     message="tns:setRSF_byComponentResponse">
+   </output>
+  </operation>
+  <operation    name="setContributions_Pensions">
+   <input     message="tns:setContributions_Pensions">
+   </input>
+   <output     message="tns:setContributions_PensionsResponse">
+   </output>
+  </operation>
+  <operation    name="msg_changeStatus_OS">
+   <input     message="tns:msg_changeStatus_OS">
+   </input>
+   <output     message="tns:msg_changeStatus_OSResponse">
+   </output>
+  </operation>
+  <operation    name="getUnclearedBalance_PEP">
+   <input     message="tns:getUnclearedBalance_PEP">
+   </input>
+   <output     message="tns:getUnclearedBalance_PEPResponse">
+   </output>
+  </operation>
+  <operation    name="setTopUpAdhocDD_Pensions">
+   <input     message="tns:setTopUpAdhocDD_Pensions">
+   </input>
+   <output     message="tns:setTopUpAdhocDD_PensionsResponse">
+   </output>
+  </operation>
+  <operation    name="setSwitch_Pensions">
+   <input     message="tns:setSwitch_Pensions">
+   </input>
+   <output     message="tns:setSwitch_PensionsResponse">
+   </output>
+  </operation>
+  <operation    name="getSummary_Deposit">
+   <input     message="tns:getSummary_Deposit">
+   </input>
+   <output     message="tns:getSummary_DepositResponse">
+   </output>
+  </operation>
+  <operation    name="clientDetermination">
+   <input     message="tns:clientDetermination">
+   </input>
+   <output     message="tns:clientDeterminationResponse">
+   </output>
+  </operation>
+  <operation    name="getClientDetails">
+   <input     message="tns:getClientDetails">
+   </input>
+   <output     message="tns:getClientDetailsResponse">
+   </output>
+  </operation>
+  <operation    name="getAccruedInterest_Collectives">
+   <input     message="tns:getAccruedInterest_Collectives">
+   </input>
+   <output     message="tns:getAccruedInterest_CollectivesResponse">
+   </output>
+  </operation>
+  <operation    name="userLogout">
+   <input     message="tns:userLogout">
+   </input>
+   <output     message="tns:userLogoutResponse">
+   </output>
+  </operation>
+  <operation    name="getBACSCollectionDate_Collectives">
+   <input     message="tns:getBACSCollectionDate_Collectives">
+   </input>
+   <output     message="tns:getBACSCollectionDate_CollectivesResponse">
+   </output>
+  </operation>
+  <operation    name="getPayrollSchedule_Pensions">
+   <input     message="tns:getPayrollSchedule_Pensions">
+   </input>
+   <output     message="tns:getPayrollSchedule_PensionsResponse">
+   </output>
+  </operation>
+  <operation    name="getRSF_Deposit">
+   <input     message="tns:getRSF_Deposit">
+   </input>
+   <output     message="tns:getRSF_DepositResponse">
+   </output>
+  </operation>
+  <operation    name="getUnclearedBalance_Deposit">
+   <input     message="tns:getUnclearedBalance_Deposit">
+   </input>
+   <output     message="tns:getUnclearedBalance_DepositResponse">
+   </output>
+  </operation>
+  <operation    name="getRSF_Adhoc_Pensions">
+   <input     message="tns:getRSF_Adhoc_Pensions">
+   </input>
+   <output     message="tns:getRSF_Adhoc_PensionsResponse">
+   </output>
+  </operation>
+  <operation    name="getTarget_Pension">
+   <input     message="tns:getTarget_Pension">
+   </input>
+   <output     message="tns:getTarget_PensionResponse">
+   </output>
+  </operation>
+  <operation    name="getFunds_Pensions">
+   <input     message="tns:getFunds_Pensions">
+   </input>
+   <output     message="tns:getFunds_PensionsResponse">
+   </output>
+  </operation>
+  <operation    name="getInvestments">
+   <input     message="tns:getInvestments">
+   </input>
+   <output     message="tns:getInvestmentsResponse">
+   </output>
+  </operation>
+  <operation    name="validateDebitCard">
+   <input     message="tns:validateDebitCard">
+   </input>
+   <output     message="tns:validateDebitCardResponse">
+   </output>
+  </operation>
+  <operation    name="getRSF_UT">
+   <input     message="tns:getRSF_UT">
+   </input>
+   <output     message="tns:getRSF_UTResponse">
+   </output>
+  </operation>
+  <operation    name="setTopUpDC_ISA">
+   <input     message="tns:setTopUpDC_ISA">
+   </input>
+   <output     message="tns:setTopUpDC_ISAResponse">
+   </output>
+  </operation>
+  <operation    name="getDebitCardTypes_Collectives">
+   <input     message="tns:getDebitCardTypes_Collectives">
+   </input>
+   <output     message="tns:getDebitCardTypes_CollectivesResponse">
+   </output>
+  </operation>
+  <operation    name="msg_getList_OS">
+   <input     message="tns:msg_getList_OS">
+   </input>
+   <output     message="tns:msg_getList_OSResponse">
+   </output>
+  </operation>
+  <operation    name="getRSF_Pensions">
+   <input     message="tns:getRSF_Pensions">
+   </input>
+   <output     message="tns:getRSF_PensionsResponse">
+   </output>
+  </operation>
+  <operation    name="getHistory_PEP">
+   <input     message="tns:getHistory_PEP">
+   </input>
+   <output     message="tns:getHistory_PEPResponse">
+   </output>
+  </operation>
+  <operation    name="getHistory_Pensions">
+   <input     message="tns:getHistory_Pensions">
+   </input>
+   <output     message="tns:getHistory_PensionsResponse">
+   </output>
+  </operation>
+  <operation    name="userForgotten_pinOrPassword">
+   <input     message="tns:userForgotten_pinOrPassword">
+   </input>
+   <output     message="tns:userForgotten_pinOrPasswordResponse">
+   </output>
+  </operation>
+  <operation    name="userLogin">
+   <input     message="tns:userLogin">
+   </input>
+   <output     message="tns:userLoginResponse">
+   </output>
+  </operation>
+  <operation    name="setTopUpAdhocDD_Deposit">
+   <input     message="tns:setTopUpAdhocDD_Deposit">
+   </input>
+   <output     message="tns:setTopUpAdhocDD_DepositResponse">
+   </output>
+  </operation>
+  <operation    name="getForm">
+   <input     message="tns:getForm">
+   </input>
+   <output     message="tns:getFormResponse">
+   </output>
+  </operation>
+  <operation    name="getStandingData">
+   <input     message="tns:getStandingData">
+   </input>
+   <output     message="tns:getStandingDataResponse">
+   </output>
+  </operation>
+  <operation    name="getSummary_ISA">
+   <input     message="tns:getSummary_ISA">
+   </input>
+   <output     message="tns:getSummary_ISAResponse">
+   </output>
+  </operation>
+  <operation    name="userRegister">
+   <input     message="tns:userRegister">
+   </input>
+   <output     message="tns:userRegisterResponse">
+   </output>
+  </operation>
+  <operation    name="getCollectiveInvestments">
+   <input     message="tns:getCollectiveInvestments">
+   </input>
+   <output     message="tns:getCollectiveInvestmentsResponse">
+   </output>
+  </operation>
+  <operation    name="getAvailableFund_Collectives">
+   <input     message="tns:getAvailableFund_Collectives">
+   </input>
+   <output     message="tns:getAvailableFund_CollectivesResponse">
+   </output>
+  </operation>
+  <operation    name="getSummary_PEP">
+   <input     message="tns:getSummary_PEP">
+   </input>
+   <output     message="tns:getSummary_PEPResponse">
+   </output>
+  </operation>
+  <operation    name="getContribution_Pensions">
+   <input     message="tns:getContribution_Pensions">
+   </input>
+   <output     message="tns:getContribution_PensionsResponse">
+   </output>
+  </operation>
+  <operation    name="getDDI">
+   <input     message="tns:getDDI">
+   </input>
+   <output     message="tns:getDDIResponse">
+   </output>
+  </operation>
+  <operation    name="getUnclearedBalance_ISA">
+   <input     message="tns:getUnclearedBalance_ISA">
+   </input>
+   <output     message="tns:getUnclearedBalance_ISAResponse">
+   </output>
+  </operation>
+  <operation    name="getHistory_ISA">
+   <input     message="tns:getHistory_ISA">
+   </input>
+   <output     message="tns:getHistory_ISAResponse">
+   </output>
+  </operation>
+  <operation    name="msg_get_OS">
+   <input     message="tns:msg_get_OS">
+   </input>
+   <output     message="tns:msg_get_OSResponse">
+   </output>
+  </operation>
+  <operation    name="getHistory_Deposit">
+   <input     message="tns:getHistory_Deposit">
+   </input>
+   <output     message="tns:getHistory_DepositResponse">
+   </output>
+  </operation>
+  <operation    name="create_UT">
+   <input     message="tns:create_UT">
+   </input>
+   <output     message="tns:create_UTResponse">
+   </output>
+  </operation>
+  <operation    name="validateBankAccount">
+   <input     message="tns:validateBankAccount">
+   </input>
+   <output     message="tns:validateBankAccountResponse">
+   </output>
+  </operation>
+  <operation    name="getAvailableTaxYears_Pensions">
+   <input     message="tns:getAvailableTaxYears_Pensions">
+   </input>
+   <output     message="tns:getAvailableTaxYears_PensionsResponse">
+   </output>
+  </operation>
+  <operation    name="getLinkedBankAccount">
+   <input     message="tns:getLinkedBankAccount">
+   </input>
+   <output     message="tns:getLinkedBankAccountResponse">
+   </output>
+  </operation>
+  <operation    name="getRSF_ISA">
+   <input     message="tns:getRSF_ISA">
+   </input>
+   <output     message="tns:getRSF_ISAResponse">
+   </output>
+  </operation>
+  <operation    name="setTopUpAdhocDD_ISA">
+   <input     message="tns:setTopUpAdhocDD_ISA">
+   </input>
+   <output     message="tns:setTopUpAdhocDD_ISAResponse">
+   </output>
+  </operation>
+  <operation    name="getRSF_Adhoc_ISA">
+   <input     message="tns:getRSF_Adhoc_ISA">
+   </input>
+   <output     message="tns:getRSF_Adhoc_ISAResponse">
+   </output>
+  </operation>
+  <operation    name="userChangePassword">
+   <input     message="tns:userChangePassword">
+   </input>
+   <output     message="tns:userChangePasswordResponse">
+   </output>
+  </operation>
+  <operation    name="getAvailableContribution_ISA">
+   <input     message="tns:getAvailableContribution_ISA">
+   </input>
+   <output     message="tns:getAvailableContribution_ISAResponse">
+   </output>
+  </operation>
+  <operation    name="getSummary_UT">
+   <input     message="tns:getSummary_UT">
+   </input>
+   <output     message="tns:getSummary_UTResponse">
+   </output>
+  </operation>
+  <operation    name="setWithdrawal_Deposit">
+   <input     message="tns:setWithdrawal_Deposit">
+   </input>
+   <output     message="tns:setWithdrawal_DepositResponse">
+   </output>
+  </operation>
+  <operation    name="setClientDetails">
+   <input     message="tns:setClientDetails">
+   </input>
+   <output     message="tns:setClientDetailsResponse">
+   </output>
+  </operation>
+  <operation    name="getFunds_Collectives">
+   <input     message="tns:getFunds_Collectives">
+   </input>
+   <output     message="tns:getFunds_CollectivesResponse">
+   </output>
+  </operation>
+  <operation    name="create_Pensions">
+   <input     message="tns:create_Pensions">
+   </input>
+   <output     message="tns:create_PensionsResponse">
+   </output>
+  </operation>
+  <operation    name="userForgotten_InternetID">
+   <input     message="tns:userForgotten_InternetID">
+   </input>
+   <output     message="tns:userForgotten_InternetIDResponse">
+   </output>
+  </operation>
+  <operation    name="getPensions">
+   <input     message="tns:getPensions">
+   </input>
+   <output     message="tns:getPensionsResponse">
+   </output>
+  </operation>
+  <operation    name="getPayrollInformation_Pensions">
+   <input     message="tns:getPayrollInformation_Pensions">
+   </input>
+   <output     message="tns:getPayrollInformation_PensionsResponse">
+   </output>
+  </operation>
+  <operation    name="create_ISA">
+   <input     message="tns:create_ISA">
+   </input>
+   <output     message="tns:create_ISAResponse">
+   </output>
+  </operation>
+  <operation    name="getInfoPack_Collectives">
+   <input     message="tns:getInfoPack_Collectives">
+   </input>
+   <output     message="tns:getInfoPack_CollectivesResponse">
+   </output>
+  </operation>
+  <operation    name="setTopUpDC_UT">
+   <input     message="tns:setTopUpDC_UT">
+   </input>
+   <output     message="tns:setTopUpDC_UTResponse">
+   </output>
+  </operation>
+  <operation    name="getInterestRate_Collectives">
+   <input     message="tns:getInterestRate_Collectives">
+   </input>
+   <output     message="tns:getInterestRate_CollectivesResponse">
+   </output>
+  </operation>
+  <operation    name="setRSF_Pensions">
+   <input     message="tns:setRSF_Pensions">
+   </input>
+   <output     message="tns:setRSF_PensionsResponse">
+   </output>
+  </operation>-->
+ </portType>
+ <binding   type="tns:OnlineServicesSoapHttpPort"
+   name="OnlineServicesSoapHttpPort">
+  <soap:binding    style="rpc"
+    transport="http://schemas.xmlsoap.org/soap/http">
+  </soap:binding>
+<!--
+  <operation    name="getPensionDetails">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="setSwitch">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getFirstTransDate_Pensions">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="setWithdrawal_ISA">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getContributionLimits_ISA">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="msg_send_OS">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getFirstTransDate_Collectives">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="workflowRequest">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="setRSF_Deposit">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getHistory_UT">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getRSF_Adhoc_Deposit">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getUnclearedBalance_UT">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="setRSF_ISA">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+-->
+  <operation    name="getAddress">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+<!--
+  <operation    name="getDebitCardTypes_Pensions">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getBACSCollectionDate_Pensions">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getSummary_Pensions">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="setTopUpDC_Pensions">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="userValidateAnswer">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="setRSF_byComponent">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="setContributions_Pensions">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="msg_changeStatus_OS">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getUnclearedBalance_PEP">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="setTopUpAdhocDD_Pensions">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="setSwitch_Pensions">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getSummary_Deposit">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="clientDetermination">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getClientDetails">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getAccruedInterest_Collectives">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="userLogout">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getBACSCollectionDate_Collectives">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getPayrollSchedule_Pensions">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getRSF_Deposit">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getUnclearedBalance_Deposit">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getRSF_Adhoc_Pensions">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getTarget_Pension">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getFunds_Pensions">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getInvestments">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="validateDebitCard">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getRSF_UT">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="setTopUpDC_ISA">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getDebitCardTypes_Collectives">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="msg_getList_OS">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getRSF_Pensions">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getHistory_PEP">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getHistory_Pensions">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="userForgotten_pinOrPassword">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="userLogin">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="setTopUpAdhocDD_Deposit">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getForm">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getStandingData">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getSummary_ISA">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="userRegister">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getCollectiveInvestments">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getAvailableFund_Collectives">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getSummary_PEP">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getContribution_Pensions">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getDDI">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getUnclearedBalance_ISA">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getHistory_ISA">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="msg_get_OS">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getHistory_Deposit">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="create_UT">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="validateBankAccount">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getAvailableTaxYears_Pensions">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getLinkedBankAccount">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getRSF_ISA">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="setTopUpAdhocDD_ISA">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getRSF_Adhoc_ISA">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="userChangePassword">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getAvailableContribution_ISA">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getSummary_UT">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="setWithdrawal_Deposit">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="setClientDetails">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getFunds_Collectives">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="create_Pensions">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="userForgotten_InternetID">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getPensions">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getPayrollInformation_Pensions">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="create_ISA">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getInfoPack_Collectives">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="setTopUpDC_UT">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="getInterestRate_Collectives">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+  <operation    name="setRSF_Pensions">
+   <soap:operation     style="rpc"
+     soapAction="">
+   </soap:operation>
+   <wsr:reliability     persistDuration="60000">
+   </wsr:reliability>
+   <input>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </input>
+   <output>
+    <soap:body      namespace="java:uk.co.ifdsgroup.onlineservices.messages.soap"
+      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      use="encoded">
+    </soap:body>
+   </output>
+  </operation>
+-->
+ </binding>
+ <service   name="OnlineServicesSoapHttp">
+  <port    name="OnlineServicesSoapHttpPort"
+    binding="tns:OnlineServicesSoapHttpPort">
+   <soap:address     location="http://ifdwebapp2:7906/OnlineServicesSoap/OnlineServicesSoapHttpuri">
+   </soap:address>
+  </port>
+ </service>
+</definitions>

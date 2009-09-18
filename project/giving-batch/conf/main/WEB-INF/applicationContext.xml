@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+			http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd
+      http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
+      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<!-- Autowire components -->
+	<context:annotation-config /> 
+	<tx:annotation-driven />
+
+	<import resource="classpath:/WEB-INF/resources/giving-data-source-context.xml" />
+	<import resource="classpath:/WEB-INF/resources/payment-data-source-context.xml" />
+	<import resource="classpath:/WEB-INF/resources/giving-batch-context.xml" />
+  	<import resource="classpath:/WEB-INF/resources/batch-integration-context.xml" />
+
+    <!--  quick ref to make auto-magic transaction interceptor work -->
+	<!--<bean id="transactionManager" parent="paymentTransactionManager"/>-->
+    <bean id="transactionManager" parent="givingTransactionManager"/>
+
+    <!--
+		Get properties config files, allowing values in system properties to
+		over-ride
+	-->
+
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="searchSystemEnvironment">
+			<value>true</value>
+		</property>
+		<property name="systemPropertiesModeName">
+			<value>SYSTEM_PROPERTIES_MODE_FALLBACK</value>
+		</property>
+		<property name="locations">
+			<list>
+				<value>file:${GIVING_CONF_HOME}/giving-batch-service.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="testJMSAction" class="com.virginmoneygiving.givingbatch.web.action.TestJMS">
+		<property name="jmsTemplate" ref="jmsTemplate" />
+	</bean>
+
+	<bean id="glisTestJMSAction" class="com.virginmoneygiving.givingbatch.web.action.GlisTestJMS">
+		<property name="jmsTemplate" ref="glisJmsTemplate" />
+		<property name="filePath"><value>${glis.test.data.path}</value></property>
+	</bean>
+	
+	<bean id="glisResponseTestJMSAction" class="com.virginmoneygiving.givingbatch.web.action.GlisResponseTestJMS">
+		<property name="jmsTemplate" ref="glisJmsTemplate" />
+	</bean>
+
+	<bean id="jobExecutionService"
+		class="com.virginmoneygiving.givingbatch.launcher.impl.JobExecutionServiceImpl">
+		<property name="jobLauncher" ref="jobLauncher" />
+		<property name="jobLocator" ref="jobLocator" />
+		<property name="filePath"><value>${glis.xml.file.path}</value></property>
+		<property name="alertServiceLocator" ref="alertServiceLocator"/>
+        <property name="givingBatchExtManagementServiceLocatorImpl" ref="givingBatchExtServiceLocator" />
+    </bean>
+
+	<bean id="jobLocator"
+		class="org.springframework.batch.core.configuration.support.ClassPathXmlJobRegistry">
+		<property name="jobPaths">
+			<list>
+				<value>classpath:BatchStartupJob.xml</value>
+                <value>classpath:BatchFinishedJob.xml</value>
+                <value>classpath:CharityRegistrationJob.xml</value>
+				<value>classpath:GiftAidClaimedJob.xml</value>
+				<value>classpath:giftAidClaimProcessJob.xml</value>
+				<value>classpath:GiftAidReceivedJob.xml</value>
+				<value>classpath:PaymentInitiatedJob.xml</value> 
+				<value>classpath:TransactionChargePaidJob.xml</value>
+				<value>classpath:TransactionFeePaidJob.xml</value>
+				<value>classpath:CharityRegistrationJob.xml</value>
+				<value>classpath:CharityRegistrationPartTwoJob.xml</value>
+				<value>classpath:PaymentCollectedJob.xml</value>
+				<value>classpath:EventRegistrationFeePaymentCollectedJob.xml</value>
+				<value>classpath:RegularDonationPaymentCollectedJob.xml</value>
+				<value>classpath:EventRegistrationFeeTransactionChargePaidJob.xml</value>
+				<value>classpath:EventRegistrationTransactionFeePaidJob.xml</value>
+				<value>classpath:RegularDonationTransactionChargePaidJob.xml</value>
+				<value>classpath:CreateRegistrationFeesJob.xml</value>
+				<value>classpath:TransitionalReliefClaimedJob.xml</value>
+				<value>classpath:TransitionalReliefReceivedJob.xml</value>
+				<value>classpath:CollectedRegistrationFeesJob.xml</value>
+				<value>classpath:EventRegistrationPaymentInitiatedJob.xml</value>
+				<value>classpath:RegularDonationPaymentInitiatedJob.xml</value>
+				<value>classpath:EventRegistrationPaymentFailedJob.xml</value>
+				<value>classpath:RegularDonationPaymentFailedJob.xml</value>
+				<value>classpath:RegularDonationTransactionFeePaidJob.xml</value>
+				<value>classpath:ProcessEventJob.xml</value>
+				<value>classpath:WebDonationPaymentFailedJob.xml</value>
+				<value>classpath:WaiveCharityRegistrationFeeJob.xml</value>
+				<value>classpath:CharityRegistrationAmendSupplierRecord.xml</value>
+				<value>classpath:ProcessSettledJob.xml</value>
+				<value>classpath:PaymentSettledJob.xml</value>
+				<value>classpath:giftAidClaimProcessForMarchAndOctoberJob.xml</value>
+				<value>classpath:EventPublishJob.xml</value>
+				<value>classpath:EventUnpublishJob.xml</value>
+				<value>classpath:charityTrusteeDetailsJob.xml</value>
+				<value>classpath:PutCharityLiveBatchJob.xml</value>
+				<value>classpath:CollectRegularDonationJob.xml</value>
+				<value>classpath:InactivateFundraisingPageJob.xml</value>
+		 </list>
+		</property>
+		
+	</bean>
+
+	<bean id="jobLauncher"
+		class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+		<property name="jobRepository" ref="jobRepository" />
+	</bean>
+
+	<bean id="jobRepository"
+		class="org.springframework.batch.core.repository.support.SimpleJobRepository">
+		<constructor-arg>
+			<bean
+				class="org.springframework.batch.core.repository.dao.MapJobInstanceDao" />
+		</constructor-arg>
+		<constructor-arg>
+			<bean
+				class="org.springframework.batch.core.repository.dao.MapJobExecutionDao" />
+		</constructor-arg>
+		<constructor-arg>
+			<bean
+				class="org.springframework.batch.core.repository.dao.MapStepExecutionDao" />
+		</constructor-arg>
+		<constructor-arg>
+			<bean
+				class="org.springframework.batch.core.repository.dao.MapExecutionContextDao" />
+		</constructor-arg>
+	</bean>
+
+	<!-- jboss stuff ... -->
+	<bean name="connectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="java:ConnectionFactory" />
+	</bean>
+
+	<bean id="jmsTransactionManager"
+		class="org.springframework.jms.connection.JmsTransactionManager">
+		<property name="connectionFactory" ref="connectionFactory" />
+	</bean>
+
+	<!-- jms destination already defined in jboss -->
+	<bean name="destination" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName">
+			<value>${queue.name}</value>
+		</property>
+	</bean>
+
+
+	<!-- jmsTemplate for client -->
+	<bean name="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="defaultDestination" ref="destination" />
+		<property name="receiveTimeout" value="1" />
+	</bean>
+
+	<!-- The batch service to run jobs from the scheduler -->
+
+	<!-- this is the Message Driven POJO (MDP) -->
+	<bean id="messageListener"
+		class="org.springframework.jms.listener.adapter.MessageListenerAdapter">
+		<constructor-arg>
+			<bean id="messageHandler"
+				class="com.virginmoneygiving.givingbatch.jms.impl.DefaultBatchMessageDelegate">
+				<property name="jobExecutionService" ref="jobExecutionService" />
+			</bean>
+		</constructor-arg>
+		<property name="messageConverter">
+        	<null/>
+    	</property>
+	</bean>
+
+	<!-- and this is the message listener container... -->
+	<bean id="jmsContainer"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="destination" />
+		<property name="messageListener" ref="messageListener" />
+		<property name="transactionManager" ref="jmsTransactionManager" />
+	</bean>
+	<bean id="generateSequenceHelper"
+		class="com.virginmoneygiving.givingbatch.common.GivingBatchHelper">
+		<property name="prefixMap" ref="prefixMap" />
+		<property name="validTransactionTypeList" ref="validTransactionTypeList"/>
+		<property name="validReferenceList" ref="validReferenceList"/>
+        <property name="batchStatusesMap"   ref="batchStatusesMap"/> <!-- HunarC: Added this. -->
+    </bean>
+
+	<util:map id="prefixMap">
+		<entry key="INVOICEWEB_DONATION" value="IDN" />
+		<entry key="INVOICEEVENT_REGISTRATION_FEE" value="IEF" />
+		<entry key="INVOICEGIFT_AID" value="IGA" />
+		<entry key="INVOICETRANSITIONAL_RELIEF" value="ITR" />
+		<entry key="INVOICECHARITY_REGISTRATION_FEE" value="ICR" />
+		<entry key="CREDIT_NOTECHARITY_REGISTRATION_FEE" value="CCR" />
+		<entry key="CREDIT_NOTEWEB_DONATION" value="CDN" />
+		<entry key="CREDIT_NOTEGIFT_AID" value="CGA" />
+		<entry key="CREDIT_NOTEEVENT_REGISTRATION_FEE" value="CEF" />
+		<entry key="CREDIT_NOTETRANSACTION_CHARGE" value="CTC" />
+		<entry key="CREDIT_NOTEVMG_TRANSACTION_FEE" value="CTF" />
+		<entry key="CREDIT_NOTETRANSITIONAL_RELIEF" value="CTR" />
+		<!-- TODO need to verify the type -->
+		<entry key="INVOICEDONATION" value="DON" />
+		<entry key="INVOICEREGULARDONATION" value="REGDON" />
+	</util:map>
+
+	<!-- HunarC: Added this. -->
+    <util:map id="batchStatusesMap">
+		<entry key="BATCH_STATUS_PROCESSING"          value="Processing" />
+		<entry key="BATCH_STATUS_VALIDATING"          value="Validating" />
+		<entry key="BATCH_STATUS_WAITING"             value="Waiting" />
+        <entry key="BATCH_STATUS_SUCCESSFUL"          value="Success" />
+        <entry key="BATCH_STATUS_FAIL"                value="Failed" />
+        <entry key="BATCH_STATUS_WARNING"             value="Success (Warnings)" />
+        <entry key="BATCH_STATUS_ERROR"               value="Error" />
+    </util:map>
+
+    <util:set id="validTransactionTypeList">
+		<value>WEB_DONATION</value>
+		<value>EVENT_REGISTRATION_FEE</value>
+		<value>GIFT_AID</value>
+		<value>TRANSITIONAL_RELIEF</value>
+		<value>CHARITY_REGISTRATION_FEE</value>
+		<value>VMG_TRANSACTION_FEE</value>
+		<value>TRANSACTION_CHARGE</value>
+		<!-- TODO need to verify the type -->
+		<value>DONATION</value>
+		<value>REGULARDONATION</value>
+	</util:set>
+
+	<util:set id="validReferenceList">
+		<value>INVOICE</value>
+		<value>CREDIT_NOTE</value>		
+	</util:set>
+	
+	<!-- ==================================================
+	  -  Configure the Glis Message Delegate
+	  -  ===============================================-->
+
+	<!-- This is what actually listens on the JMS queue 
+	   - The JMS Queue is set up by the destination property
+	   - TextMessges are passed to the bean defined by the messageListener property
+	   -->
+	<bean id="glisResponseJmsContainer"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="glisDestination" />
+		<property name="messageListener" ref="glisResponseMessageListener" />
+		<property name="transactionManager" ref="jmsTransactionManager" />
+	</bean>
+	  
+	<!-- Message Driven POJO (MDP) the receives messages from glisResponseJmsContainer -->
+	<bean id="glisResponseMessageListener"
+		class="org.springframework.jms.listener.adapter.MessageListenerAdapter">
+		<constructor-arg>
+			<bean class="com.virginmoneygiving.givingbatch.jms.impl.GlisProcessedMessageDelegateImpl">
+				<property name="glisResponseService" ref="glisResponseService" />
+				<property name="jobExecutionService" ref="jobExecutionService" />
+			</bean>
+		</constructor-arg>
+		<property name="messageConverter">
+        	<null/>
+    	</property>
+	</bean>
+	
+	<!--  Bean referencd by GlisProcessedMessageDelegateImpl -->
+	<bean id="glisResponseService" class = "com.virginmoneygiving.givingbatch.launcher.impl.GLISResponseServiceImpl">
+		<property name="givingBatchExtManagementServiceLocatorImpl" ref="givingBatchExtServiceLocator" />
+		<property name="alertServiceLocatorImpl" ref="alertServiceLocator"/>
+		<property name="givingService" ref="givingService" />
+		<property name="paymentService" ref="paymentManagementServiceLocator" />
+        <property name="batchHelper"    ref="generateSequenceHelper" />
+    </bean>
+	
+	<!-- This is the queue that glisResponseJmsContainer will listen on
+	   - The queue name is defined in external-config/giving-batch-service.properties
+	   - by the glis.queue.name key. At the time of writing the queue name was virginMoneyGivingQ.glis_process_response
+	   -->
+	<bean name="glisDestination" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName">
+			<value>${glis.queue.name}</value>
+		</property>
+	</bean>
+
+	<!-- This is just used by the JSP test page 
+	   - It also links to the glisDestination queue
+	   -->
+	<bean name="glisJmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="defaultDestination" ref="glisDestination" />
+		<property name="receiveTimeout" value="1" />
+	</bean>
+
+
+	<!-- Alert Service Locator Proxy Configuration -->
+	<bean id="alertServiceLocator" class="com.virginmoneygiving.givingbatch.serviceproxy.impl.AlertServiceLocatorImpl">
+		<property name="webServiceURL" value="${alertservice.url.system.property}" />
+	</bean>
+	
+	<!-- Giving Batch Ext Service Locator Proxy Configuration -->
+	<bean id="givingBatchExtServiceLocator" 
+		class="com.virginmoneygiving.givingbatch.serviceproxy.impl.GivingBatchExtManagementServiceLocatorImpl">
+		<property name="webServiceURL" value="${givingbatchextmanagement.url.system.property}" />
+	</bean>
+	
+	<!-- Giving Management Service Locator Proxy Configuration -->
+	<bean id="givingManagementServiceLocator"
+		class="com.virginmoneygiving.givingbatch.serviceproxy.impl.GivingManagementServiceLocatorImpl">
+		<property name="webServiceURL" value="${givingmanagement.url.system.property}" />
+	</bean>
+	
+	<!-- Payment Management Service Locator Proxy Configuration -->
+	<bean id="paymentManagementServiceLocator"
+		class="com.virginmoneygiving.givingbatch.serviceproxy.impl.PaymentManagementServiceLocatorImpl">
+		<property name="webServiceURL" value="${paymentmanagement.url.system.property}" />
+	</bean>
+	
+	<!--
+    <bean id="charityDAO" class="com.virginmoneygiving.giving.dao.impl.JPACharityDAOImpl" />
+    -->
+
+    <!--
+    <bean id="givingService" class="com.virginmoneygiving.giving.service.impl.GivingServiceImpl">
+		<property name="charityDAO" ref="charityDAO" />
+	</bean>
+	-->
+	
+	<!--
+    <bean id="paymentDAO" class="com.virginmoneygiving.payment.dao.impl.JPAPaymentDAOImpl" />
+    -->
+
+    <bean id="paymentService" class="com.virginmoneygiving.payment.service.impl.PaymentServiceImpl">
+		<property name="paymentDAO" ref="paymentDAO" />
+    </bean>
+
+	<!-- Bring in Hibernate stats via JMX -->
+	
+	<jee:jndi-lookup id="hibernateSessionFactory" jndi-name="SessionFactory" />
+
+	<bean id="hibernateStatistics" class="org.hibernate.jmx.StatisticsService">
+		<property name="statisticsEnabled" value="${hibernate.batch.stats.enabled}" />
+		<property name="sessionFactory" ref="hibernateSessionFactory"/>
+	</bean>
+
+	<bean class="org.springframework.jmx.export.MBeanExporter" 
+		lazy-init="false" p:autodetect="true">
+   		<property name="beans">
+      		<map>
+        		<entry key="Hibernate:name=givingBatchStatistics" value-ref="hibernateStatistics"/>
+      		</map>
+   		</property>
+	</bean>
+	
+</beans>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" attributeFormDefault="unqualified" version="*$Revision: 180 $" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:include schemaLocation="inc_global.xsd"/>
+  <xs:include schemaLocation="inc_address.xsd"/>
+  <xs:include schemaLocation="inc_error.xsd"/>
+  <xs:include schemaLocation="getAddress_Req.xsd"/>
+  <xs:element name="getAddress_Res">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="header"/>
+        <xs:element ref="error"/>
+        <xs:element ref="request"/>
+        <xs:element name="response">
+          <xs:complexType>
+            <xs:sequence minOccurs="0">
+              <xs:element name="addresses">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="addressElements" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element ref="addressKind"/>
+                          <xs:element ref="address"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

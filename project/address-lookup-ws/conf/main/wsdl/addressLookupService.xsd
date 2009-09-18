@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            xmlns="http://www.w3.org/2001/XMLSchema"
+            xmlns:vm="http://www.virginmoney.com/vmDataTypes/"
+            xmlns:fault="http://www.virginmoney.com/vmDataTypes/faults/"
+            targetNamespace="http://www.virginmoney.com/vmDataTypes/"
+            xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+            xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+            elementFormDefault="qualified">
+
+    <xs:import namespace="http://www.virginmoney.com/vmDataTypes/faults/" schemaLocation="fault.xsd" />
+
+
+    <xs:element name="addressLookupRequest" type="vm:AddressLookupRequest" />
+    <xs:element name="addressLookupResponse" type="vm:AddressLookupResponse" />
+
+    <!-- define the allowable service providers -->
+    <xs:simpleType name="ServiceProviders">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="PostcodeAnywhere">
+                <xs:annotation>
+                <xs:documentation>
+                This option requests that Postcode Anywhere is used to perform the search, using the
+                default Virgin money Account.
+                Unformatted PAF address data will be available.
+                </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="VMGivingConsumer">
+                <xs:annotation>
+                <xs:documentation>
+                This option requests that Postcode Anywhere is used to perform the search, using the VM Giving
+                'website consumer' account .
+                Unformatted PAF address data will be available.
+                </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="VMGivingOperator">
+                <xs:annotation>
+                <xs:documentation>
+                This option requests that Postcode Anywhere is used to perform the search, using the VM Giving
+                'call centre operator' account.
+                Unformatted PAF address data will be available.
+                </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="IFDS">
+                <xs:annotation>
+                <xs:documentation>
+                This option requests that IFDS is used to perform the search. Unformatted PAF address data will
+                NOT be available. Only STYLE1 result format is supported
+                </xs:documentation>
+                </xs:annotation>
+             </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- define the result formats -->
+    <xs:simpleType name="ResultFormats">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="STYLE1">
+                <xs:annotation>
+                <xs:documentation>
+                Style 1 : 4 lines of address, plus postcode. Organisation name will be on Address line 1
+                </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="STYLE2">
+                <xs:annotation>
+                <xs:documentation>
+                 Style 2 : 2 lines of address, plus postcode, post town, county and organisation name in seperate fields.
+                </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="SearchParameters">
+        <xs:sequence>
+         <xs:element name="searchPostcode" nillable="false" minOccurs="1" maxOccurs="1">
+         <xs:simpleType>
+             <xs:restriction base="xs:string">
+                 <xs:minLength value="1" />
+                 <xs:maxLength value="10" />
+             </xs:restriction>
+         </xs:simpleType>
+     </xs:element>
+
+
+
+     <xs:element name="searchBuilding" minOccurs="0" maxOccurs="1">
+         <xs:simpleType>
+             <xs:restriction base="xs:string">
+                 <xs:minLength value="1" />
+                 <xs:maxLength value="100" />
+             </xs:restriction>
+         </xs:simpleType>
+     </xs:element>
+
+     <xs:element name="serviceProvider"  type="vm:ServiceProviders" minOccurs="0" maxOccurs="1"/>
+
+     <xs:element name="resultFormat"  type="vm:ResultFormats" minOccurs="0" maxOccurs="1"/>
+
+     <xs:element name="returnOnlyMatchingAddresses" type="xs:boolean" minOccurs="0" maxOccurs="1">
+         <xs:annotation id="AddressLookupRequest.serviceprovider.returnOnlyMatchingAddresses">
+             <xs:documentation>
+                 If set to true, this option requests only addresses which match searchBuilding will
+                 be returned.
+                 If not set, or false, all results will be returned, but any addresses which match the value of
+                 searchBuilding will be at the start of the list.
+             </xs:documentation>
+         </xs:annotation>
+     </xs:element>
+
+     <xs:element name="sortMatchingAddresses" type="xs:boolean" minOccurs="0" maxOccurs="1">
+         <xs:annotation id="AddressLookupRequest.serviceprovider.sortMatchingAddresses">
+             <xs:documentation>
+                 If set to true, this option requests that addresses which match searchBuilding will
+                 be sorted to the beginning of the list of results.
+                 If set to false, all results will be returned in the order returned by the search provider.
+                 If searchBuildingis spopulated but sortMatchingAddresses not supplied it defaults to true
+             </xs:documentation>
+         </xs:annotation>
+     </xs:element>
+
+     <xs:element name="returnPAFData" type="xs:boolean" minOccurs="0" maxOccurs="1">
+         <xs:annotation id="AddressLookupRequest.serviceprovider.returnPAFData">
+             <xs:documentation>
+                 If set to true, this option requests that unformatted PAF address data will be retured, IF the
+                 serviceProvider supports it. If not set, or false, unformatted PAF data will not be returned.
+                 PAF data is not available from the IFDS service provider.
+             </xs:documentation>
+         </xs:annotation>
+     </xs:element>
+</xs:sequence>
+</xs:complexType>
+
+
+
+    <xs:complexType name="AddressLookupRequest">
+        <xs:complexContent>
+            <xs:extension base="vm:SearchParameters"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+
+    <xs:complexType name="AddressLookupResponse">
+        <xs:complexContent>
+            <xs:extension base="vm:SearchParameters">
+        <xs:sequence>
+            <xs:choice>
+                <xs:sequence>
+                    <xs:element name="resultCount" type="xs:int"   minOccurs="1" maxOccurs="1" nillable="false" />
+                    <xs:element name="Addresses" type="vm:address"  minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+                <element name="errors" type="fault:ErrorList"/>
+            </xs:choice>
+        </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+ 
+
+    <xs:complexType name="address">
+        <xs:sequence>
+            <xs:element name="picklistEntry"                   type="xs:string" />
+            <xs:element name="organisationName"                type="xs:string" />
+            <xs:element name="addressLine1"                    type="xs:string" />
+            <xs:element name="addressLine2"                    type="xs:string"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="addressLine3"                    type="xs:string"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="addressLine4"                    type="xs:string"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="postTown"                        type="xs:string"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="county"                          type="xs:string"  minOccurs="0" maxOccurs="1" />
+            <xs:element name="postcode"                        type="xs:string" />
+            <xs:element name="pafData"                         type="vm:PAFData" minOccurs="0" maxOccurs="1" />
+            <xs:element name="matchesSearchBuilding"           type="xs:boolean" minOccurs="1" maxOccurs="1" />
+
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="PAFData">
+    <xs:sequence>
+        <xs:element name="PAFCode"                            type="xs:string"  minOccurs="0" maxOccurs="1" />
+        <xs:element name="organisationName"                   type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="departmentName"                     type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="postTown"                           type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="county"                             type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="postcode"                           type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="mailsort"                           type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="barcode"                            type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="isResidential"                      type="xs:boolean" minOccurs="0" maxOccurs="1" />
+        <xs:element name="isSmallOrganisation"                type="xs:boolean" minOccurs="0" maxOccurs="1" />
+        <xs:element name="isLargeOrganisation"                type="xs:boolean" minOccurs="0" maxOccurs="1" />
+        <xs:element name="deliveryPointSuffix"                type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="checksum"                           type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="subBuildingName"                    type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="buildingName"                       type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="buildingNumber"                     type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="thoroughfareName"                   type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="thoroughfareDescriptor"             type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="dependentThoroughfareName"          type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="dependentThoroughfareDescriptor"    type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="doubleDependentLocality"            type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="dependentLocality"                  type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="poBoxNumber"                        type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="numberOfHouseholds"                 type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="concatenationOperator"              type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="gridEastM"                          type="xs:int" minOccurs="0" maxOccurs="1" />
+        <xs:element name="gridNorthM"                         type="xs:int" minOccurs="0" maxOccurs="1" />
+        <xs:element name="districtCode"                       type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="wardCode"                           type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="nhsCode"                            type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="nhsRegionCode"                      type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="countyCode"                         type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="countryCode"                        type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="wardStatus"                         type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="wardName"                           type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="districtName"                       type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="objective2"                         type="xs:boolean" minOccurs="0" maxOccurs="1" />
+        <xs:element name="objective2Region"                   type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="transitional"                       type="xs:boolean" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+</xs:complexType>
+    
+
+
+</xs:schema>

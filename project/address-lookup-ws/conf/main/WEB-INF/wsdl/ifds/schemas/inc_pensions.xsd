@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" attributeFormDefault="unqualified" version="*$Revision: 180 $" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="employerID">
+    <xs:annotation>
+      <xs:documentation>EM01X</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="4"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="contactID" type="xs:string"/>
+  <xs:element name="clientRefNoID">
+    <xs:annotation>
+      <xs:documentation>clientID</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="10"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="memberRefNoID">
+    <xs:annotation>
+      <xs:documentation>refno</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="7"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="productHoldingId">
+    <xs:annotation>
+      <xs:documentation>individual, group</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="productDescription">
+    <xs:annotation>
+      <xs:documentation>Product id and name</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="productID"/>
+        <xs:element ref="productName"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="productID">
+    <xs:annotation>
+      <xs:documentation>ID  for  schema</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:length value="6"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="productInstanceID">
+    <xs:annotation>
+      <xs:documentation> 01=schemeA, 02=schemeB</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:short">
+        <xs:totalDigits value="2"/>
+        <xs:fractionDigits value="0"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="productInstanceName" type="xs:string">
+    <xs:annotation>
+      <xs:documentation> depositA, depositB</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="productName">
+    <xs:annotation>
+      <xs:documentation>schema</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:minLength value="0"/>
+        <xs:maxLength value="60"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="restriction" type="restrictionType"/>
+  <xs:complexType name="restrictionType">
+    <xs:sequence>
+      <xs:element name="restrictionID" type="xs:int" default="0"/>
+      <xs:element name="severity" type="xs:int" default="0"/>
+      <xs:element name="text">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:minLength value="0"/>
+            <xs:maxLength value="20"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

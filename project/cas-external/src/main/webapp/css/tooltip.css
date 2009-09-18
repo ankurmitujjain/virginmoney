@@ -1,0 +1,60 @@
+.error_popup {
+  padding: 30px;
+  margin: 1em 30;
+  width:80%;
+  background-color: #FFFFFF;
+}
+
+.error_popup_open {
+  position: absolute;
+  left: 222px;
+  bottom: 250px;
+  z-index: 1;
+  width: 320px;
+  padding: 10px;
+  margin: 1em 0;
+  cursor:move;
+}
+
+.error_popup_open {
+ 
+  padding: 10px;
+  font-size:12px;
+ 
+}
+
+.error_popup_closed {
+  display: none;
+}
+
+a.error_popup_open img {
+	vertical-align: middle;
+}
+div.error_popup_open {
+	margin-top: 1em;
+}
+
+div.error_popup_open div.header {
+	height: 32px;
+	width: 280px;
+	background: url('../img/components/vm-tooltip/bg-top.gif') top left no-repeat;
+}
+div.error_popup_open div.content {
+	padding: 0 20px;
+	width: 240px;
+	color: #000;
+	background: url('../img/components/vm-tooltip/bg-repeat.png') top left;
+}
+div.error_popup_open div.footer {
+	height: 20px;
+	width: 280px;
+	background: url('../img/components/vm-tooltip/bg-bottom.gif') bottom left no-repeat;
+}
+div.error_popup_open div.content strong {
+	color: #3498CB;
+}
+
+img.tooltip{
+position:relative;
+vertical-align:middle;
+}
