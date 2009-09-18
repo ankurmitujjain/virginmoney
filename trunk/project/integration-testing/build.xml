@@ -1,0 +1,177 @@
+<project name="integration-tests" basedir="." default="build">
+
+	<!-- Ant build script for the address lookup addresslookup -->
+
+
+	<!-- user-specific properties -->
+	<property file="${user.home}/etc/env.build.properties" />
+
+	<!-- import the build file which predefines all the standard properties -->
+	<property name="antscripts.dir" value="${env.dev.root.dir}/common/antscripts" />
+	<property file="${antscripts.dir}/common.build.properties" />
+
+	<!-- import all the thirdparty library definitions -->
+	<property name="common.library.dir" value="${env.dev.root.dir}/thirdparty/libraries" />
+	<property file="${common.library.dir}/common.libraries.properties" />
+
+	<!-- import vm deployment and jboss control -->
+	<import file="${antscripts.dir}/ant-vm-deployment.xml" />
+
+	<!-- import selenium test targets -->
+	<import file="ant-selenium.xml"/>
+
+	<path id="required.libraries">
+    <fileset dir="${vmgcommons.jar.location}">
+			<include name="**/*.jar" />
+		</fileset>		
+		<fileset dir="${junit45.home}">
+			<exclude name="**/*log4j*.*" />
+		</fileset>
+		<fileset dir="${dbunit.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${slf4j.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${log4j.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${mysql.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${webdriver.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${selenium.rc.java-client.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${mockito.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${solr.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${jboss.lib}">
+			<include name="**/jboss-j2ee.jar" />
+		</fileset>
+		<fileset dir="${spring256.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+		<fileset dir="${spring256.test.lib}">
+			<include name="**/*.jar" />
+		</fileset>		
+	</path>
+
+	<!-- master classpath - includes common libraries and configuration elements -->
+	<path id="master.classpath">
+		<path refid="required.libraries" />
+		<pathelement path="${build.main.dir}" />
+		<pathelement path="${conf.dir}" />
+	</path>
+
+	<!-- test classpath - includes common libraries and configuration elements plus test version of configuration elements -->
+	<path id="test.classpath">
+		<pathelement path="${conf.dir}" />
+		<pathelement path="${build.test.dir}" />
+		<path refid="master.classpath" />
+	</path>
+
+	<!-- builds and runs the integration tests -->
+	<target name="build" depends="build-no-tests, test-all" />
+
+	<target name="build-no-tests" depends="clean, assert-dependencies, compile" description="builds the project without tests" />
+
+	<target name="clean" description="Clean out the build and deployment directories">
+		<ant antfile="${antscripts.dir}/ant-clean.xml" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="compile" description="Compiles all source java files">		
+		<ant antfile="${antscripts.dir}/ant-compile.xml" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="test-all">
+		<if>
+			<not>
+				<or>
+					<equals arg1="${skip.integrtaion.tests}" arg2="true"/>
+					<equals arg1="${skip.its}" arg2="true"/>
+				</or>
+			</not>
+			<then>
+				<if>
+					<not><equals arg1="${skip.selenium}" arg2="true"/></not>
+					<then>
+			        <antcall target="test-selenium"/>
+					</then>
+				</if>
+				<if>
+					<not><equals arg1="${skip.webdriver}" arg2="true"/></not>
+					<then>
+			        <antcall target="test-webdriver"/>
+					</then>
+				</if>
+			</then>
+		</if>
+	</target>
+	
+	<target name="test-junit" description="Runs the Junit tests" depends="compile" unless="skip.integration.tests">
+		<ant antfile="${antscripts.dir}/ant-junit.xml" inheritall="true" inheritrefs="true" />
+	</target>
+
+  <target name="test-selenium" description="Start Proxy ; Run JUnit ; stop Proxy">
+    <parallel>
+    	<antcall target="start-server"></antcall>
+            <sequential>	
+                <echo taskname="waitfor" message="Wait for proxy server launch" />
+                <waitfor maxwait="30" maxwaitunit="second" checkevery="100">
+                    <http url="${selenium.rc.server.url}/selenium-server/driver/?cmd=testComplete"/>
+                </waitfor>
+                    <antcall target="test-junit"></antcall>
+                    <antcall target="stop-server"></antcall>
+            </sequential>
+		</parallel>
+	</target>
+
+    <fileset id="webdriver-junit-fileset" dir="${build.test.dir}">
+			<!-- include name="**/webdriver/**/Test*.*"/>
+			<include name="**/webdriver/**/*TestCase.*"/>
+			<include name="**/webdriver/**/*Test.*"/ -->
+			<include name="**/*Suit.*"/>
+			<exclude name="**/messages/**.*"/>
+			<exclude name="**/*$$*.*"/>
+		</fileset>
+
+	<target name="test-webdriver" description="Runs the WebDriver Unit tests" depends="compile" unless="skip.integration.tests">
+		<property name="junit-execute-fileset-id"  value="webdriver-junit-fileset"/>
+		<echo message="Running WebDriver integration tests ..."/>
+		<ant antfile="${antscripts.dir}/ant-junit.xml" inheritall="true" inheritrefs="true" />
+	</target>
+
+
+	<!-- Use to start selenuim before running individual tests -->
+	<target name="start-selenium">
+		<antcall target="start-server"></antcall>
+	</target>
+	
+	<!-- Use to stop selenuim after running individual tests -->
+	<target name="stop-selenium">
+		<antcall target="stop-server"></antcall>
+	</target>
+
+			<target name="echoproperties">
+		<echo message="==============================================================================================" />
+		<echo message=" Start of properties for project : '${ant.project.name}'" />
+		<echo message="                         basedir : '${basedir}' " />
+		<echo message="                        ant file : '${ant.file}'" />
+		<echo message="==============================================================================================" />
+		<echoproperties />
+		<echoproperties />
+		<echo message="==============================================================================================" />
+		<property name="print.test.classpath" refid="test.classpath" />
+		<echo message="                        print.test.classpath : '${print.test.classpath}'" />
+		<echo message="==============================================================================================" />
+		<echo message=" End of properties for project : '${ant.project.name}' " />
+		<echo message="==============================================================================================" />
+	</target>
+
+</project>

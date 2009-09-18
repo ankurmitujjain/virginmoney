@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:util="http://www.springframework.org/schema/util"	
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+    http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+	<bean id="eventHelper" class="com.virginmoneygiving.integrationtests.webdriver.event.EventHelper" />
+	
+	<bean id="charityHelper" class="com.virginmoneygiving.integrationtests.webdriver.charity.CharityHelper">
+		<property name="charities" ref="charities" />
+	</bean>
+	
+	<bean id="donorHelper" class="com.virginmoneygiving.integrationtests.webdriver.donor.DonorHelper">
+	</bean>
+	
+	<bean id="fundraiserHelper" class="com.virginmoneygiving.integrationtests.webdriver.fundraiser.FundraiserHelper">
+		<property name="fundraisers" ref="fundraisers" />
+	</bean>
+	
+	<bean id="operationsHelper" class="com.virginmoneygiving.integrationtests.webdriver.operations.OperationsHelper" />
+	
+	<bean id="givingDbUnitHelper" class="com.virginmoneygiving.integrationtests.dbunit.GivingDbUnitHelper">
+		<constructor-arg value="/com/virginmoneygiving/integrationtests/charity/webdriver/registerpart1/giving-after-dataset.xml" />
+		<constructor-arg value="/com/virginmoneygiving/integrationtests/charity/webdriver/registerpart1/giving-before-dataset.xml" />
+	</bean>
+
+	<bean id="paymentDbUnitHelper" class="com.virginmoneygiving.integrationtests.dbunit.PaymentDbUnitHelper">
+		<constructor-arg value="/com/virginmoneygiving/integrationtests/charity/webdriver/registerpart1/payment-after-dataset.xml" />
+		<constructor-arg value="/com/virginmoneygiving/integrationtests/charity/webdriver/registerpart1/payment-before-dataset.xml" />
+	</bean>	
+		 	 		          
+	<bean id="securityDbUnitHelper" class="com.virginmoneygiving.integrationtests.dbunit.SecurityDbUnitHelper">
+		<constructor-arg value="/com/virginmoneygiving/integrationtests/charity/webdriver/registerpart1/security-after-dataset.xml" />
+		<constructor-arg value="/com/virginmoneygiving/integrationtests/charity/webdriver/registerpart1/security-before-dataset.xml" />
+	</bean>
+
+</beans>

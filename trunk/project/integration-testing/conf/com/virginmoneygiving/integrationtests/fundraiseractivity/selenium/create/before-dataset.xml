@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--==========================================================================
+  - Adds a live charity to the database and cleans out all the fundraiser and 
+  - fundraiser-activity related tables  
+  =========================================================================-->
+<dataset>
+
+  <user_profile/>
+  <url_details/>
+  <fundraiser/>
+  <fundraiser_activity/>
+  <fundraising_charity_split/>
+
+  <page/>
+  <page_widget/>
+
+</dataset>

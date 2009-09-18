@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+
+  <payment PAYMENT_TARGET="VMG" GROSS_AMOUNT="100.00" CURRENCY="GBP" PAYMENT_REASON="Charity Registration fees." PAYMENT_STATUS_CODE="CRFPAYINIT" PAYMENT_TYPE_CODE="CHTYREGFEE"/>
+  <vat_amount VAT_AMOUNT="15.00" CURRENCY="GBP" VAT_STATUS_CODE="VATDONINIT"/>
+
+</dataset>

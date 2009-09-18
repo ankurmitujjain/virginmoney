@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+
+<card_transaction/>
+  <payment/>
+  <card_charge/>
+  <transitional_relief_amount/>
+  <gift_aid_amount/>
+  <handling_charge/>
+  <vat_amount/>
+  
+</dataset>

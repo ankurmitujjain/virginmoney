@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main"/>
+	<classpathentry kind="src" path="src/test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="VMG_THIRDPARTY_LIBS_HOME/jboss/jboss-4.2.0.GA/servlet-api.jar"/>
+	<classpathentry kind="var" path="VMG_THIRDPARTY_LIBS_HOME/log4J/1.2.15/log4j-1.2.15.jar"/>
+	<classpathentry kind="var" path="VMG_THIRDPARTY_LIBS_HOME/junit/4_4.5/junit-4.5.jar"/>
+	<classpathentry kind="output" path="build/main"/>
+</classpath>

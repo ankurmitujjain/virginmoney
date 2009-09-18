@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+
+  <charity/>
+  <address/>
+  <categorised_charity/>
+  <charity_address/>
+
+  <event/>
+  <event_activity/>
+  <charitable_activity/>
+  
+  <person/>
+  <user/>
+  <user_role/>
+  <charity_administrator/>
+
+  <email_address/>
+  <person_email_address/>
+
+  <telephone_number/>
+  <person_telephone_number/>
+  
+</dataset>

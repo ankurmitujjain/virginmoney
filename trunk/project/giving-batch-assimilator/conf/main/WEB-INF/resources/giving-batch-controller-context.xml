@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:si="http://www.springframework.org/schema/integration"
+    xmlns:jms="http://www.springframework.org/schema/integration/jms"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:stream="http://www.springframework.org/schema/integration/stream"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-2.5.xsd
+			http://www.springframework.org/schema/integration
+			http://www.springframework.org/schema/integration/spring-integration-1.0.xsd
+			http://www.springframework.org/schema/integration/stream
+			http://www.springframework.org/schema/integration/stream/spring-integration-stream-1.0.xsd
+			http://www.springframework.org/schema/integration/jms
+			http://www.springframework.org/schema/integration/jms/spring-integration-jms-1.0.xsd">
+
+    <si:annotation-config/>
+
+	<context:component-scan base-package="com.virginmoneygiving.givingbatchcontroller"/>
+
+    <!--<si:gateway id="batchGateway" service-interface="com.virginmoneygiving.givingbatchcontroller.gateway.BatchGateway"/>-->
+
+    <bean id="aggregatorBean" class="com.virginmoneygiving.givingbatchcontroller.endpoint.ThreadGroupAggregator"/>
+
+    <si:aggregator id="batchAggregator" input-channel="completions" output-channel="triggers"
+                   ref="aggregatorBean" method="joinThreads" discard-channel="discardChannel"
+                   correlation-strategy="aggregatorBean" correlation-strategy-method="correlateByParameter"
+                   reaper-interval="5000"
+                   timeout="${si_batch_aggregator.timeout.value}"/>
+
+    <si:channel id="triggers"/>
+	<si:channel id="batch"/>
+	<si:channel id="completions"/>
+    <si:channel id="discardChannel"/>
+
+    <si:poller id="poller" default="true">
+		<si:interval-trigger interval="3" time-unit="SECONDS"/>
+	</si:poller>
+
+    <!-- Inbound Channel Adapter for Triggers -->
+    <jms:message-driven-channel-adapter id="jmsTriggerIn" destination="triggersDestinationQueue" channel="triggers" />
+    <!-- These are the other options ...
+    <jms:inbound-gateway id="jmsTriggersInGateway" request-destination="triggersDestinationQueue" request-channel="triggers" />
+    <jms:inbound-channel-adapter id="jmsTriggerIn" destination="triggersDestinationQueue" channel="triggers" />
+    -->
+
+    <!-- Outbound Channel Adapter for Triggers-Used by Completions -->
+    <jms:outbound-channel-adapter id="jmsTriggerOut" destination="triggersDestinationQueue" channel="triggers" />
+
+    <!-- Outbound Channel Adapter for batches -->
+    <jms:outbound-channel-adapter id="jmsBatchOut" destination="batchDestinationQueue" channel="batch" />
+
+    <!-- These are the other oprtions to define the Inbound batch channel
+    <jms:inbound-channel-adapter id="jmsBatchOut" destination="batchDestinationQueue" channel="batch" />
+    <jms:inbound-gateway id="jmsBatchesInGateway" request-destination="batchDestinationQueue" request-channel="batch" concurrent-consumers="5"/>
+    -->
+
+    <!-- Inbound Channel Adapter for batches -->
+    <jms:message-driven-channel-adapter id="jmsBatchIn" destination="batchDestinationQueue" channel="batch" concurrent-consumers="5"/>
+
+    <!-- These are the other options to define the Inbound batch channel
+    <jms:inbound-channel-adapter id="jmsBatchIn" destination="batchDestinationQueue" channel="batch" />
+    <jms:inbound-gateway id="jmsBatchesInGateway" request-destination="batchDestinationQueue" request-channel="batch" concurrent-consumers="5"/>
+    -->
+
+
+    <!-- get completion messages in -->
+    <!--<jms:inbound-gateway id="jmsCompletionsInGateway" request-destination="completionsDestinationQueue" request-channel="completions" />-->
+    <jms:message-driven-channel-adapter id="jmsCompletionsIn" destination="completionsDestinationQueue" channel="completions" />
+
+    <!-- Message manager implementation -->
+    <bean id="messageManager" class="com.virginmoneygiving.givingbatchcontroller.common.MessageManagerProxyImpl">
+        <property name="triggersJMSTemplate"       ref="triggerJmsTemplate"/>
+        <property name="batchJMSTemplate"          ref="batchJmsTemplate"/>
+        <property name="completionsJMSTemplate"    ref="completionsJmsTemplate"/>
+    </bean>
+
+</beans:beans>

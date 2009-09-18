@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:util="http://www.springframework.org/schema/util"	
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+    http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.5.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+	
+	
+     
+<bean id="charityDetails" class="com.virginmoneygiving.integrationtests.webdriver.operations.OperationsCharityDetails">
+		<property name="bankAccountDetails.sortCodePart1" value="11" />
+		<property name="bankAccountDetails.sortCodePart2" value="22" />
+		<property name="bankAccountDetails.sortCodePart3" value="33" />
+		<property name="bankAccountDetails.accountNumber" value="12345678" />
+		<property name="bankAccountDetails.accountName" value="Barclays account 1" />
+		<property name="bankAccountDetails.bankName" value="Barclays LLC" />
+		<property name="bankAccountDetails.bankAddressLine1" value="11" />
+		<property name="bankAccountDetails.bankAddressLine2" value="MarlikSpine Ln" />
+		<property name="bankAccountDetails.bankAddressLine3" value="London" />
+		<property name="bankAccountDetails.bankAddressLine4" value="London" />
+		<property name="bankAccountDetails.postCode" value="sk3 8py" />
+		<property name="bankAccountDetails.accountDescription" value="My Barclays account 1" />
+		<property name="verificationDetails.charityHmrcReferenceNumber" value="1234" />
+		<property name="verificationDetails.virginHmrcReferenceNumber" value="5678" />
+		<property name="verificationDetails.verifyNotes" value="Verified-Signed" />
+		<property name="formDetails.formNotes" value="Forms have been recieved-Signed" />
+</bean>	
+
+<bean id="operationsUserDetails" class="com.virginmoneygiving.integrationtests.webdriver.operations.OperationsUserDetails">
+		<property name="userName" value="${operations.user.username}" />
+		<property name="password" value="${operations.user.password}" />
+</bean>	
+
+	
+
+</beans>

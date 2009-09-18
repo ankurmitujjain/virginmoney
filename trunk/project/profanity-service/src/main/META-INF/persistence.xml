@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+  <persistence-unit name="VMGProfanity" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <jta-data-source>java:VmgProfanity</jta-data-source>
+    <properties>
+      <property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.JBossTransactionManagerLookup"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+      <property name="jboss.entity.manager.factory.jndi.name" value="java:/VMGProfanity"/>
+      <property name="hibernate.show_sql" value="false"/> 
+      <property name="hibernate.hbm2ddl.auto" value="validate"/>
+      
+      <property name="hibernate.ejb.event.post-insert"   
+             value="org.hibernate.envers.event.AuditEventListener" />  
+      <property name="hibernate.ejb.event.post-update"   
+             value="org.hibernate.envers.event.AuditEventListener" />  
+      <property name="hibernate.ejb.event.post-delete"   
+             value="org.hibernate.envers.event.AuditEventListener" />  
+      <property name="hibernate.ejb.event.pre-collection-update"   
+             value="org.hibernate.envers.event.AuditEventListener" />  
+      <property name="hibernate.ejb.event.pre-collection-remove"   
+             value="org.hibernate.envers.event.AuditEventListener" />  
+      <property name="hibernate.ejb.event.post-collection-recreate"   
+             value="org.hibernate.envers.event.AuditEventListener" /> 
+      <property name="org.jboss.envers.versionsTableSuffix" value="_V" />           
+      <property name="org.jboss.envers.revisionFieldName" value="ver_rev" />
+      
+    </properties>
+  </persistence-unit>
+</persistence>

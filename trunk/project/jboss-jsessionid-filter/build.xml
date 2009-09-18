@@ -1,0 +1,219 @@
+<?xml version="1.0"?>
+<project name="jboss-jsessionid-filter" basedir="." default="build">
+
+	<property file="build.properties" />
+	<property file="library.version" />
+
+	<!-- user-specific properties -->
+	<property file="${user.home}/etc/env.build.properties" />
+
+	<!-- import the build file which predefines all the standard properties -->
+	<property name="antscripts.dir" value="${env.dev.root.dir}/common/antscripts" />
+	<property file="${antscripts.dir}/common.build.properties" />
+
+	<!-- import all the thirdparty library definitions -->
+	<property name="common.library.dir" value="${env.dev.root.dir}/thirdparty/libraries" />
+	<property file="${common.library.dir}/common.libraries.properties" />
+
+	<property file="${common.component.dir}/common.components.properties" />
+
+	<property name="jar.name" value="${ant.project.name}"/>
+
+	<!-- import vm deployment and jboss control -->
+	<import file="${antscripts.dir}/ant-vm-deployment.xml" />
+
+	<!--required libraries for this project -->
+	<path id="required.libraries">
+		<fileset dir="${jboss.lib}">
+			<include name="**/*.jar" />
+			<exclude name="**/*log4j*.*" />
+		</fileset>
+		<fileset dir="${commons-logging.lib}">
+			<include name="*.jar" />
+			<exclude name="**/*log4j*.*" />
+		</fileset>
+		<fileset dir="${log4j.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!-- master classpath - includes common libraries and configuration elements -->
+	<path id="master.classpath">
+		<path refid="required.libraries" />
+		<pathelement path="${build.main.dir}" />
+		<!--<pathelement path="${conf.main.dir}"/>        -->
+	</path>
+
+	<path id="test.classpath">
+		<!--<pathelement path="${conf.test.dir}"/>         -->
+		<pathelement path="${build.test.dir}" />
+		<path refid="master.classpath" />
+		<fileset dir="${junit.home}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!-- builds and tests the project -->
+	<target name="build" depends="build-no-tests, test-all, javadoc" />
+
+	<target name="build-no-tests" depends="clean, assert-dependencies, compile, create-jar" description="builds the project without tests" />
+
+	<target name="create-jar" depends="clean,compile" description="Create a jar containing all java classes">
+
+		<mkdir dir="${deploy.dir}" />
+
+		<jar destfile="${deploy.dir}/${jar.name}.jar">
+			<fileset dir="${build.main.dir}" />
+
+			<fileset dir="${src.main.dir}">
+				<include name="**/*.xml" />
+			</fileset>
+		</jar>
+
+	</target>
+
+	<target name="clean" depends="clean-dist" description="Cleans all class files">
+		<ant antfile="${antscripts.dir}/ant-clean.xml" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="clean-dist" description="Clean out the distribution directory">
+		<delete dir="${distribution.dir}" failonerror="false" />
+	</target>
+
+	<target name="compile" description="Compiles all source java files">
+		<ant antfile="${antscripts.dir}/ant-compile.xml" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="javadoc" description="Runs Javadoc" >
+		<if>
+			<not><equals arg1="${skip.javadoc}" arg2="true"/></not>
+			<then>
+				<ant antfile="${antscripts.dir}/ant-javadoc.xml" target="javadoc-html" inheritall="true" inheritrefs="true">
+					<property name="javadoc.title" value="${ant.project.name}" />
+					<property name="javadoc.verbose" value="false" />
+				</ant>
+			</then>
+			<else>
+				<echo message="Property 'skip.javadoc' is set to true, skipping javadoc"/>
+			</else>
+		</if>
+	</target>
+
+	<target name="test-all">
+		<if>
+			<not><equals arg1="${skip.tests}" arg2="true"/></not>
+			<then>
+      	<if>
+      		<not><equals arg1="${skip.cobertura}" arg2="true"/></not>
+					<then>
+		        <antcall target="test-cobertura"/>
+					</then>
+					<else>
+						<echo message="Property 'skip.cobertura' is set to true, skipping cobertura processing"/>
+		        <antcall target="test-junit"/>
+					</else>
+				</if>
+			</then>
+			<else>
+				<echo message="Property 'skip.tests' is set to true, skipping tests"/>
+			</else>
+		</if>
+    <antcall target="test-checkstyle"/>
+    <antcall target="test-findbugs"/>
+	</target>
+
+	<target name="test-cobertura" description="Runs the Junit tests with Cobertura analysis" depends="compile">
+		<if>
+			<not><equals arg1="${skip.cobertura}" arg2="true"/></not>
+			<then>
+				<ant antfile="${antscripts.dir}/ant-cobertura.xml" inheritall="true" inheritrefs="true"/>
+			</then>
+			<else>
+				<echo message="Property 'skip.cobertura' is set to true, skipping cobertura tests"/>
+			</else>
+		</if>
+	</target>
+
+	<target name="test-junit" description="Runs the Junit tests" depends="compile">
+		<if>
+			<not><equals arg1="${skip.tests}" arg2="true"/></not>
+			<then>
+				<ant antfile="${antscripts.dir}/ant-junit.xml" inheritall="true" inheritrefs="true" />
+			</then>
+			<else>
+				<echo message="Property 'skip.tests' is set to true, skipping tests"/>
+			</else>
+		</if>				
+	</target>
+
+	<target name="test-checkstyle" description="Runs checkstyle over the source to check the coding standards">
+		<if>
+			<not><equals arg1="${skip.checkstyle}" arg2="true"/></not>
+			<then>
+				<ant antfile="${antscripts.dir}/ant-checkstyle.xml" inheritall="true" inheritrefs="true" />
+			</then>
+			<else>
+				<echo message="Property 'skip.checkstyle' is set to true, skipping checkstyle analysis"/>
+			</else>
+		</if>				
+	</target>
+
+	<target name="test-findbugs" description="Runs findbugs over the source to check the coding bugs">
+		<if>
+			<not><equals arg1="${skip.findbugs}" arg2="true"/></not>
+			<then>
+				<ant antfile="${antscripts.dir}/ant-findbugs.xml" inheritall="true" inheritrefs="true" />
+			</then>
+			<else>
+				<echo message="Property 'skip.findbugs' is set to true, skipping findbugs analysis"/>
+			</else>
+		</if>				
+	</target>
+
+	<!-- a default fitnesse target. Provide the name of the fitnesse page to test with -->
+	<target name="test-fitnesse" description="Runs the Fitnesse tests" unless="skip.fitnesse">
+		<ant antfile="${antscripts.dir}/ant-fitnesse.xml" inheritall="true" inheritrefs="true">
+			<property name="fitnesse.test.page" value="a fitnesse page" />
+		</ant>
+	</target>
+
+	<target name="test-qalab" description="Runs qalab against the test results to record the metrics" unless="skip.qalab">
+		<ant antfile="${antscripts.dir}/ant-qalab.xml" inheritall="true" inheritrefs="true" />
+	</target>
+	
+	<target name="echoproperties">
+		<echo message="==============================================================================================" />
+		<echo message=" Start of properties for project : '${ant.project.name}'" />
+		<echo message="                         basedir : '${basedir}' " />
+		<echo message="                        ant file : '${ant.file}'" />
+		<echo message="==============================================================================================" />
+		<echoproperties />
+		<echo message="==============================================================================================" />
+		<echo message=" End of properties for project : '${ant.project.name}' " />
+		<echo message="==============================================================================================" />
+	</target>
+
+	<!-- BUILD DISTRIBUTION BUNDLE -->
+
+	<!-- We have no dist, so just build instead -->
+	<target name="dist" depends="build" description="Build the project's distribution bundle, which for this project is just a JAR" />
+
+
+	<!-- CHECK/ASSERT THAT WE'RE DEPLOYED OKAY -->
+
+	<!-- we're just a JAR project so simply check for the presence of it -->
+
+	<target name="check-deployment">
+		<available file="${deploy.dir}/${jar.name}.jar" property="jar.available" />
+		<if>
+			<isset property="jar.available"/>
+			<then><echo message="Project JAR '${jar.name}' available"/></then>
+			<else><echo message="Project JAR '${jar.name}' not available"/></else>
+		</if>
+	</target>
+
+	<target name="assert-deployment" depends="check-deployment">
+		<fail message="Project JAR '${jar.name}' not found" unless="jar.available" />
+	</target>
+
+</project>

@@ -1,0 +1,79 @@
+
+To build, deploy and test the indexer service.
+
+Assumption: That all paths are set up correctly in ~userhome/etc, including baseline libs etc.
+Replace all instances of ${variable} with appropriate paths for your local environment
+
+1. Install Solr on JBoss
+=========================
+
+Copy ${baseline}\thirdparty\libraries\apache-solr\1.3.0\apache-solr-1.3.0.war to 
+the ${jboss}/deploy directory
+Copy ${svn}/indexer-service/config/solr to ${jboss}/lib-virgin/solr
+
+When Solr starts it needs two variables:
+
+solr.solr.home tell it where to find it's config files
+solr.data.dir tells it where to write it's data indexes
+
+They can both be provided as system.properties values, so either set JAVA_OPTS or 
+pass the using -D when starting java
+
+solr.solr.home should be set to ${jboss}/lib-virgin/solr
+solr.data.dir should be set to a suitable location
+
+Start JBoss and the Solr service should start. You can check by using a browser 
+to hit http://localhost:8080/apache-solr-1.3.0/admin/
+
+2. Configure Local JBoss
+=========================
+
+Set up the required JMS queue by copying the XML file ${svn}/indexer-service/config/jboss/jms-indexer-service-destination-service.xml 
+into ${jboss_home}/production/deploy
+
+Copy the following to ${jboss_home}/${lib.virgin}
+
+${baseline}\thirdparty\libraries\xStream\xstream-1.3\lib\*.jar
+${baseline}\thirdparty\libraries\spring\spring-2.5.6\*.jar
+${baseline}\thirdparty\libraries\apache-solr\1.3.0\*.jar
+
+3. Build indexer-service
+=========================
+
+
+Edit ~userhome/etc/env.build.properties and ensure property indexerservice.wsdl.location 
+is set to ${svn}/indexer-service/config/wsdl/indexer-service.wsdl
+
+Run deploy-local-jboss-no-tests.
+
+The ant scripts should generate the interface classes then compile the code, create a 
+war file and deploy it to your local jboss instance.
+
+If JBoss is already running, indexer-service.war should be deployed and started. 
+
+4. Over-ride Runtime Variables
+===============================
+
+There are two runtime variables that are used in indexer-service.
+
+queue.name			The name of the jms queue the service will listen on
+solr.server.url		The url to connect to the solr server
+
+The default values are shown below
+
+queue.name=queue/indexerQueue
+solr.server.url=http://localhost:8080/apache-solr-1.3.0
+
+They can be over-ridden by editing file indexer-service.properties
+
+Test
+=====
+
+Open ${svn}/indexer-service/test/stories/DON0020/CharityIsModifiedStory.groovy and change the hard-coded paths to fit your local environment.
+Open ${svn}/indexer-service/test/stories/DON0020/FundraiserIsModifiedStory.groovy and change the hard-coded paths to fit your local environment.
+
+Run target "test-easyb", examine the files in test/stories to see examples of usage and creating messages to add, index and delete 
+charities and fundraisers. There are also some unit test classes in the test directory for more examples. 
+
+The easyb tests are more of a complete end-to-end test using an embedded Solr server, while the unit tests use mock classes.
+

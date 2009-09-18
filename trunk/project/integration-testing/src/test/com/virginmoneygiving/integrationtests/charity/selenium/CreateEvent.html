@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://127.0.0.1:8080/" />
+<title>CreateEvent</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">CreateEvent</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/charity-web/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Charity Sign-in</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>username</td>
+	<td>c.admin@one.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dobDay</td>
+	<td>01</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dobMonth</td>
+	<td>01</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dobYear</td>
+	<td>1965</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>next-btn</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>First</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>firstCharacter</td>
+	<td>P</td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Seventh</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>secondCharacter</td>
+	<td>r</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>login-btn</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/charity-web/charity/charityportal.action</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Events</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Create an event</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//img[@alt='Get started']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>createEventBasicSave_organisedEventDetailsVo_selectEventBasicPageIndicatorY</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>createEventBasicSave_organisedEventDetailsVo_name</td>
+	<td>Selenium Event</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>createEventBasicSave_eventDateVo_eventStartDay</td>
+	<td>30</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>createEventBasicSave_eventDateVo_eventStartMonth</td>
+	<td>09</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>createEventBasicSave_eventDateVo_eventStartYear</td>
+	<td>2009</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>createEventBasicSave_eventDateVo_eventStartTime</td>
+	<td>08.00</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id026</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>locationlist</td>
+	<td>label=Oxfordshire</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>organisedEventDetailsVo.accountId</td>
+	<td>label=11-22-33 1234567879 HSBC Bank Account</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>createEventBasicSave_organisedEventDetailsVo_eventSetUpDateIndicatorY</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>createEventBasicSave__execute</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>createEventBasicSave_eventDateVo_eventStartTime</td>
+	<td>8 am</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>createEventBasicSave__execute</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>createEventDetailsSave_organisedEventDetailsVo_description</td>
+	<td>Walk the Oxfordshire Way</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>createEventDetailsSave_organisedEventDetailsVo_joiningInstructions</td>
+	<td>Turn up and walk</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>upload</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>upload</td>
+	<td>C:\Users\ipriest\Pictures\187x1672_Henry.JPG</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>createEventDetailsSave__executeImage</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>createEventDetailsSave_organisedEventDetailsVo_contactName</td>
+	<td>Wally Walker</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>createEventDetailsSave_organisedEventDetailsVo_email</td>
+	<td>w.walker@charityone.vmgtest.com</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>createEventDetailsSave_0</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>charityDonationSplit_organisedEventBean_organisedEventFeeDetails_vmgManagingFeeIndicatorN</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>charityDonationSplit_organisedEventBean_organisedEventFeeDetails_eventSolelyAidOfCharityIndY</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>charityDonationSplit_navigationButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>_0</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Thank you - your event has been set up</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Selenium Event</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
