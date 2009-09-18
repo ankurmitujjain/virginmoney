@@ -1,0 +1,396 @@
+<?xml version="1.0"?>
+<project name="template-email-service" basedir="." default="build">
+
+    <!--
+
+    Standard Ant Build file for Virgin Money projects
+    =======================================================
+
+    Function
+    ========
+
+        This script acts as a default build file to use for new projects. It makes use of the default ant targets provided in
+        /dev/common/antscripts.
+
+
+    To use this script
+    ==================
+
+        1. Take a copy of this file and put it in your own project directory.
+
+        2. Change the project name to reflect your own project
+        
+        3. Change the war.name to reflect your own project
+
+        3. The wsdl-gen-exampleservice target needs to be changed to reflect your own project
+
+        4. the required.libraries needs to be changed to the libraries you're using (I've just provided a base set)
+
+        5. The create-war target has a base set of libraries included. Amend this to suit your project.
+        
+        6. The create-database-schema target should work by default if the hibernate files are in 
+        	${web.conf.main.dir}/WEB-INF/classes/. It will also need a hibernate.dialect set in hibernate.properties
+
+
+    -->
+
+
+    <!-- user-specific properties -->
+    <property file="${user.home}/etc/env.build.properties" />
+
+    <!-- import the build file which predefines all the standard properties-->
+    <property name="antscripts.dir" value="${env.dev.root.dir}/common/antscripts"/>
+    <property file="${antscripts.dir}/common.build.properties" />
+
+    <!-- import all the thirdparty library definitions -->
+    <property name="common.library.dir" value="${env.dev.root.dir}/thirdparty/libraries" />
+    <property file="${common.library.dir}/common.libraries.properties" />
+    
+    <property name="war.name" value="template-email-service"/>
+	
+	<!-- import vm deployment and jboss control -->
+	<import file="${antscripts.dir}/ant-vm-deployment.xml" />
+
+	
+	<property name="deploy.exploded.dir" value="${deploy.dir}/exploded/${war.name}"/>
+	
+	<property name="pages.dir" value="${basedir}/pages"/>
+	
+	<property name="lib.dir" value="${basedir}/lib"/>
+	
+	<property name="proxy.host" value="${env.proxy.default.host}"/>
+ 	<!--  <property name="template-email-service.xsd.location" value="${conf.dir}/wsdl/template-email-service.xsd" />  -->
+	<property name="generated.package.name" value="com.virginmoneygiving.templateemailservice.messages"/>
+	
+	<target name="probe-proxy" if="env.proxy.default.host">
+	    <condition property="proxy.enabled">
+	      <and>
+	        <isset property="proxy.host"/>
+	        <isreachable host="${proxy.host}"/>
+	      </and>
+	    </condition>
+	  </target>
+
+	  <target name="proxy" depends="probe-proxy" if="proxy.enabled">
+	    <property name="proxy.port" value="${env.proxy.default.port}"/>
+	    <property name="proxy.user" value="${env.proxy.default.user}"/>
+	    <property name="proxy.pass" value="${env.proxy.default.pass}"/>
+	    <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"
+	      proxyuser="${proxy.user}" proxypassword="${proxy.pass}"/>
+	  </target>
+
+    <!-- libraries required by the project. This is a base set of libraries that can be added/amended accordingly where appropriate-->
+    <path id="required.libraries">
+        <fileset dir="${commons-logging.lib}">
+            <include name="*.jar" />
+            <exclude name="**/*log4j*.*" />
+        </fileset>
+        <fileset dir="${log4j.lib}">
+            <include name="*.jar" />
+        </fileset>
+		<fileset dir="${spring256.lib}">
+			<include name="**/*.jar" />
+        </fileset>
+        <fileset dir="${commons-lang.lib}">
+            <include name="**/*.jar" />
+        </fileset>
+        <fileset dir="${metro.lib}">
+            <include name="*.jar" />
+            <exclude name="j2ee.jar" />
+            <exclude name="**/*log4j*.*" />
+        </fileset>
+    	<fileset dir="${xstream.13.lib}">
+    		<include name="*.jar"/>
+    	</fileset>
+    	<fileset dir="${freemarker.lib}">
+    		<include name="*.jar"/>
+    	</fileset>
+    </path>
+
+
+    <!-- master classpath - includes common libraries and configuration elements -->
+     <path id="master.classpath">
+         <path refid="required.libraries" />
+         <pathelement path="${build.main.dir}"/>
+         <pathelement path="${web.conf.main.dir}"/>
+     </path>
+
+     <!-- test classpath - includes common libraries and configuration elements plus test version of configuration elements -->
+     <path id="test.classpath">
+     	 <path refid="required.libraries" />
+         <pathelement path="${web.conf.test.dir}"/>
+         <pathelement path="${build.test.dir}"/>
+         <path refid="master.classpath" />
+        <fileset dir="${junit.home}">
+            <include name="**/*.jar" />
+            <exclude name="**/*log4j*.*" />
+        </fileset>         	
+		<fileset dir="${mockito.lib}">
+			<include name="**/*.jar" />
+		</fileset>
+     </path>
+
+
+     <!-- builds and tests the project -->
+     <target name="build" depends="build-no-tests, test-all, javadoc"/>
+
+     <target name="build-no-tests" depends="clean, wsdl-gen-all, compile, create-war" description="builds the project without tests"/>
+
+     <target name="deploy-local-jboss" depends="build-no-tests,test-all" description="Deploy application to local web server">
+     	<!-- jboss.local.deploy.dir should be defined in your local env.build.properties-->
+        <copy verbose="${verbose}" file="${deploy.dir}/${war.name}.war" todir="${jboss.local.deploy.dir}"
+        	preservelastmodified="false">
+        </copy>
+     </target>
+     
+     <target name="deploy-local-jboss-no-tests" depends="build-no-tests" description="Deploy application to local web server">
+        <copy verbose="${verbose}" file="${deploy.dir}/${war.name}.war" todir="${jboss.local.deploy.dir}"
+        	preservelastmodified="false">
+        </copy>
+     </target>
+
+
+    <target name="clean" depends="clean-dist" description="Clean out the build and deployment directories">
+        <ant antfile="${antscripts.dir}/ant-clean.xml" inheritall="true" inheritrefs="true" />
+    </target>
+
+	<target name="clean-dist" description="Clean out the distribution directory">
+		<delete dir="${distribution.dir}" failonerror="false" />
+	</target>	
+
+    <target name="compile" description="Compiles all source java files">
+         <ant antfile="${antscripts.dir}/ant-compile.xml" inheritall="true" inheritrefs="true" />
+    	
+    	<copy verbose="${verbose}" todir="${build.main.dir}" preservelastmodified="false">
+			<fileset dir="${src.main.dir}">
+				<include name="**/*.properties"/>
+				<include name="**/*.xml"/>
+			</fileset>
+		</copy>
+    	
+    </target>
+    
+    <!-- A base create-war target. Will need to be amended to include/exclude the relevant libraries.
+         A base set of libraries has been included by default -->
+     <target name="create-war" description="This target creates the deployable WAR file">
+     	
+     	<mkdir dir="${deploy.dir}"/>
+         <war  destfile="${deploy.dir}/${war.name}.war" webxml="${conf.main.dir}/WEB-INF/web.xml">
+            <!-- take all the compiled code from the build folder, but not the test code -->
+            <classes dir="${build.main.dir}"/>
+            <classes dir="${build.generated.dir}"/>
+
+            <!-- include the main config entries but not the test ones -->
+            <zipfileset  dir="${conf.main.dir}">
+                <include name="**/*.*"/>
+            	<exclude name="**/*.jar" />
+                <exclude name="web.xml"/> <!-- already referenced above -->
+            </zipfileset>
+        </war>
+    </target>
+
+	<target name="javadoc" description="Runs Javadoc" >
+		<if>
+			<not><equals arg1="${skip.javadoc}" arg2="true"/></not>
+			<then>
+				<ant antfile="${antscripts.dir}/ant-javadoc.xml" target="javadoc-html" inheritall="true" inheritrefs="true">
+					<property name="javadoc.title" value="${ant.project.name}" />
+					<property name="javadoc.verbose" value="false" />
+				</ant>
+			</then>
+			<else>
+				<echo message="Property 'skip.javadoc' is set to true, skipping javadoc"/>
+			</else>
+		</if>
+	</target>
+
+	<target name="test-all">
+		<if>
+			<not><equals arg1="${skip.tests}" arg2="true"/></not>
+			<then>
+      	<if>
+      		<not><equals arg1="${skip.cobertura}" arg2="true"/></not>
+					<then>
+		        <antcall target="test-cobertura"/>
+					</then>
+					<else>
+						<echo message="Property 'skip.cobertura' is set to true, skipping cobertura processing"/>
+		        <antcall target="test-junit"/>
+					</else>
+				</if>
+			</then>
+			<else>
+				<echo message="Property 'skip.tests' is set to true, skipping tests"/>
+			</else>
+		</if>
+    <antcall target="test-checkstyle"/>
+    <antcall target="test-findbugs"/>
+	</target>
+
+	<target name="test-cobertura" description="Runs the Junit tests with Cobertura analysis" depends="compile">
+		<if>
+			<not><equals arg1="${skip.cobertura}" arg2="true"/></not>
+			<then>
+				<ant antfile="${antscripts.dir}/ant-cobertura.xml" inheritall="true" inheritrefs="true"/>
+			</then>
+			<else>
+				<echo message="Property 'skip.cobertura' is set to true, skipping cobertura tests"/>
+			</else>
+		</if>
+	</target>
+
+	<target name="test-junit" description="Runs the Junit tests" depends="compile">
+		<if>
+			<not><equals arg1="${skip.tests}" arg2="true"/></not>
+			<then>
+				<ant antfile="${antscripts.dir}/ant-junit.xml" inheritall="true" inheritrefs="true" />
+			</then>
+			<else>
+				<echo message="Property 'skip.tests' is set to true, skipping tests"/>
+			</else>
+		</if>				
+	</target>
+
+	<target name="test-checkstyle" description="Runs checkstyle over the source to check the coding standards">
+		<if>
+			<not><equals arg1="${skip.checkstyle}" arg2="true"/></not>
+			<then>
+				<ant antfile="${antscripts.dir}/ant-checkstyle.xml" inheritall="true" inheritrefs="true" />
+			</then>
+			<else>
+				<echo message="Property 'skip.checkstyle' is set to true, skipping checkstyle analysis"/>
+			</else>
+		</if>				
+	</target>
+
+	<target name="test-findbugs" description="Runs findbugs over the source to check the coding bugs">
+		<if>
+			<not><equals arg1="${skip.findbugs}" arg2="true"/></not>
+			<then>
+				<ant antfile="${antscripts.dir}/ant-findbugs.xml" inheritall="true" inheritrefs="true" />
+			</then>
+			<else>
+				<echo message="Property 'skip.findbugs' is set to true, skipping findbugs analysis"/>
+			</else>
+		</if>				
+	</target>
+
+	<!-- a default fitnesse target. Provide the name of the fitnesse page to test with -->
+	<target name="test-fitnesse" description="Runs the Fitnesse tests" unless="skip.fitnesse">
+		<ant antfile="${antscripts.dir}/ant-fitnesse.xml" inheritall="true" inheritrefs="true">
+			<property name="fitnesse.test.page" value="a fitnesse page" />
+		</ant>
+	</target>
+
+	<target name="test-qalab" description="Runs qalab against the test results to record the metrics" unless="skip.qalab">
+		<ant antfile="${antscripts.dir}/ant-qalab.xml" inheritall="true" inheritrefs="true" />
+	</target>
+	    
+   <!-- WDSL to Java -->
+    <target name="wsdl-gen-all" description="Generate and compile the java source files from the WSDL">
+        <!-- clean the generated stuff -->
+        <delete dir="${src.generated.dir}"/>
+        <mkdir dir="${src.generated.dir}" />
+        <mkdir dir="${build.main.dir}"/>
+
+        <antcall target="wsdl-gen-templateemail-xsd" />
+     </target>
+	
+    <!-- define the XJC task for wsdl-gen-IFDS-xsd to use to convert xsd's to Java-->
+    <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+        <classpath >
+            <fileset dir="${metro.lib}">
+                <include name="*.jar"/>
+                <exclude name="j2ee.jar"/>
+            </fileset>
+        </classpath>
+    </taskdef>
+	
+    <target name="wsdl-gen-templateemail-xsd" description="Convert templateemail XSD files to Java code">
+        <delete  dir="${src.generated.dir}"/>
+        <mkdir dir="${src.generated.dir}"/>
+        <xjc destdir="${src.generated.dir}" package="com.virginmoneygiving.templateemail.service.messages" 
+        schema="${templateemail.xsd.location}"/>
+        <!--Unlike wsimport and wscompile, XJC doesnt automatically compile what it generates, so do it here-->
+        <javac destdir="${build.main.dir}" target="1.5" debug="${debug}" deprecation="false" optimize="false"
+            failonerror="true" verbose="true">
+            <src path="${src.generated.dir}"/>
+            <classpath refid="master.classpath"/>
+        </javac>
+    </target>
+	
+	<!-- Import the libraries
+	<target name="import-lib" description="Import all the librarry file inside lib folder">
+		<echo message="Import Libraries"  />
+	    <ant antfile="${antscripts.dir}/ant-import-lib.xml" inheritall="true" inheritrefs="true" />
+		<echo message="Import Completed"/>
+	</target>
+-->
+   <target name="echoproperties">
+        <echo message="=============================================================================================="  />
+        <echo message=" Start of properties for project : '${ant.project.name}'"  />
+        <echo message="                         basedir : '${basedir}' "  />
+        <echo message="                        ant file : '${ant.file}'"  />
+        <echo message="=============================================================================================="  />
+        <echoproperties/>
+        <echo message="=============================================================================================="  />
+        <echo message=" End of properties for project : '${ant.project.name}' "  />
+        <echo message="=============================================================================================="  />
+    </target>
+    
+	<target name="dist" depends="clean-dist, build, create-vm-distribution, copy-deployment-instruction, copy-distribution-jboss-deployables, 
+		copy-distribution-external-configuration, copy-distribution-email-documents, copy-distribution-jboss-conf, copy-distribution-sql-scripts, vm-distribution-import-lib-virgin, create-distribution-tar" description="Creates distribution tar." />
+
+	<target name="create-vm-distribution" description="Create distribution release structure.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="vm-distribution" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="copy-distribution-jboss-deployables" description="Copy war for to distribution release structure.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="copy-jboss-deployables" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="copy-distribution-jboss-conf" description="Copy configuration files required in jboss -> deploy folder.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="copy-jboss-conf" inheritall="true" inheritrefs="true"/>
+	</target>
+
+	<target name="copy-distribution-sql-scripts" description="Copy sql scripts to distribution release structure.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="copy-sql-scripts" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="copy-distribution-external-configuration" description="Copy external configurations to distribution release structure.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="copy-external-configuration" inheritall="true" inheritrefs="true"/>
+	</target>
+	
+	<target name="copy-distribution-email-documents" description="Copy email documents to distribution release structure.">
+			<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="copy-email-documents" inheritall="true" inheritrefs="true"/>
+	</target>
+
+	<target name="copy-deployment-instruction" description="Copy file that contains tar deployment instructions.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="copy-readme" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="create-distribution-tar" description="Create distribution tar.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution.xml" target="create-gzip" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<target name="vm-distribution-import-lib-virgin" description="Import project specific dependencies.">
+		<ant antfile="${antscripts.dir}/ant-vm-distribution-lib-virgin-import.xml" target="copy-template-email-service-lib-virgin" inheritall="true" inheritrefs="true" />
+	</target>
+
+	<!-- ASSERT THAT OUR DEPENDENCIES ARE AVAILABLRE -->
+	<!-- we have none -->
+
+
+	<!-- DEPLOY THIS COMPONENT -->
+
+	<target name="deploy-dist" depends="jboss-assert-running, 
+		unpack-distribution, 
+		deploy-libraries, 
+		deploy-external-config, 
+		deploy-jboss-config, 
+		deploy-jboss-deployables"
+		description="Deploy the component, takes the tar ball and deploys it properly into JBoss and MySQL">
+	</target>
+
+		
+</project>

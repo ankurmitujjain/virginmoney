@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xsi:schemaLocation=" 
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd 
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+			
+	<!-- JMS -->
+		
+	<bean name="jmsConnectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean"
+        p:jndiName="${scheduler.jms.connectionFactory.jndiName}"/>
+        
+	<bean id="jmsTxManager" class="org.springframework.jms.connection.JmsTransactionManager"
+        p:connectionFactory-ref="jmsConnectionFactory"/>
+        
+	<!-- default destination resolver, the Triggers pass in the correct JNDI name -->
+
+	<bean name="jmsDynamicDestinationResolver" class="org.springframework.jms.support.destination.JndiDestinationResolver"
+		p:fallbackToDynamicDestination="false"/>
+
+  <!-- Dynamic JMS template, requires clients to specify JNDI destination at message send time,
+  injected into BatchJobRequestJob via the SpringBeanJobFactory and not the bean container itself -->
+
+  <bean name="jmsDynamicTemplate" class="org.springframework.jms.core.JmsTemplate"
+  	p:connectionFactory-ref="jmsConnectionFactory"
+		p:destinationResolver-ref="jmsDynamicDestinationResolver"/>
+
+</beans>
+		

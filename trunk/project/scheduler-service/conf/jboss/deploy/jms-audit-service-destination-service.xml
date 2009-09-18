@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+
+	<!-- Giving Audit Service JMS queue -->
+	<mbean code="org.jboss.jms.server.destination.QueueService"
+  	name="jboss.messaging.destination:service=Queue,name=auditServiceQueue"
+		xmbean-dd="xmdesc/Queue-xmbean.xml">
+		<depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+		<depends>jboss.messaging:service=PostOffice</depends>
+		<attribute name="Clustered">false</attribute>
+		<attribute name="SecurityConfig">
+			<security>
+				<role name="guest" read="true" write="true"/>
+				<role name="publisher" read="true" write="true" create="false"/>
+				<role name="noacc" read="false" write="false" create="false"/>
+			</security>
+		</attribute>
+	</mbean>
+
+</server>
+	

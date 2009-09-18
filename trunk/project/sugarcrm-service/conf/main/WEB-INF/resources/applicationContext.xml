@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<!-- Autowire components -->
+    <context:annotation-config/>
+
+	<!-- Load service property using the system variable. -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="searchSystemEnvironment">
+			<value>true</value>
+		</property>
+		<property name="systemPropertiesModeName">
+			<value>SYSTEM_PROPERTIES_MODE_FALLBACK</value>
+		</property>
+		<property name="locations">
+			<list>
+				<value>file:${GIVING_CONF_HOME}/sugarcrm-service.properties</value>
+			</list>
+		</property>
+	</bean>
+
+    <bean name="connectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="java:ConnectionFactory"/>
+    </bean>
+
+
+    <bean name="sugarcrmDestination" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="${sugarcrm.queue.name}"/>
+    </bean>
+
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+	</bean>
+
+    <bean id="jmsTransactionManager" class="org.springframework.jms.connection.JmsTransactionManager">
+        <property name="connectionFactory" ref="connectionFactory"/>
+    </bean>
+
+	<bean id="messageListener" class="org.springframework.jms.listener.adapter.MessageListenerAdapter">
+	    <constructor-arg>
+	        <bean class="com.virginmoneygiving.sugarcrmservice.jms.impl.DefaultSugarCRMMessageDelegateImpl">
+	        	<property name="jmsTemplate" ref="jmsTemplate" />
+	        	<property name="charityRegistrationProcessor" ref="charityRegistrationSugarCrmAlertProcessor" />
+				<property name="charityContactProcessor" ref="charityContactSugarCrmAlertProcessor" />
+				<property name="charityAddressProcessor" ref="charityAddressSugarCrmAlertProcessor" />
+	        </bean>
+	    </constructor-arg>
+	</bean>
+
+	<bean id="jmsContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+	    <property name="connectionFactory" ref="connectionFactory"/>
+	    <property name="destination" ref="sugarcrmDestination"/>
+	    <property name="messageListener" ref="messageListener" />
+        <property name="transactionManager" ref="jmsTransactionManager"/>
+	</bean>
+	
+	
+	<!-- ******************************** Web service URL property configuration ******************** -->
+	<bean id="sugarCrmWebServiceURL" class="java.lang.String">
+		<constructor-arg value="${sugarcrm.url.system.property}"/>
+	</bean>
+	
+	
+	<!-- ******************************** Locator configuration ********************** -->
+	<bean id="sugarCrmWebServiceLocator"
+		class="com.virginmoneygiving.sugarcrmservice.locator.SugarCRMWebServiceLocator">
+		<property name="webServiceURL" ref="sugarCrmWebServiceURL"/>
+	</bean>
+	
+	
+	<bean id="charityRegistrationSugarCrmAlertProcessor" class="com.virginmoneygiving.sugarcrmservice.processor.CharityRegistrationSugarCrmAlertProcessor" >
+		<property name="service" ref="sugarCrmWebServiceLocator" />
+		<property name="username" value="${sugarcrm.service.username}" />
+		<property name="password" value="${sugarcrm.service.password}" />
+	</bean>
+	
+	<bean id="charityContactSugarCrmAlertProcessor" class="com.virginmoneygiving.sugarcrmservice.processor.CharityContactSugarCrmAlertProcessor" >
+		<property name="service" ref="sugarCrmWebServiceLocator" />
+		<property name="username" value="${sugarcrm.service.username}" />
+		<property name="password" value="${sugarcrm.service.password}" />
+	</bean>
+	
+	<bean id="charityAddressSugarCrmAlertProcessor" class="com.virginmoneygiving.sugarcrmservice.processor.CharityAddressSugarCrmAlertProcessor" >
+		<property name="service" ref="sugarCrmWebServiceLocator" />
+		<property name="username" value="${sugarcrm.service.username}" />
+		<property name="password" value="${sugarcrm.service.password}" />
+	</bean>
+	
+
+
+</beans>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.w3.org/2001/XMLSchema" 
+	xmlns:sugarCrm="http://www.virginmoneygiving.com/type/sugar-crm-service/sugarCrmAlerts"
+	targetNamespace="http://www.virginmoneygiving.com/type/sugar-crm-service/sugarCrmAlerts"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+	elementFormDefault="qualified">	
+	
+	<xsd:simpleType name="SugarCrmMessageType">
+		<!-- Restricting the values to a set of value using 'enumeration' -->
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="CHARITY_REGISTRATION_PART_ONE" />
+			<xsd:enumeration value="CHARITY_REGISTRATION_PART_TWO" />
+			<xsd:enumeration value="CREATE_CHARITY_CONTACT" />
+			<xsd:enumeration value="REMOVE_CHARITY_CONTACT" />
+			<xsd:enumeration value="UPDATE_CHARITY_CONTACT" />
+			<xsd:enumeration value="UPDATE_CHARITY_ADMIN_ADDRESS" />
+			<xsd:enumeration value="UPDATE_CHARITY_REGISTERED_ADDRESS" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:complexType name="ClientVmgCharity">
+		<xsd:sequence>
+			<xsd:element type="int" name="vmg_charity_id" nillable="false"/>
+			<xsd:element type="string" name="registered_charity_number" nillable="false"/>
+			<xsd:element type="string" name="name" nillable="false"/>
+			<xsd:element type="string" name="charity_status_code" nillable="false"/>
+			<xsd:element type="string" name="main_telephone_number" />
+			<xsd:element type="string" name="main_email_address" />
+			<xsd:element type="int" name="online_income" />
+			<xsd:element type="int" name="fundraising_percentage" />
+			<xsd:element type="string" name="annual_income" />
+			<xsd:element name="administration_address" type="sugarCrm:ClientVmgAddress" />
+			<xsd:element name="registered_address" type="sugarCrm:ClientVmgAddress" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="ClientVmgCharityContact">
+		<xsd:sequence>
+			<xsd:element type="string" name="title" nillable="false"/>
+			<xsd:element type="string" name="forename" />
+			<xsd:element type="string" name="surname" />
+			<xsd:element type="string" name="occupation" />
+			<xsd:element type="string" name="email_address" nillable="false" />
+			<xsd:element type="string" name="phone_work" />
+			<xsd:element type="string" name="phone_other" />
+			<xsd:element type="int" name="charity_id" nillable="false" />
+			<xsd:element type="int" name="charity_administrator_id" nillable="false" />
+			<xsd:element name="address" type="sugarCrm:ClientVmgAddress" />
+		</xsd:sequence>
+	</xsd:complexType>	
+	
+	<xsd:complexType name="ClientVmgAddress">
+		<xsd:sequence>
+			<xsd:element type="string" name="address_line_1" nillable="false"/>
+			<xsd:element type="string" name="address_line_2" />
+			<xsd:element type="string" name="town_city" />
+			<xsd:element type="string" name="county_state" />
+			<xsd:element type="string" name="postcode" nillable="false" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="charityRegistrationSugarCrmAlert">
+		<xsd:sequence>
+			<xsd:element name="clientVmgCharity" type="sugarCrm:ClientVmgCharity" nillable="false"/>
+			<xsd:element name="clientVmgCharityContact" type="sugarCrm:ClientVmgCharityContact" nillable="false"/>
+			<xsd:element name="sugarCrmMessageType" type="sugarCrm:SugarCrmMessageType" nillable="false"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="charityContactSugarCrmAlert">
+		<xsd:sequence>
+			<xsd:element name="clientVmgCharityContact" type="sugarCrm:ClientVmgCharityContact" nillable="false"/>
+			<xsd:element name="sugarCrmMessageType" type="sugarCrm:SugarCrmMessageType" nillable="false"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="charityAddressSugarCrmAlert">
+		<xsd:sequence>
+			<xsd:element type="int" name="vmg_charity_id" nillable="false"/>
+			<xsd:element name="clientVmgAddress" type="sugarCrm:ClientVmgAddress" nillable="false"/>
+			<xsd:element name="sugarCrmMessageType" type="sugarCrm:SugarCrmMessageType" nillable="false"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+</xsd:schema>

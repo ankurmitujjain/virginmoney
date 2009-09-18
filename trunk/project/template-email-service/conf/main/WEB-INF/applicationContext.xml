@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xmlns:aop="http://www.springframework.org/schema/aop"
+		xmlns:p="http://www.springframework.org/schema/p" 
+		xmlns:context="http://www.springframework.org/schema/context" 
+		xmlns:tx="http://www.springframework.org/schema/tx" 
+		xmlns:ws="http://jax-ws.dev.java.net/spring/core" 
+		xmlns:wss="http://jax-ws.dev.java.net/spring/servlet" 
+		xsi:schemaLocation="
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd 
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd 
+			http://jax-ws.dev.java.net/spring/core http://jax-ws.dev.java.net/spring/core.xsd 
+			http://jax-ws.dev.java.net/spring/servlet http://jax-ws.dev.java.net/spring/servlet.xsd">
+
+    <context:annotation-config/>
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="searchSystemEnvironment">
+			<value>true</value>
+		</property>
+		<property name="systemPropertiesModeName">
+			<value>SYSTEM_PROPERTIES_MODE_FALLBACK</value>
+		</property>
+		<property name="locations" ref="propertyFileLocations" />				
+	</bean>
+	
+    <bean id="propertyFileLocations" class="java.util.ArrayList">
+        <constructor-arg>
+            <list>
+                <value>file:${GIVING_CONF_HOME}/templates/email.properties</value>
+                <value>file:${GIVING_CONF_HOME}/email-template-locations.properties</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <!-- Pulls the email and template services together.  Autowired -->
+    <bean id="templateEmailService" class="com.virginmoneygiving.services.email.TemplateEmailServiceImpl">
+    	<property name="templateService" ref="templateService"/>
+    	<property name="mailService" ref="mailService"/>
+    	<property name="emailAttachmentFormLocation" ref="emailAttachmentFormLocation"/>
+    </bean>
+    
+     <bean id="emailAttachmentFormLocation" class="java.lang.String">
+        <constructor-arg value="${emailAttachmentFormLocation.path}" />
+    </bean>
+
+    <!-- freemarker template service including classpath location of the template files -->
+    <bean id="templateService" class="com.virginmoneygiving.services.template.freemarker.FreemarkerTemplateServiceImpl">
+        <property name="freemarkerConfigFactory">
+            <bean class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean">
+                <property name="templateLoaderPath">
+                    <value></value>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+     <!-- set these up for you environment - for testing I was using a local James server --><!--
+     <bean id="mailService" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host">
+            <value>localhost</value>
+        </property>
+        <property name="port">
+            <value>25</value>
+        </property>
+        <property name="username">
+            <value>afensome</value>
+        </property>
+        <property name="password">
+            <value></value>
+        </property>
+    </bean>
+
+--><!-- Mail service -->
+<bean id="mailService" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <property name="host" value="${mailservice.host.ip}"/>
+    <property name="port" value="${mailservice.host.port}"/>
+    <property name="javaMailProperties">
+        <props>
+            <!-- Use SMTP-AUTH to authenticate to SMTP server -->
+            <prop key="mail.smtp.auth">false</prop>
+            <!-- Use TLS to encrypt communication with SMTP server -->
+            <prop key="mail.smtp.starttls.enable">true</prop>
+        </props>
+    </property>
+</bean>
+
+
+    <!-- get a handle on the jndi jms queue -->
+    <bean name="connectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="java:ConnectionFactory"/>
+    </bean>
+
+    <!-- transaction manager should be set to reflect system wide settings - XA? -->
+    <bean id="jmsTransactionManager" class="org.springframework.jms.connection.JmsTransactionManager">
+        <property name="connectionFactory" ref="connectionFactory"/>
+    </bean>
+
+    <!-- jms destination already defined in jboss -->
+    <bean name="testDestination" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="queue/emailTemplateQueue"/>
+    </bean>
+
+    <!-- Container for the message driven pojo -->
+    <bean id="testMessageListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="concurrentConsumers" value="1"/>
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="transactionManager" ref="jmsTransactionManager"/>
+        <property name="destination" ref="testDestination"/>
+        <property name="messageListener" ref="emailMessageListener"/>
+    </bean>
+
+    <!-- wrapping a simple pojo to create a message driven pojo -->
+    <bean id="emailMessageListener" class="org.springframework.jms.listener.adapter.MessageListenerAdapter">
+        <constructor-arg>
+            <bean class="com.virginmoneygiving.services.jms.MessageDelegateImpl"/>
+        </constructor-arg>
+    </bean>
+
+
+</beans>

@@ -1,0 +1,34 @@
+Deployment Instructions - 
+
+1. Untar the tar file.
+
+2. Application deployment components within /JBoss/Main - 
+
+2.1 deploy-virgin - contains all the files to be placed in the deploy folder of jboss. 
+
+2.2 lib-virgin - external library files to be copied to jboss_server_home folder.
+
+2.3 external-configuration - stores application configuration files. Copy this folder as-is on the file system**.
+
+2.3.1 Create the system property GIVING_CONF_HOME to point to the location of this folder. 
+           eg: -DGIVING_CONF_HOME=/user/home/VMG/external-configuration
+
+** Please note that JBoss user should have access permission to this folder location.
+
+2.3.2 Edit template/email.properties - update following details - 
+mailservice.host.ip={IP address of VMG mail server}
+mailservice.host.port={Port of VMG mail server}
+sender.email.address={Emails address of the VMG admin person}
+
+2.3.2 email-documents - this contains the email attachment related files.Copy this folder to local file system and the specify
+the same in email-template-locations.properties against emailAttachmentFormLocation.path.
+
+3. Delete following jars from jboss -> production -> lib folder since they conflict with other jars used in the application. 
+If not deleted the application server will give some error while deployiong the war file.
+--asm.jar
+--asm-attrs.jar
+--cglib.jar
+--jboss-jaxws.jar
+
+Note:
+Please increase the permgen size in run.conf as appropriate (256 m)

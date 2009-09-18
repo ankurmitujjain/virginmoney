@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<!-- Load scheduler service properties using the system variable. -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="searchSystemEnvironment">
+			<value>true</value>
+		</property>
+		<property name="systemPropertiesModeName">
+			<value>SYSTEM_PROPERTIES_MODE_FALLBACK</value>
+		</property>
+		<property name="locations" ref="propertyFileLocations" />
+	</bean>
+
+	<bean id="propertyFileLocations" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<value>/WEB-INF/resources/scheduler-service.properties</value>
+				<value>file:${GIVING_CONF_HOME}/scheduler-service.properties</value>
+			</list>
+		</constructor-arg>
+	</bean>
+
+
+	<!-- TRIGGER LISTENER -->
+	
+	<!-- reports events of interest (only misfires at the moment) to the Audit Service -->
+	<bean id="alertServiceTriggerListener" class="com.virginmoneygiving.schedulerservice.listeners.AlertServiceTriggerListener"/>
+		
+</beans>			

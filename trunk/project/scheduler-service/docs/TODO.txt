@@ -1,0 +1,11 @@
+Scheduler Service To-Do
+-----------------------
+
+* Determine real schedule information.
+
+* Determine exclusion dates and times, if any, (to be implemented via Quartz Calendars),
+we could use a Calendar to set exclusions that cover normal business operating hours 
+thus making it impossible for scheduled jobs to be fired off during the day
+
+* Send message to Audit Service from listener and create vm-commons.jar provided
+GUID to tag messages for correlation with other systems (~1 hrs)

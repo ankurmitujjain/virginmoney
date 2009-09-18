@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+	<local-tx-datasource>
+		<jndi-name>VmgQuartzDS</jndi-name>
+
+		<connection-url>jdbc:mysql://localhost:3306/quartz</connection-url>
+		<driver-class>com.mysql.jdbc.Driver</driver-class>
+		
+		<user-name>quartz</user-name>
+		<password>quartz</password>
+
+		<!-- JHA: we get a classcastexception out of this, which im guessing is coming
+		from Spring wrapping the connection but i have to debug it properly to be sure,
+		for now fall back to a SQL statement -->	
+		
+		<!-- valid-connection-checker-class-name>
+			org.jboss.resource.adapter.jdbc.vendor.MySQLValidConnectionChecker
+		</valid-connection-checker-class-name -->
+		<check-valid-connection-sql>
+			SELECT 1
+		</check-valid-connection-sql>
+
+		<!--
+			the default transaction isolation of the connection (unspecified
+			means use the default provided by the database)
+		-->
+		<transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
+
+		<!--
+			a class that looks at vendor specific messages to determine whether
+			sql errors are fatal and thus the connection should be destroyed. If
+			none specified, no errors will be treated as fatal.
+		-->
+		
+		<exception-sorter-class-name>
+			com.mysql.jdbc.integration.jboss.ExtendedMysqlExceptionSorter
+		</exception-sorter-class-name>
+
+		<!-- corresponding type-mapping in the standardjbosscmp-jdbc.xml -->
+		<metadata>
+			<type-mapping>mySQL</type-mapping>
+		</metadata>
+	</local-tx-datasource>
+</datasources>
