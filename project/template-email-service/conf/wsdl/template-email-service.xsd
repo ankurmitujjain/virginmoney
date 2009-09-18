@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema
+        xmlns="http://www.w3.org/2001/XMLSchema"
+		xmlns:tns="http://www.virginmoneygiving.com/templateEmailService/"
+        targetNamespace="http://www.virginmoneygiving.com/templateEmailService/"
+        elementFormDefault="qualified">
+    <complexType name="Message">
+        <sequence>
+            <element type="string" name="sender"/>
+            <element type="string" name="destination"/>
+             <element type="string" name="destinationCC"/>
+             <element type="string" name="destinationBCC"/>
+            <element type="string" name="subject"/>
+            <element type="string" name="message"/>
+            <element type="string" name="templateFile"/>
+            <element type="tns:emailParameter" name="emailParameterList" maxOccurs="unbounded" />
+            <element type="string" name="fileNamesList" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
+    <complexType name="emailParameter" >
+       <sequence>
+           <element type="string" name="key"/>
+           <element type="string" name="value" nillable="true" />
+           <element type="tns:emailParameter" name="innerList" maxOccurs="unbounded" nillable="true" />
+       </sequence>
+    </complexType>
+</schema>

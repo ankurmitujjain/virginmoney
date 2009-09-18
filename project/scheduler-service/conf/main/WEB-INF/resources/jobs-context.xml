@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation=" 
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd 
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<!-- JOBS & TRIGGERS -->
+
+	<!--
+		Generic batch request job, this one job is used to invoke all the
+		different batch jobs via parameterisation passed in from the job
+		triggers that follow. Bean injection is performed by the scheduler's
+		SpringBeanJobFactory, do not do it here.
+	-->
+
+	<bean name="batchRequestJob" class="org.springframework.scheduling.quartz.JobDetailBean"
+		p:jobClass="com.virginmoneygiving.schedulerservice.batch.BatchJobRequestJob"
+		p:name="batchRequestJob" p:group="batchJobs" p:durability="false"
+		p:volatility="false" p:requestsRecovery="false" />
+
+	<!-- TRIGGERS -->
+
+	<!-- Abstract bean defines common settings for rest of the triggers -->
+	<bean id="parentBatchJobTrigger" abstract="true"
+		class="com.virginmoneygiving.schedulerservice.batch.BatchJobCronTrigger"
+		p:jobDetail-ref="batchRequestJob" p:volatility="false" p:group="batchJobTriggers"
+		p:misfireInstructionName="MISFIRE_INSTRUCTION_DO_NOTHING" />
+
+    <!-- HunarC: Overnight Giving/Payments Batch Job trigger -->
+    <bean id="overnightBatchJobTrigger"
+        class="com.virginmoneygiving.schedulerservice.batch.BatchJobCronTrigger"
+        parent="parentBatchJobTrigger"
+        p:cronExpression="${scheduler.trigger.overnightBatchJobTrigger.cronExpression}"
+        p:description="Request that the 'Overnight Giving/Payment' batch job is run once a day"
+        p:batchJobName="${scheduler.giving.batch.overnightbatch.job.name}" 
+        p:batchJobServiceJmsJndiName="${scheduler.jms.givingBatchJobsDestination.jndiName}" />
+
+    <!-- HunarC: Monthly Gift Aid Claim process batch Job trigger -->
+    <bean id="monthlyGiftAidClaimProcessBatchJobTrigger"
+        class="com.virginmoneygiving.schedulerservice.batch.BatchJobCronTrigger"
+        parent="parentBatchJobTrigger"
+        p:cronExpression="${scheduler.trigger.monthlygiftAidClaimJob.cronExpression}"
+        p:description="Request that the 'Monthly Gift Aid claim process' batch job is run in specified months"
+        p:batchJobName="${scheduler.giving.batch.monthlygiftAidClaimJob.job.name}"
+        p:batchJobServiceJmsJndiName="${scheduler.jms.givingBatchJobsDestination.jndiName}" />
+
+    <!-- HunarC: march and October Gift Aid Claim process batch Job trigger -->
+    <bean id="marchOctoberGAClaimProcessBatchJobTrigger"
+        class="com.virginmoneygiving.schedulerservice.batch.BatchJobCronTrigger"
+        parent="parentBatchJobTrigger"
+        p:cronExpression="${scheduler.trigger.giftAidClaimJobMarchOctober.cronExpression}"
+        p:description="Request that the 'Gift Aid claim process' batch job is run in March and October"
+        p:batchJobName="${scheduler.giving.batch.giftAidClaimJobMarchOctober.job.name}"
+        p:batchJobServiceJmsJndiName="${scheduler.jms.givingBatchJobsDestination.jndiName}" />
+
+	<!-- Regular Card Payments Job trigger -->
+
+	<bean id="regularCardPaymentsTrigger"
+		class="com.virginmoneygiving.schedulerservice.batch.BatchJobCronTrigger"
+		parent="parentBatchJobTrigger"
+		p:cronExpression="${scheduler.trigger.regularCardPaymentsTrigger.cronExpression}"
+		p:description="Request that the 'Regular Card Payments' batch job is run once a day"
+		p:batchJobName="REGULAR_CARD_PAYMENTS" p:batchJobServiceJmsJndiName="${scheduler.jms.givingBatchJobsDestination.jndiName}" />
+
+	<!-- General Ledger Cash Feeds trigger -->
+
+	<bean id="generalLedgerCashFeedsTrigger"
+		class="com.virginmoneygiving.schedulerservice.batch.BatchJobCronTrigger"
+		parent="parentBatchJobTrigger"
+		p:cronExpression="${scheduler.trigger.generalLedgerCashFeedsTrigger.cronExpression}"
+		p:description="Requests that the 'General Ledger Cash Feeds' batch job is run once a day"
+		p:batchJobName="GENERAL_LEDGER_CASH_FEEDS"
+		p:batchJobServiceJmsJndiName="${scheduler.jms.paymentBatchJobsDestination.jndiName}" />
+
+	<!-- General Ledger Payments Received trigger -->
+
+	<bean id="generalLedgerPaymentsReceivedTrigger"
+		class="com.virginmoneygiving.schedulerservice.batch.BatchJobCronTrigger"
+		parent="parentBatchJobTrigger"
+		p:cronExpression="${scheduler.trigger.generalLedgerPaymentsReceivedTrigger.cronExpression}"
+		p:description="Requests that the 'General Ledger Payments Received' batch job is run once a day"
+		p:batchJobName="GENERAL_LEDGER_PAYMENTS_RECEIVED"
+		p:batchJobServiceJmsJndiName="${scheduler.jms.paymentBatchJobsDestination.jndiName}" />
+
+	<!-- General Ledger Charity Registration trigger -->
+
+	<bean id="generalLedgerCharityRegistrationTrigger"
+		class="com.virginmoneygiving.schedulerservice.batch.BatchJobCronTrigger"
+		parent="parentBatchJobTrigger"
+		p:cronExpression="${scheduler.trigger.generalLedgerCharityRegistrationTrigger.cronExpression}"
+		p:description="Requests that the 'General Ledger Charity Registration Received' batch job is run once a day"
+		p:batchJobName="GENERAL_LEDGER_CHARITY_REGISTRATION"
+		p:batchJobServiceJmsJndiName="${scheduler.jms.givingBatchJobsDestination.jndiName}" />
+
+	<!-- General Ledger Charity Update trigger -->
+
+	<bean id="generalLedgerCharityUpdateTrigger"
+		class="com.virginmoneygiving.schedulerservice.batch.BatchJobCronTrigger"
+		parent="parentBatchJobTrigger"
+		p:cronExpression="${scheduler.trigger.generalLedgerCharityUpdateTrigger.cronExpression}"
+		p:description="Requests that the 'General Ledger Charity Update' batch job is run once a day"
+		p:batchJobName="GENERAL_LEDGER_CHARITY_UPDATE"
+		p:batchJobServiceJmsJndiName="${scheduler.jms.givingBatchJobsDestination.jndiName}" />
+
+	<!-- BAC Registration trigger -->
+
+	<bean id="bacRegistrationTrigger"
+		class="com.virginmoneygiving.schedulerservice.batch.BatchJobCronTrigger"
+		parent="parentBatchJobTrigger" p:cronExpression="${scheduler.trigger.bacRegistrationTrigger.cronExpression}"
+		p:description="Requests that the 'BAC Registration' batch job is run once a day"
+		p:batchJobName="BAC_REGISTRATION" p:batchJobServiceJmsJndiName="${scheduler.jms.givingBatchJobsDestination.jndiName}" />
+
+	<!-- BAC Cash Back trigger -->
+
+	<bean id="bacCashBackTrigger"
+		class="com.virginmoneygiving.schedulerservice.batch.BatchJobCronTrigger"
+		parent="parentBatchJobTrigger" p:cronExpression="${scheduler.trigger.bacCashBackTrigger.cronExpression}"
+		p:description="Requests that the 'BAC Cash Back' batch job is run once a day"
+		p:batchJobName="BAC_CASH_BACK" p:batchJobServiceJmsJndiName="${scheduler.jms.paymentBatchJobsDestination.jndiName}" />
+
+</beans>			

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://www.virginmoneygiving.com/templateEmail/"
+	xmlns="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.virginmoneygiving.com/templateEmail/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+	elementFormDefault="qualified">
+
+    <element name="Message">
+        <complexType>
+            <sequence>
+                <element type="string" name="sender"/>
+                <element type="string" name="destination"/>
+                <element type="string" name="subject"/>
+                <element type="string" name="message"/>
+                <element type="string" name="templateFile"/>
+            </sequence>
+        </complexType>
+    </element>
+</xsd:schema>

@@ -1,0 +1,50 @@
+Scheduler Service Installation
+------------------------------
+
+* Read the component overview document ($PROJECT_HOME/docs/README.txt) before you 
+attempt to deploy this component as it provides essential information regarding customisation 
+and dependency setup.
+
+* Install scheduler service's data source by copying the $PROJECT_HOME/config/jboss/deploy/quartz-ds.xml 
+into the JBoss deploy location (e.g. $JBOSS_HOME/server/production/deploy)
+
+* Edit the installed quartz-ds.xml data source file to the point to the specific MySQL database
+instance the deployment is using, not forgetting to set the username and password.
+
+* Ensure the MySQL driver from trunk/root/thirdparty/libraries/mysql/ is in 
+the lib-virgin directory of the JBoss server ($JBOSS_HOME/server/production/lib-virgin). 
+
+* Ensure the Quartz JAR from trunk/root/thirdparty/libraries/quartz/quartz-1.6.1 is in 
+the lib-virgin directory of the JBoss server ($JBOSS_HOME/server/production/lib-virgin). 
+
+* Create the MySQL Quartz database, user (quartz) using mysqladmin tools and then the database 
+tables by running the scripts in $PROJECT_HOME/database
+
+* Rename or remove all and any instances of the JBoss provided quartz-all.jar from the JBoss server
+
+* Rename or remove the JBoss provided $JBOSS_HOME/server/production/deploy/quartz-ra.rar from the 
+JBoss server
+		
+* Check that the TWO Batch Job Service JMS queues have been set-up and are exposed to 
+the scheduler service via JNDI (names defined in scheduler-service.properties). If not 
+install them by copying the $PROJECT_HOME/config/jboss/deploy/jms-batch-job-destination-service.xml
+into the JBoss deploy location (e.g. $JBOSS_HOME/server/production/deploy)
+
+* Check that the Audit Service JMS queue has been set-up and is exposed to 
+the scheduler service via JNDI (names defined in scheduler-service.properties). If not 
+install it by copying the $PROJECT_HOME/config/jboss/deploy/jms-audit-service-destination-service.xml
+into the JBoss deploy location (e.g. $JBOSS_HOME/server/production/deploy)
+
+* Install the scheduler-service.war into the JBoss server by copying the
+$PROJECT_HOME/deploy/scheduler-service.war into the JBoss deploy directory
+$JBOSS_HOME/server/production/deploy/scheduler-service.war
+
+* Install the external configuration files stored in $PROJECT_HOME/config/external_configuration 
+into JBoss configured ${GIVING_HOME} location (passed to JBoss via the -DGIVING_HOME system
+property)
+
+* Edit the external configuration files to suite your needs.
+
+* Start JBoss and monitor the server log file ($JBOSS_HOME/server/production/log/server.log), 
+after a short delay the scheduler-service should be initialised and operational.
+

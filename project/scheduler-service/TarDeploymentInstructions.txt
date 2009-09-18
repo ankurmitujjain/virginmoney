@@ -1,0 +1,43 @@
+Deployment Instructions - 
+
+1. Untar the tar file.
+
+2. Add the following line in mysql configuration file for case insensitive table names (eg: my.conf).
+
+lower_case_table_names=1 
+
+3. Database SQL Scripts - contained within /database - 
+
+3.1 Scripts for quartz database within /database - following 4 scripts - 
+
+00_base_script.sql  - creates the schema if does not exist already.
+01_create_schema.sql - creates the base tables.
+02_payment_master_data_setup_script.sql - sets up the master data.
+
+
+4. Application deployment components within /JBoss/Main - 
+
+4.1 deploy-virgin - contains all the files to be placed in the deploy folder of jboss. 
+4.1.1. Update payment-ds.xml configurations to point to VMG Database settings - IP Address, user name and password.
+** Please note that the database user ID and Password (root/root123) are dummy values.
+
+4.2 lib-virgin - external library files to be copied to jboss_server_home folder.
+
+4.3 conf - contains JBoss configuration file. Please copy this file to jboss server conf folder.
+
+4.4 external-configuration - stores application configuration files. Copy this folder as-is on the file system**.
+
+4.4.1 Create the system property GIVING_CONF_HOME to point to the location of this folder. 
+           eg: -DGIVING_CONF_HOME=/user/home/VMG/external-configuration
+
+** Please note that JBoss user should have access permission to this folder location.
+
+5. Delete following jars from jboss -> production -> lib folder since they conflict with other jars used in the application. 
+If not deleted the application server will give some error while deployiong the war file.
+--asm.jar
+--asm-attrs.jar
+--cglib.jar
+--jboss-jaxws.jar
+
+Note:
+Please increase the permgen size in run.conf as appropriate (256 m)

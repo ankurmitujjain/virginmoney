@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xsi:schemaLocation=" 
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd 
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+			
+	<!-- enable annotations -->
+ 	<context:annotation-config />
+ 			
+	<!-- QUARTZ SCHEDULER -->
+ 
+	<!-- DS used for Quartz jobStore, set JNDI name in properties to point to correct resource.
+	Note this is expected to be a non-XA data source, if it's not we need to provide an 
+	additional nonTransactionalDataSource so that quartz can do stuff without being involved
+	in the distributed transactions -->
+ 
+	<bean id="schedulerDS" class="org.springframework.jndi.JndiObjectFactoryBean"
+		p:jndiName="${scheduler.quartz.jobStore.dataSource.jndiName}" />
+
+	<bean id="dsTxManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		p:dataSource-ref="schedulerDS"/>
+		
+	<bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false"
+		p:dataSource-ref="schedulerDS"
+		p:transactionManager-ref="dsTxManager"
+		p:schedulerName="VMGScheduler"
+		p:autoStartup="true"
+		p:startupDelay="${scheduler.quartz.startupDelay}"
+		p:applicationContextSchedulerContextKey="applicationContext"
+		p:waitForJobsToCompleteOnShutdown="${scheduler.quartz.waitForJobsToCompleteOnShutdown}">
+		<property name="schedulerContextAsMap">
+			<map>
+				<entry key="batchJobServiceJmsTemplate" value-ref="jmsDynamicTemplate"/> 
+			</map>
+		</property>
+		<property name="jobFactory">
+			<bean class="org.springframework.scheduling.quartz.SpringBeanJobFactory"/>
+		</property>		
+		<property name="quartzProperties">
+			<props>			
+				<!-- ThreadPool -->
+				<!-- Yes the package name really is org.quartz.simpl -->
+				<prop key="org.quartz.threadPool.class">org.quartz.simpl.SimpleThreadPool</prop>
+				<prop key="org.quartz.threadPool.threadCount">${scheduler.quartz.threadPool.threadCount}</prop>
+				<prop key="org.quartz.threadPool.threadPriority">${scheduler.quartz.threadPool.threadPriority}</prop>
+				
+				<!-- Job Store -->
+				<!-- we *only* allow primitives to be persisted in the job store -->
+				<prop key="org.quartz.jobStore.useProperties">true</prop>			
+								
+				<!-- JDBCJobStore settings -->
+				<prop key="org.quartz.jobStore.misfireThreshold">60000</prop>				
+				<prop key="org.quartz.jobStore.tablePrefix">QRTZ_</prop>
+				<prop key="org.quartz.jobStore.driverDelegateClass">${scheduler.quartz.jobStore.driverDelegateClass}</prop> 
+				<prop key="org.quartz.jobStore.selectWithLockSQL">${scheduler.quartz.jobStore.selectWithLockSQL}</prop> 								
+				
+				<!-- Clustering -->
+				<prop key="org.quartz.jobStore.isClustered">${scheduler.quartz.jobStore.isClustered}</prop>
+				<prop key="org.quartz.scheduler.instanceId">AUTO</prop>
+				
+				<!-- Shutdown plug-in - catches the event of the JVM terminating and attempts to gracefully shutdown scheduler -->
+				<prop key="org.quartz.plugin.shutdownhook.class">org.quartz.plugins.management.ShutdownHookPlugin</prop>
+				<prop key="org.quartz.plugin.shutdownhook.cleanShutdown">true</prop>
+
+				<!-- Trigger history plug-in - logs trigger firings via commons logging framework -->
+				<prop key="org.quartz.plugin.triggHistory.class">org.quartz.plugins.history.LoggingTriggerHistoryPlugin</prop>
+				<prop key="org.quartz.plugin.triggHistory.triggerFiredMessage">Trigger {1}.{0} fired job {6}.{5} at: {4, date, HH:mm:ss MM/dd/yyyy}</prop>
+				<prop key="org.quartz.plugin.triggHistory.triggerCompleteMessage">Trigger {1}.{0} completed firing job {6}.{5} at {4, date, HH:mm:ss MM/dd/yyyy} with resulting trigger instruction code: {9}</prop>
+
+			</props> 
+		</property>
+	</bean> 
+
+	<!-- Set triggers and listeners on the scheduler via this convenience accessor -->
+	<!-- HunarC: Added overnightBatchJobTrigger, marchOctoberGAClaimProcessBatchJobTrigger,monthlyGiftAidClaimProcessBatchJobTrigger  beans -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerAccessorBean"
+		p:scheduler-ref="scheduler">
+		<property name="triggers">
+			<list>
+                <ref bean="overnightBatchJobTrigger"/>
+                <!--
+                <ref bean="monthlyGiftAidClaimProcessBatchJobTrigger"/>
+                <ref bean="marchOctoberGAClaimProcessBatchJobTrigger"/>
+                <ref bean="regularCardPaymentsTrigger"/>
+				<ref bean="generalLedgerCashFeedsTrigger"/>
+				<ref bean="generalLedgerPaymentsReceivedTrigger"/>
+				<ref bean="generalLedgerCharityRegistrationTrigger"/>
+				<ref bean="generalLedgerCharityUpdateTrigger"/>
+				<ref bean="bacCashBackTrigger"/>
+				<ref bean="bacRegistrationTrigger"/>
+				-->
+			</list>
+		</property>
+		<property name="globalTriggerListeners">
+			<list>
+				<ref bean="alertServiceTriggerListener"/> 
+			</list>
+		</property>		
+	</bean>
+
+</beans>

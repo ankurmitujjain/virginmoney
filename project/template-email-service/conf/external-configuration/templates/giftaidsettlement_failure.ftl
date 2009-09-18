@@ -1,0 +1,1 @@
+The Gift Aid Claim Settlement Process has not completed successfully – please contact IT Support
